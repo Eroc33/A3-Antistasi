@@ -19,7 +19,7 @@ if (_escarretera) then
 		_garrison = [staticCrewBuenos];
 		{
 		if (random 20 <= skillFIA) then {_garrison pushBack (_x select 1)} else {_garrison pushBack (_x select 0)};
-		} forEach gruposSDKAT;
+		} forEach groupsSDKAT;
 		garrison setVariable [_marcador,_garrison,true];
 		};
 	while {true} do
@@ -38,7 +38,7 @@ if (_escarretera) then
 		_nul = [_veh] call A3A_fnc_AIVEHinit;
 		sleep 1;
 		};
-	_grupo = [_posicion, buenos, _garrison,true,false] call A3A_fnc_spawnGroup;
+	_grupo = [_posicion, good, _garrison,true,false] call A3A_fnc_spawnGroup;
 	//_unit = _grupo createUnit [staticCrewBuenos, _posicion, [], 0, "NONE"];
 	//_unit moveInGunner _veh;
 	{[_x,_marcador] spawn A3A_fnc_FIAinitBases; if (typeOf _x == staticCrewBuenos) then {_x moveInGunner _veh}} forEach units _grupo;
@@ -48,8 +48,8 @@ else
 	_formato = [];
 	{
 	if (random 20 <= skillFIA) then {_formato pushBack (_x select 1)} else {_formato pushBack (_x select 0)};
-	} forEach gruposSDKSniper;
-	_grupo = [_posicion, buenos, _formato] call A3A_fnc_spawnGroup;
+	} forEach groupsSDKSniper;
+	_grupo = [_posicion, good, _formato] call A3A_fnc_spawnGroup;
 	_grupo setBehaviour "STEALTH";
 	_grupo setCombatMode "GREEN";
 	{[_x,_marcador] spawn A3A_fnc_FIAinitBases;} forEach units _grupo;
@@ -62,7 +62,7 @@ if ({alive _x} count units _grupo == 0) then
 	{
 	puestosFIA = puestosFIA - [_marcador]; publicVariable "puestosFIA";
 	marcadores = marcadores - [_marcador]; publicVariable "marcadores";
-	lados setVariable [_marcador,nil,true];
+	sides setVariable [_marcador,nil,true];
 	_nul = [5,-5,_posicion] remoteExec ["A3A_fnc_citySupportChange",2];
 	deleteMarker _marcador;
 	if (_escarretera) then

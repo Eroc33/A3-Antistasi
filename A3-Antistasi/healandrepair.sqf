@@ -1,10 +1,10 @@
 
 private ["_posHQ"];
-_posHQ = getMarkerPos respawnBuenos;
+_posHQ = getMarkerPos respawnGood;
 
-{if ((side group _x == buenos) and (_x distance _posHQ < 50)) then
+{if ((side group _x == good) and (_x distance _posHQ < 50)) then
 	{
-	if (hayACEMedical) then
+	if (foundACEMedical) then
 		{
 		[_x, _x] call ace_medical_fnc_treatmentAdvanced_fullHeal;
 		}

@@ -6,13 +6,13 @@ _coste = (server getVariable (SDKExp select 0)) + ([vehSDKRepair] call A3A_fnc_v
 
 [-1,-1*_coste] remoteExec ["A3A_fnc_resourcesFIA",2];
 
-_grupo = createGroup buenos;
+_grupo = createGroup good;
 
-_unit = _grupo createUnit [(SDKExp select 0), getMarkerPos respawnBuenos, [], 0, "NONE"];
+_unit = _grupo createUnit [(SDKExp select 0), getMarkerPos respawnGood, [], 0, "NONE"];
 _grupo setGroupId ["MineSw"];
 _minas = [];
 sleep 1;
-_road = [getMarkerPos respawnBuenos] call A3A_fnc_findNearestGoodRoad;
+_road = [getMarkerPos respawnGood] call A3A_fnc_findNearestGoodRoad;
 _pos = position _road findEmptyPosition [1,30,"B_G_Van_01_transport_F"];
 
 _camion = vehSDKRepair createVehicle _pos;
@@ -37,13 +37,13 @@ while {alive _unit} do
 		{
 		if (alive _camion) then
 			{
-			if ((count magazineCargo _camion > 0) and (_unit distance (getMarkerPos respawnBuenos) < 50)) then
+			if ((count magazineCargo _camion > 0) and (_unit distance (getMarkerPos respawnGood) < 50)) then
 				{
 				[_camion,caja] remoteExec ["A3A_fnc_munitionTransfer",2];
 				sleep 30;
 				};
 			};
-		_minas = (detectedMines buenos) select {(_x distance _unit) < 100};
+		_minas = (detectedMines good) select {(_x distance _unit) < 100};
 		if (count _minas == 0) then
 			{
 			waitUntil {sleep 1;(!alive _unit) or (!unitReady _unit)};

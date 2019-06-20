@@ -14,7 +14,7 @@ if (_marcador isEqualType "") then
 	};
 _tipo = _this select 2;
 
-_tipoAvion = if (_lado == malos) then {vehNATOPlane} else {vehCSATPlane};
+_tipoAvion = if (_lado == bad) then {vehNATOPlane} else {vehCSATPlane};
 
 _ang = random 360;
 _angorig = _ang + 180;
@@ -27,7 +27,7 @@ if (_esMarcador) then
 	{
 	_timeOut = time + 600;
 	waitUntil {sleep 1; (spawner getVariable _marcador == 0) or (time > _timeOut)};
-	if (_marcador in aeropuertos) then
+	if (_marcador in airports) then
 		{
 		_size = [_marcador] call A3A_fnc_sizeMarker;
 		_buildings = nearestObjects [_posicion, ["Land_LandMark_F","Land_runway_edgelight"], _size / 2];
@@ -40,16 +40,16 @@ if (_esMarcador) then
 			}
 		};
 	_pos1 = [_posicion, 400, _angorig] call BIS_Fnc_relPos;
-	_origpos = [_posicion, 3*distanciaSPWN, _angorig] call BIS_fnc_relPos;
+	_origpos = [_posicion, 3*distanceSPWN, _angorig] call BIS_fnc_relPos;
 	_pos2 = [_posicion, 200, _ang] call BIS_Fnc_relPos;
-	_finpos = [_posicion, 3*distanciaSPWN, _ang] call BIS_fnc_relPos;
+	_finpos = [_posicion, 3*distanceSPWN, _ang] call BIS_fnc_relPos;
 	}
 else
 	{
-	_amigos = if (_lado == malos) then {allUnits select {(_x distance _posicion < 300) and (alive _x) and ((side _x == malos) or (side _x == civilian))}} else {allUnits select {(_x distance _posicion < 300) and (alive _x) and (side _x == muyMalos)}};
+	_amigos = if (_lado == bad) then {allUnits select {(_x distance _posicion < 300) and (alive _x) and ((side _x == bad) or (side _x == civilian))}} else {allUnits select {(_x distance _posicion < 300) and (alive _x) and (side _x == veryBad)}};
 	if (count _amigos == 0) then
 		{
-		_enemigos = if (_lado == malos) then {allUnits select {_x distance _posicion < 300 and (side _x != _lado) and (side _x != civilian) and (alive _x)}} else {allUnits select {_x distance _posicion < 300 and (side _x != _lado) and (alive _x)}};
+		_enemigos = if (_lado == bad) then {allUnits select {_x distance _posicion < 300 and (side _x != _lado) and (side _x != civilian) and (alive _x)}} else {allUnits select {_x distance _posicion < 300 and (side _x != _lado) and (alive _x)}};
 		if (count _enemigos > 0) then
 			{
 			_mediaX = 0;
@@ -93,7 +93,7 @@ else
 if (_exit) exitWith {};
 _planefn = [_origpos, _ang, _tipoavion, _lado] call bis_fnc_spawnvehicle;
 _plane = _planefn select 0;
-if (hayIFA) then {_plane setVelocityModelSpace [((velocityModelSpace _plane) select 0) + 0,((velocityModelSpace _plane) select 1) + 150,((velocityModelSpace _plane) select 2) + 50]};
+if (foundIFA) then {_plane setVelocityModelSpace [((velocityModelSpace _plane) select 0) + 0,((velocityModelSpace _plane) select 1) + 150,((velocityModelSpace _plane) select 2) + 50]};
 _planeCrew = _planefn select 1;
 _grupoPlane = _planefn select 2;
 {_x setVariable ["spawner",true,true]} forEach _planeCrew;

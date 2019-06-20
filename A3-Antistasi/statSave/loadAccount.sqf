@@ -10,11 +10,11 @@ else
 	{
 	if (!isDedicated) then
 		{
-		if (side player == buenos) then
+		if (side player == good) then
 			{
 			waitUntil {/*(!isNil "serverInitDone") and */(!isNil "initVar")};
 			["loadoutPlayer"] call fn_LoadStat;
-			//player setPos getMarkerPos respawnBuenos;
+			//player setPos getMarkerPos respawnGood;
 			if ([player] call A3A_fnc_isMember) then
 				{
 				["scorePlayer"] call fn_LoadStat;
@@ -52,7 +52,7 @@ if (isServer and !_byPassServer) then
 	["resourcesFIA"] call fn_LoadStat;
 	["garrison"] call fn_LoadStat;
 	["skillFIA"] call fn_LoadStat;
-	["distanciaSPWN"] call fn_LoadStat;
+	["distanceSPWN"] call fn_LoadStat;
 	["civPerc"] call fn_LoadStat;
 	["maxUnits"] call fn_LoadStat;
 	["miembros"] call fn_LoadStat;
@@ -94,42 +94,42 @@ if (isServer and !_byPassServer) then
 	//unlockedRifles = unlockedweapons select {_x in arifles}; publicVariable "unlockedRifles";
 
 	{
-	_arma = _x;
-	if (_arma in arifles) then
+	_weapon = _x;
+	if (_weapon in arifles) then
 		{
-		unlockedRifles pushBack _arma;
-		if (count (getArray (configfile >> "CfgWeapons" >> _arma >> "muzzles")) == 2) then
+		unlockedRifles pushBack _weapon;
+		if (count (getArray (configfile >> "CfgWeapons" >> _weapon >> "muzzles")) == 2) then
 			{
-			unlockedGL pushBack _arma;
+			unlockedGL pushBack _weapon;
 			};
 		}
 	else
 		{
-		if (_arma in mguns) then
+		if (_weapon in mguns) then
 			{
-			unlockedMG pushBack _arma;
+			unlockedMG pushBack _weapon;
 			}
 		else
 			{
-			if (_arma in srifles) then
+			if (_weapon in srifles) then
 				{
-				unlockedSN pushBack _arma;
+				unlockedSN pushBack _weapon;
 				}
 			else
 				{
-				if (_arma in ((rlaunchers + mlaunchers) select {(getNumber (configfile >> "CfgWeapons" >> _x >> "lockAcquire") == 0)})) then
+				if (_weapon in ((rlaunchers + mlaunchers) select {(getNumber (configfile >> "CfgWeapons" >> _x >> "lockAcquire") == 0)})) then
 					{
-					unlockedAT pushBack _arma;
+					unlockedAT pushBack _weapon;
 					}
 				else
 					{
-					if (_arma in (mlaunchers select {(getNumber (configfile >> "CfgWeapons" >> _x >> "lockAcquire") == 1)})) then {unlockedAA pushBack _arma};
+					if (_weapon in (mlaunchers select {(getNumber (configfile >> "CfgWeapons" >> _x >> "lockAcquire") == 1)})) then {unlockedAA pushBack _weapon};
 					};
 				};
 			};
 		};
 	} forEach unlockedWeapons;
-	if (hayIFA) then {unlockedRifles = unlockedRifles - ["LIB_M2_Flamethrower","LIB_PTRD"]};
+	if (foundIFA) then {unlockedRifles = unlockedRifles - ["LIB_M2_Flamethrower","LIB_PTRD"]};
 
 	publicVariable "unlockedRifles";
 	publicVariable "unlockedMG";
@@ -141,20 +141,20 @@ if (isServer and !_byPassServer) then
 	if (!haveRadio) then {if ("ItemRadio" in unlockedItems) then {haveRadio = true; publicVariable "haveRadio"}};
 
 	{
-	if (lados getVariable [_x,sideUnknown] != buenos) then
+	if (sides getVariable [_x,sideUnknown] != good) then
 		{
-		_posicion = getMarkerPos _x;
-		_cercano = [(marcadores - controles - puestosFIA),_posicion] call BIS_fnc_nearestPosition;
-		_lado = lados getVariable [_cercano,sideUnknown];
-		lados setVariable [_x,_lado,true];
+		_position = getMarkerPos _x;
+		_near = [(marcadores - controles - puestosFIA),_position] call BIS_fnc_nearestPosition;
+		_side = sides getVariable [_near,sideUnknown];
+		sides setVariable [_x,_side,true];
 		};
 	} forEach controles;
 
 
 	{
-	if (lados getVariable [_x,sideUnknown] == sideUnknown) then
+	if (sides getVariable [_x,sideUnknown] == sideUnknown) then
 		{
-		lados setVariable [_x,malos,true];
+		sides setVariable [_x,bad,true];
 		};
 	} forEach marcadores;
 
@@ -173,12 +173,12 @@ if (isServer and !_byPassServer) then
 	*/
 	["posHQ"] call fn_LoadStat;
 	["nextTick"] call fn_LoadStat;
-	["estaticas"] call fn_LoadStat;//tiene que ser el último para que el sleep del borrado del contenido no haga que despawneen
+	["estaticas"] call fn_LoadStat;//tiene que ser el ??ltimo para que el sleep del borrado del contenido no haga que despawneen
 
 
-	if (!isMultiPlayer) then {player setPos getMarkerPos respawnBuenos} else {{_x setPos getMarkerPos respawnBuenos} forEach (playableUnits select {side _x == buenos})};
-	_sitios = marcadores select {lados getVariable [_x,sideUnknown] == buenos};
-	tierWar = 1 + (floor (((5*({(_x in puestos) or (_x in recursos) or (_x in ciudades)} count _sitios)) + (10*({_x in puertos} count _sitios)) + (20*({_x in aeropuertos} count _sitios)))/10));
+	if (!isMultiPlayer) then {player setPos getMarkerPos respawnGood} else {{_x setPos getMarkerPos respawnGood} forEach (playableUnits select {side _x == good})};
+	_sites = marcadores select {sides getVariable [_x,sideUnknown] == good};
+	tierWar = 1 + (floor (((5*({(_x in puestos) or (_x in recursos) or (_x in ciudades)} count _sites)) + (10*({_x in puertos} count _sites)) + (20*({_x in airports} count _sites)))/10));
 	if (tierWar > 10) then {tierWar = 10};
 	publicVariable "tierWar";
 
@@ -187,7 +187,7 @@ if (isServer and !_byPassServer) then
 	clearItemCargoGlobal caja;
 	clearBackpackCargoGlobal caja;
 
-	[] remoteExec ["A3A_fnc_statistics",[buenos,civilian]];
+	[] remoteExec ["A3A_fnc_statistics",[good,civilian]];
 	diag_log "Antistasi: Server sided Persistent Load done";
 
 	["tasks"] call fn_LoadStat;
@@ -198,11 +198,11 @@ if (isServer and !_byPassServer) then
 		_dmrk = createMarker [format ["Dum%1",_x], _pos];
 		_dmrk setMarkerShape "ICON";
 		[_x] call A3A_fnc_mrkUpdate;
-		if (lados getVariable [_x,sideUnknown] != buenos) then
+		if (sides getVariable [_x,sideUnknown] != good) then
 			{
 			_nul = [_x] call A3A_fnc_crearControles;
 			};
-		} forEach aeropuertos;
+		} forEach airports;
 
 		{
 		_pos = getMarkerPos _x;
@@ -211,7 +211,7 @@ if (isServer and !_byPassServer) then
 		_dmrk setMarkerType "loc_rock";
 		_dmrk setMarkerText "Resources";
 		[_x] call A3A_fnc_mrkUpdate;
-		if (lados getVariable [_x,sideUnknown] != buenos) then
+		if (sides getVariable [_x,sideUnknown] != good) then
 			{
 			_nul = [_x] call A3A_fnc_crearControles;
 			};
@@ -224,7 +224,7 @@ if (isServer and !_byPassServer) then
 		_dmrk setMarkerType "u_installation";
 		_dmrk setMarkerText "Factory";
 		[_x] call A3A_fnc_mrkUpdate;
-		if (lados getVariable [_x,sideUnknown] != buenos) then
+		if (sides getVariable [_x,sideUnknown] != good) then
 			{
 			_nul = [_x] call A3A_fnc_crearControles;
 			};
@@ -236,7 +236,7 @@ if (isServer and !_byPassServer) then
 		_dmrk setMarkerShape "ICON";
 		_dmrk setMarkerType "loc_bunker";
 		[_x] call A3A_fnc_mrkUpdate;
-		if (lados getVariable [_x,sideUnknown] != buenos) then
+		if (sides getVariable [_x,sideUnknown] != good) then
 			{
 			_nul = [_x] call A3A_fnc_crearControles;
 			};
@@ -249,13 +249,13 @@ if (isServer and !_byPassServer) then
 		_dmrk setMarkerType "b_naval";
 		_dmrk setMarkerText "Sea Port";
 		[_x] call A3A_fnc_mrkUpdate;
-		if (lados getVariable [_x,sideUnknown] != buenos) then
+		if (sides getVariable [_x,sideUnknown] != good) then
 			{
 			_nul = [_x] call A3A_fnc_crearControles;
 			};
 		} forEach puertos;
-		lados setVariable ["NATO_carrier",malos,true];
-		lados setVariable ["CSAT_carrier",muyMalos,true];
+		sides setVariable ["NATO_carrier",bad,true];
+		sides setVariable ["CSAT_carrier",veryBad,true];
 		};
 	statsLoaded = 0; publicVariable "statsLoaded";
 	placementDone = true; publicVariable "placementDone";

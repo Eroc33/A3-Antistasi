@@ -1,12 +1,12 @@
 {
 _lado = _x;
-_acelerador = if (_lado == malos) then {if (tierWar == 1) then {0} else {1+((tierWar + difficultyCoef)/20)}} else {1.2+((tierWar + difficultyCoef)/20)};
-_airbases = {lados getVariable [_x,sideUnknown] == _lado} count aeropuertos;
-_puestos =  {lados getVariable [_x,sideUnknown] == _lado} count puestos;
-_puertos = {lados getVariable [_x,sideUnknown] == _lado} count puertos;
+_acelerador = if (_lado == bad) then {if (tierWar == 1) then {0} else {1+((tierWar + difficultyCoef)/20)}} else {1.2+((tierWar + difficultyCoef)/20)};
+_airbases = {sides getVariable [_x,sideUnknown] == _lado} count airports;
+_puestos =  {sides getVariable [_x,sideUnknown] == _lado} count puestos;
+_puertos = {sides getVariable [_x,sideUnknown] == _lado} count puertos;
 //at
 _maxItems = (_puestos * 0.2) + (_airbases * 0.5);
-_tipo = if (_lado == malos) then {staticATmalos} else {staticATmuyMalos};
+_tipo = if (_lado == bad) then {staticATmalos} else {staticATmuyMalos};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
@@ -14,7 +14,7 @@ if (_currentItems < _maxItems) then
 	};
 //aa
 _maxItems = (_airbases * 2);
-_tipo = if (_lado == malos) then {staticAAmalos} else {staticAAmuyMalos};
+_tipo = if (_lado == bad) then {staticAAmalos} else {staticAAmuyMalos};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
@@ -22,7 +22,7 @@ if (_currentItems < _maxItems) then
 	};
 //apcs
 _maxItems = (_puestos * 0.3) + (_airbases * 2);
-_tipo = if (_lado == malos) then {vehNATOAPC} else {vehCSATAPC};
+_tipo = if (_lado == bad) then {vehNATOAPC} else {vehCSATAPC};
 if !(_tipo isEqualTo []) then
 	{
 	_currentItems = 0;
@@ -34,7 +34,7 @@ if !(_tipo isEqualTo []) then
 	};
 //tanks
 _maxItems = (_puestos * 0.5) + (_airbases * 2);
-_tipo = if (_lado == malos) then {vehNATOTank} else {vehCSATTank};
+_tipo = if (_lado == bad) then {vehNATOTank} else {vehCSATTank};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
@@ -42,7 +42,7 @@ if (_currentItems < _maxItems) then
 	};
 //aaTANKS
 _maxItems = _airbases;
-_tipo = if (_lado == malos) then {vehNATOAA} else {vehCSATAA};
+_tipo = if (_lado == bad) then {vehNATOAA} else {vehCSATAA};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
@@ -50,7 +50,7 @@ if (_currentItems < _maxItems) then
 	};
 //ATTACK BOATS
 _maxItems = _puertos;
-_tipo = if (_lado == malos) then {vehNATOBoat} else {vehCSATBoat};
+_tipo = if (_lado == bad) then {vehNATOBoat} else {vehCSATBoat};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
@@ -58,7 +58,7 @@ if (_currentItems < _maxItems) then
 	};
 //CAS PLANE
 _maxItems = _airbases * 4;
-_tipo = if (_lado == malos) then {vehNATOPlane} else {vehCSATPlane};
+_tipo = if (_lado == bad) then {vehNATOPlane} else {vehCSATPlane};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
@@ -66,7 +66,7 @@ if (_currentItems < _maxItems) then
 	};
 //AA PLANE
 _maxItems = _airbases * 4;
-_tipo = if (_lado == malos) then {vehNATOPlaneAA} else {vehCSATPlaneAA};
+_tipo = if (_lado == bad) then {vehNATOPlaneAA} else {vehCSATPlaneAA};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
@@ -74,7 +74,7 @@ if (_currentItems < _maxItems) then
 	};
 //AIR TRANSPORTS
 _maxItems = _airbases * 4;
-_tipo = if (_lado == malos) then {vehNATOTransportHelis - [vehNATOPatrolHeli]} else {vehCSATTransportHelis - [vehCSATPatrolHeli]};
+_tipo = if (_lado == bad) then {vehNATOTransportHelis - [vehNATOPatrolHeli]} else {vehCSATTransportHelis - [vehCSATPatrolHeli]};
 if !(_tipo isEqualTo []) then
 	{
 	_currentItems = 0;
@@ -86,7 +86,7 @@ if !(_tipo isEqualTo []) then
 	};
 //ATTACK HELIS
 _maxItems = _airbases * 4;
-_tipo = if (_lado == malos) then {vehNATOAttackHelis} else {vehCSATAttackHelis};
+_tipo = if (_lado == bad) then {vehNATOAttackHelis} else {vehCSATAttackHelis};
 if !(_tipo isEqualTo []) then
 	{
 	_currentItems = 0;
@@ -98,10 +98,10 @@ if !(_tipo isEqualTo []) then
 	};
 //ARTY
 _maxItems = _airbases + (_puestos * 0.2);
-_tipo = if (_lado == malos) then {vehNATOMRLS} else {vehCSATMRLS};
+_tipo = if (_lado == bad) then {vehNATOMRLS} else {vehCSATMRLS};
 _currentItems = timer getVariable [_tipo,0];
 if (_currentItems < _maxItems) then
 	{
 	timer setVariable [_tipo,_currentItems + (0.2 * _acelerador),true];
 	};
-} forEach [malos,muyMalos];
+} forEach [bad,veryBad];

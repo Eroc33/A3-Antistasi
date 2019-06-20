@@ -7,13 +7,13 @@ _fechaNum = if (_esMarcador) then {server getVariable [_sitio,0]} else {timer ge
 if (_fechaNum < dateToNumber date) then {_fechaNum = dateToNumber date};
 if (!_esMarcador) then
 	{
-	if (side _sitio == malos) then
+	if (side _sitio == bad) then
 		{
 		_time = round (_time * 1.5)
 		}
 	else
 		{
-		if ({lados getVariable [_x,sideUnknown] == muyMalos} count aeropuertos == 1) then {_time = 0};
+		if ({sides getVariable [_x,sideUnknown] == veryBad} count airports == 1) then {_time = 0};
 		};
 	};
 _fechaArr = numberToDate [2035,_fechaNum];

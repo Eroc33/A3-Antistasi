@@ -1,12 +1,12 @@
 waitUntil {!isNull player};
 
-if (side player == buenos) then
+if (side player == good) then
 {
 _index =player createDiarySubject ["Tutorial","Begin Tutorial"];
 player createDiaryRecord ["Tutorial",["Undercover","In the early stages, especially when accomplishing certain missions, being undercover can be extremely helpful. Just as for real resistance fighters, your ability to disappear is something the enemy cannot counter. See Features section for a deep explanation of Undercover Mode."]];
 player createDiaryRecord ["Tutorial",["Start Position","Find a good spot to begin the mission. Your experience is very different from one start spot to another. Study the surrounding markers and roads between them well. If you start near a road between enemy zones, a patrol may appear and kill Petros"]];
 player createDiaryRecord ["Tutorial",["Resources","Having a good amount of resources for bigger operations is mandatory, especially weapons and ammo. In the initial stages, your main source of resources is accomplishing side-missions."]];
-player createDiaryRecord ["Tutorial",["Conquer and Hold","Don't expect a light counter-attack when you conquer strategic zones such as resources or aeropuertos. The enemy will send everything they can, if available. If you conquer a zone and expect a counter-attack, fleeing is a nice option."]];
+player createDiaryRecord ["Tutorial",["Conquer and Hold","Don't expect a light counter-attack when you conquer strategic zones such as resources or airports. The enemy will send everything they can, if available. If you conquer a zone and expect a counter-attack, fleeing is a nice option."]];
 player createDiaryRecord ["Tutorial",["Strategy","Once you have a nice amount of resources, focus on enemy communications. If you disturb them enough, you won't have to face big counter-attacks."]];
 player createDiaryRecord ["Tutorial",["Aggro Effects","Keep an eye on those. If it's too high, you will have to face more attacks with better troops."]];
 player createDiaryRecord ["Tutorial",["Early Beginning","Don't expect to be able to conquer anything in the early stages. First you have to gather enough resources (HR and Money) in order to be able to conquer and hold your positions. This mission tries to simulate real life guerilla situations. If in doubt, ask yourself what would you do in real life. Don't expect to win every time. Hit and Run is the basic manoeuvre here. Earn every resource, weapon and ammunition to gather enough assets in order to be a real challenge for the enemy. In the meantime, disturb its operations and gain support from the population."]];
@@ -42,8 +42,8 @@ player createDiaryRecord ["Features",["Server Members","For MP only. If enabled,
 player createDiaryRecord ["Features",["Base Static Emplacement","Purchased static weapons won't despawn if you leave them in a base or zone, AI garrison will man them. Reinforce places as you desire."]];
 player createDiaryRecord ["Features",["Fast Travel","When there are no enemies nearby, fast travel to Faction controlled places. The Commander also has the ability to use this option on HC groups, selecting the group on HC bar and clicking on this button"]];
 player createDiaryRecord ["Features",["Ammobox Transfer","When you mount a truck, you may use the Transfer action in the action menu. It will search for nearby ammoboxes and load the contents of the nearest one into the truck's cargo space. You may then unload the truck in your ammobox at HQ for future use. Before transferring, make sure to unload backpack/vest contents into the Truck cargo space and then transfer. TIP: If your HQ Ammobox is full, use this functionality from a nearby truck to add more content to the ammobox as it will then accept everything :)"]];
-player createDiaryRecord ["Features",["Conquer","Some zones, like aeropuertos or airports require you to use the ""Take the Flag"" action on their respective flags in order to conquer them. Some others, like roadblocks and some outposts, simply require you to defeat the garrison."]];
-player createDiaryRecord ["Features",["Static Weapons","You may steal static weapons found in enemy aeropuertos. You must use the 'Steal Static' action to do so. DO NOT disassemble them before using the 'Steal Static' action!"]];
+player createDiaryRecord ["Features",["Conquer","Some zones, like airports or airports require you to use the ""Take the Flag"" action on their respective flags in order to conquer them. Some others, like roadblocks and some outposts, simply require you to defeat the garrison."]];
+player createDiaryRecord ["Features",["Static Weapons","You may steal static weapons found in enemy airports. You must use the 'Steal Static' action to do so. DO NOT disassemble them before using the 'Steal Static' action!"]];
 player createDiaryRecord ["Features",["Vehicles","You may buy vehicles for your squad at Faction flags."]];
 player createDiaryRecord ["Features",["Radio Towers",format ["Destroy or capture Radio Towers in order to build trust on %1 cityzens.",worldName]]];
 player createDiaryRecord ["Features",["Politics","This is a civil war. People are not conquered if you cannot conquer their hearts. In game mechanics, this means you cannot conquer cities. The citizens of each town support the enemy or Faction to some amount. The dominant faction is the one who owns the city and benefits from their support in terms of money and human resources (HR). Your actions may lower enemy Support or raise yours, or both. Killing enemies, accomplishing missions, conquering resources, and power-stations, affect the amount of citizen support."]];
@@ -56,7 +56,7 @@ _index =player createDiarySubject ["AI","AI Management"];
 player createDiaryRecord ["AI",["Dismiss Squad-mate","Select the unit and use the 'Dismiss Squad-mate' option to send them back to HQ. You will recover some of the money you spent on them"]];
 player createDiaryRecord ["AI",["Vehicle Squad","Commander Only. Use this option to assign the vehicle you are looking at to any HC squad. Check vehicle status, order them to mount or disembark, and automate mounted static squads"]];
 player createDiaryRecord ["AI",["Auto Rearm \ Loot","Your AI squad-mates will automatically look for and scavenge any ammunition from nearby corpses, vehicles and ammoboxes if needed. Also they will try to renew their weapons with more powerful ones. If AI is inside a vehicle, they will loot weapons and launchers, and drop them in their truck until there is nothing in the area. Use this instead of the vanilla Rearm radio option"]];
-player createDiaryRecord ["AI",["Auto Heal","AI Medic squad-mates will heal other AI’s automatically without the need to give any orders. If in combat, your AI will use smoke grenades for cover. If there is no medic in the group, the AI will use their own medikits."]];
+player createDiaryRecord ["AI",["Auto Heal","AI Medic squad-mates will heal other AI???s automatically without the need to give any orders. If in combat, your AI will use smoke grenades for cover. If there is no medic in the group, the AI will use their own medikits."]];
 player createDiaryRecord ["AI",["AI Radio","This feature aims to simulate the lack of radio communications with AI fighters. Your AI squad-mates won't have a radio until you unlock it from the Arsenal. Without a radio, if an AI squad-mate gets too far away, they will get lost and return to the leader's position after completing the last order they received. To avoid this, you may scavenge some radios from enemy (AutoRearm feature will do) or let the AI use a military vehicle which has long range radios. If it takes too long to find their leader, they will automatically return to the HQ."]];
 player createDiaryRecord ["AI",["AI Control","Select a squad-mate or HC Group to gain direct control over them for a limited time. Selecting this option for a HC squad will give you control over the squad's leader"]];
 player createDiaryRecord ["AI",["Recruit","You may recruit up to 9 AI squad-mates at some Faction flags and the HQ flag."]];
@@ -90,9 +90,9 @@ switch (gameMode) do
 player createDiaryRecord ["Diary",["Loose",format ["You will loose the game if %1 has murdered 1/3 of the total population.",nameMuyMalos]]];
 player createDiaryRecord ["Diary",["Win","You will win the game when most of the population supports Faction and you have conquered all the Airbases"]];
 
-_nombreMiss = if (hayIFA) then {"Armia Krajowa"} else {if (worldName == "Tanoa") then {"Warlords of the Pacific"} else {"Antistasi"}};
+_missionName = if (foundIFA) then {"Armia Krajowa"} else {if (worldName == "Tanoa") then {"Warlords of the Pacific"} else {"Antistasi"}};
 
-player createDiaryRecord ["Diary",["Welcome",format ["Welcome to Arma 3 - %1. This mission aims to simulate guerilla combat, tactics and strategic situations. It is not a quick and easy mod, it is long term, step-by-step mission with LOTS of features and enhanced AI.",_nombreMiss]]];
+player createDiaryRecord ["Diary",["Welcome",format ["Welcome to Arma 3 - %1. This mission aims to simulate guerilla combat, tactics and strategic situations. It is not a quick and easy mod, it is long term, step-by-step mission with LOTS of features and enhanced AI.",_missionName]]];
 }
 else
 {

@@ -21,11 +21,11 @@ while {alive _perro} do
 			{
 			[_spotted,false] remoteExec ["setCaptive",0,_spotted]; _spotted setCaptive false;
 			};
-		} forEach ([100,0,position _perro,buenos] call A3A_fnc_distanceUnits);
+		} forEach ([100,0,position _perro,good] call A3A_fnc_distanceUnits);
 
 		if ((random 10 < 1) and (isNull _spotted)) then
 			{
-			playSound3D [missionPath + (selectRandom ladridos),_perro, false, getPosASL _perro, 1, 1, 100];
+			playSound3D [missionPath + (selectRandom barks),_perro, false, getPosASL _perro, 1, 1, 100];
 			};
 		if (_perro distance (leader _grupo) > 50) then {_perro setPos position (leader _grupo)};
 		}
@@ -33,7 +33,7 @@ while {alive _perro} do
 		{
 		_perro doWatch _spotted;
 		(leader _grupo) reveal [_spotted,4];
-		playSound3D [missionPath + (ladridos select (floor random 5)),_perro, false, getPosASL _perro, 1, 1, 100];
+		playSound3D [missionPath + (barks select (floor random 5)),_perro, false, getPosASL _perro, 1, 1, 100];
 		_perro moveTo getPosATL _spotted;
 		if (_spotted distance _perro > 100) then {_spotted = objNull};
 		sleep 3;

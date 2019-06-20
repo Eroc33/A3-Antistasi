@@ -1,7 +1,7 @@
 _unit = _this select 0;
 _jugador = _this select 1;
 
-[_unit,"remove"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_unit];
+[_unit,"remove"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_unit];
 
 //removeAllActions _unit;
 

@@ -2417,7 +2417,7 @@ switch _mode do {
 		/////////////////////////////////////////////////////////////////////////////////
 		// unifrom
 		_itemsUnifrom = [];
-		if(hayACEmedical)then{
+		if(foundACEmedical)then{
 
 			//ACE Basic medical system
 			if (ace_medical_level == 1) then{
@@ -2436,14 +2436,14 @@ switch _mode do {
 			};
 		}else{
 			_itemsUnifrom pushBack ["FirstAidKit",2];
-			if(hayACE) then {
+			if(foundACE) then {
 				_itemsUnifrom pushBack ["ACE_EarPlugs",1];
 				_itemsUnifrom pushBack ["ACE_MapTools",1];
 				_itemsUnifrom pushBack ["ACE_CableTie",2];
 			};
 		};
 
-		if ((hayACE) AND (sunOrMoon <1)) then {
+		if ((foundACE) AND (sunOrMoon <1)) then {
 			_itemsUnifrom pushback ["ACE_HandFlare_Red",1];
 			_itemsUnifrom pushback ["ACE_Chemlight_HiRed",1];
 			_itemsUnifrom pushBack ["ACE_Flashlight_MX991",1];
@@ -2475,7 +2475,7 @@ switch _mode do {
 
 		if([player] call A3A_fnc_isMedic)then{
 
-			if(hayACEmedical) then { //Medic equipment
+			if(foundACEmedical) then { //Medic equipment
 
 				if (ace_medical_level == 1) then{ //ACE Basic medical system for medic
 					_itemsBackpack pushBack ["ACE_fieldDressing",20];
@@ -2494,7 +2494,7 @@ switch _mode do {
 				_itemsBackpack pushBack ["FirstAidKit",1];
 			};
 		} else {
-		 		if(hayACEmedical) then {
+		 		if(foundACEmedical) then {
 					if (ace_medical_level == 1) then{ //ACE Basic medical system for soldiers
 						_itemsBackpack pushBack ["ACE_fieldDressing",10];
 						_itemsBackpack pushBack ["ACE_morphine",3];
@@ -2511,7 +2511,7 @@ switch _mode do {
 
 		if(player getUnitTrait "Engineer")then {
 					_itemsBackpack pushback ["Toolkit",1];
-					if(hayACE) then {
+					if(foundACE) then {
 						_itemsbackpack pushback ["ACE_Clacker",1];
 						_itemsbackpack pushback ["ACE_SpraypaintRed",4];
 					};

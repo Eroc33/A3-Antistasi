@@ -18,7 +18,7 @@ _cercano = [marcadores,_posicionTel] call BIS_fnc_nearestPosition;
 
 if !(_posicionTel inArea _cercano) exitWith {hint "You must click near a marked zone"};
 
-if (not(lados getVariable [_cercano,sideUnknown] == buenos)) exitWith {hint format ["That zone does not belong to %1",nameBuenos]};
+if (not(sides getVariable [_cercano,sideUnknown] == good)) exitWith {hint format ["That zone does not belong to %1",nameBuenos]};
 
 if ((_cercano in puestosFIA) and !(isOnRoad getMarkerPos _cercano)) exitWith {hint "You cannot manage garrisons on this kind of zone"};
 
@@ -50,11 +50,11 @@ if ((groupID _grupo == "MineF") or (groupID _grupo == "Watch") or (isPlayer(lead
 
 if (isNull _grupo) then
 	{
-	_grupo = createGroup buenos;
+	_grupo = createGroup good;
 	_unidades joinSilent _grupo;
 	//{arrayids = arrayids + [name _x]} forEach _unidades;
 	hint "Adding units to garrison";
-	if !(hayIFA) then {{arrayids pushBackUnique (name _x)} forEach _unidades};
+	if !(foundIFA) then {{arrayids pushBackUnique (name _x)} forEach _unidades};
 	}
 else
 	{
@@ -68,7 +68,7 @@ _garrison = _garrison + (garrison getVariable [_cercano,[]]);
 garrison setVariable [_cercano,_garrison,true];
 [_cercano] call A3A_fnc_mrkUpdate;
 */
-[_unidades,buenos,_cercano,0] remoteExec ["A3A_fnc_garrisonUpdate",2];
+[_unidades,good,_cercano,0] remoteExec ["A3A_fnc_garrisonUpdate",2];
 _noBorrar = false;
 
 if (spawner getVariable _cercano != 2) then
@@ -85,7 +85,7 @@ if (spawner getVariable _cercano != 2) then
 		_marcador = _muerto getVariable "marcador";
 		if (!isNil "_marcador") then
 			{
-			if (lados getVariable [_marcador,sideUnknown] == buenos) then
+			if (sides getVariable [_marcador,sideUnknown] == good) then
 				{
 				/*
 				_garrison = [];
@@ -100,15 +100,15 @@ if (spawner getVariable _cercano != 2) then
 					};
 				[_marcador] call A3A_fnc_mrkUpdate;
 				*/
-				[typeOf _muerto,buenos,_marcador,-1] remoteExec ["A3A_fnc_garrisonUpdate",2];
+				[typeOf _muerto,good,_marcador,-1] remoteExec ["A3A_fnc_garrisonUpdate",2];
 				_muerto setVariable [_marcador,nil,true];
 				};
 			};
 		}];
 	} forEach _unidades;
 
-	waitUntil {sleep 1; (spawner getVariable _cercano == 2 or !(lados getVariable [_cercano,sideUnknown] == buenos))};
-	if (!(lados getVariable [_cercano,sideUnknown] == buenos)) then {_noBorrar = true};
+	waitUntil {sleep 1; (spawner getVariable _cercano == 2 or !(sides getVariable [_cercano,sideUnknown] == good))};
+	if (!(sides getVariable [_cercano,sideUnknown] == good)) then {_noBorrar = true};
 	};
 
 if (!_noBorrar) then
@@ -133,7 +133,7 @@ else
 			_muerto = _this select 0;
 			_killer = _this select 1;
 			[_muerto] remoteExec ["A3A_fnc_postmortem",2];
-			if ((isPlayer _killer) and (side _killer == buenos)) then
+			if ((isPlayer _killer) and (side _killer == good)) then
 				{
 				if (!isMultiPlayer) then
 					{
@@ -143,14 +143,14 @@ else
 				}
 			else
 				{
-				if (side _killer == malos) then
+				if (side _killer == bad) then
 					{
 					_nul = [0.25,0,getPos _muerto] remoteExec ["A3A_fnc_citySupportChange",2];
 					[-0.25,0] remoteExec ["A3A_fnc_prestige",2];
 					}
 				else
 					{
-					if (side _killer == muyMalos) then {[0,-0.25] remoteExec ["A3A_fnc_prestige",2]};
+					if (side _killer == veryBad) then {[0,-0.25] remoteExec ["A3A_fnc_prestige",2]};
 					};
 				};
 			_muerto setVariable ["spawner",nil,true];

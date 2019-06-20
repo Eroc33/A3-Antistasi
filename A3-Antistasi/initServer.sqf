@@ -33,15 +33,15 @@ _nul = call compile preprocessFileLineNumbers "initVar.sqf";
 initVar = true; publicVariable "initVar";
 savingServer = true;
 diag_log format ["Antistasi MP. InitVar done. Version: %1",antistasiVersion];
-bookedSlots = floor (((paramsArray select 12)/100) * (playableSlotsNumber buenos)); publicVariable "bookedSlots";
+bookedSlots = floor (((paramsArray select 12)/100) * (playableSlotsNumber good)); publicVariable "bookedSlots";
 _nul = call compile preprocessFileLineNumbers "initFuncs.sqf";
 diag_log "Antistasi MP Server. Funcs init finished";
 _nul = call compile preprocessFileLineNumbers "initZones.sqf";
 diag_log "Antistasi MP Server. Zones init finished";
 if (gameMode != 1) then
     {
-    malos setFriend [muyMalos,1];
-    muyMalos setFriend [malos,1];
+    bad setFriend [veryBad,1];
+    veryBad setFriend [bad,1];
     if (gameMode == 3) then {"CSAT_carrier" setMarkerAlpha 0};
     if (gameMode == 4) then {"NATO_carrier" setMarkerAlpha 0};
     };
@@ -95,7 +95,7 @@ if (loadLastSave) then
         };
     theBoss = objNull;
     {
-    if (([_x] call A3A_fnc_isMember) and (side _x == buenos)) exitWith
+    if (([_x] call A3A_fnc_isMember) and (side _x == good)) exitWith
         {
         theBoss = _x;
         //_x setRank "CORPORAL";
@@ -113,7 +113,7 @@ else
         {
         {miembros pushBackUnique _x} forEach (call as_fnc_getExternalMemberListUIDs);
         {
-        if (([_x] call A3A_fnc_isMember) and (side _x == buenos)) exitWith {theBoss = _x};
+        if (([_x] call A3A_fnc_isMember) and (side _x == good)) exitWith {theBoss = _x};
         } forEach playableUnits;
        }
     else

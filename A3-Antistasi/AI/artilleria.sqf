@@ -8,11 +8,11 @@ _mrkDestino = _this select 1;
 _lado = _this select 2;
 _ladosMalos = _lado call BIS_fnc_enemySides;
 _posDestino = getMarkerPos _mrkDestino;
-_tipoVeh = if (_lado == malos) then {vehNATOMRLS} else {vehCSATMRLS};
+_tipoVeh = if (_lado == bad) then {vehNATOMRLS} else {vehCSATMRLS};
 
 if !([_tipoVeh] call A3A_fnc_vehAvailable) exitWith {};
 
-_tipoMuni = if (_lado == malos) then {vehNATOMRLSMags} else {vehCSATMRLSMags};
+_tipoMuni = if (_lado == bad) then {vehNATOMRLSMags} else {vehCSATMRLSMags};
 
 _pos = [_posOrigen, 50,100, 10, 0, 0.3, 0] call BIS_Fnc_findSafePos;
 
@@ -49,7 +49,7 @@ if (_posDestino inRangeOfArtillery [[_veh], ((getArtilleryAmmo [_veh]) select 0)
 				_cuentaGrupo = {(alive _x) and (!captive _x)} count units group _posible;
 				if (_cuentaGrupo > _cuenta) then
 					{
-					if ((_lado == muyMalos) or ({(side (group _x) == civilian) and (_x distance _posible < 50)} count allUnits == 0)) then
+					if ((_lado == veryBad) or ({(side (group _x) == civilian) and (_x distance _posible < 50)} count allUnits == 0)) then
 						{
 						_objetivo = _posible;
 						if (_cuentaGrupo > 6) then {_rondas = 2};
@@ -72,11 +72,11 @@ if (_posDestino inRangeOfArtillery [[_veh], ((getArtilleryAmmo [_veh]) select 0)
 		};
 	};
 
-if (!([distanciaSPWN,1,_veh,buenos] call A3A_fnc_distanceUnits) and (({_x distance _veh <= distanciaSPWN} count (allPlayers - (entities "HeadlessClient_F"))) == 0)) then {deleteVehicle _veh};
+if (!([distanceSPWN,1,_veh,good] call A3A_fnc_distanceUnits) and (({_x distance _veh <= distanceSPWN} count (allPlayers - (entities "HeadlessClient_F"))) == 0)) then {deleteVehicle _veh};
 
 {
 _veh = _x;
-waitUntil {sleep 1; !([distanciaSPWN,1,_veh,buenos] call A3A_fnc_distanceUnits) and (({_x distance _veh <= distanciaSPWN} count (allPlayers - (entities "HeadlessClient_F"))) == 0)};
+waitUntil {sleep 1; !([distanceSPWN,1,_veh,good] call A3A_fnc_distanceUnits) and (({_x distance _veh <= distanceSPWN} count (allPlayers - (entities "HeadlessClient_F"))) == 0)};
 deleteVehicle _veh;
 } forEach _vehCrew;
 

@@ -11,7 +11,7 @@ if (isNil "_coste") then
 	}
 else
 	{
-	_coste = round (_coste - (_coste * (0.1 * ({lados getVariable [_x,sideUnknown] == buenos} count puertos))));
+	_coste = round (_coste - (_coste * (0.1 * ({sides getVariable [_x,sideUnknown] == good} count puertos))));
 	};
 
 _coste

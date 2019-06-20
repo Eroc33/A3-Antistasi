@@ -17,15 +17,15 @@ while {alive _veh} do
 	{
 	if (!(_veh getVariable ["revelado",false])) then
 		{
-		if ((buenos knowsAbout _veh > 1.4) or revelar or _convoy) then
+		if ((good knowsAbout _veh > 1.4) or revelar or _convoy) then
 			{
 			_veh setVariable ["revelado",true,true];
-			[_veh,_text] remoteExec  ["A3A_fnc_vehicleMarkers",[buenos,civilian]];
+			[_veh,_text] remoteExec  ["A3A_fnc_vehicleMarkers",[good,civilian]];
 			};
 		}
 	else
 		{
-		if ((buenos knowsAbout _veh <= 1.4) and !(revelar) and !(_convoy)) then
+		if ((good knowsAbout _veh <= 1.4) and !(revelar) and !(_convoy)) then
 			{
 			_veh setVariable ["revelado",false,true];
 			};

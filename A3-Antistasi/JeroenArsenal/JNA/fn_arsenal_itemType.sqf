@@ -60,15 +60,15 @@ _weaponTypeSpecific = _weaponType select 1;
 //workaround for ACE/ACRE bugs related to bis_fnc_itemType
 if (_weaponTypeSpecific == "AccessoryBipod") then
 	{
-	if (hayACEMedical) then
+	if (foundACEMedical) then
 		{
 		if (_item in (aceBasicMedItems + aceAdvMedItems)) then {_weaponTypeSpecific = "FirstAidKit"};
 		};
-	if (hayACE) then
+	if (foundACE) then
 		{
 		if (_item in aceItems) then {_weaponTypeSpecific = "FirstAidKit"};
 		};
-	if (hayACRE) then
+	if (foundACRE) then
 		{
 		if (_item in ["ACRE_PRC343","ACRE_PRC148","ACRE_PRC152","ACRE_PRC77","ACRE_PRC117F"]) then {_weaponTypeSpecific = "FirstAidKit"};
 		};

@@ -20,13 +20,13 @@ if (_marcador != "Synd_HQ") then
 	if (!(_marcador in ciudades)) then
 		{
 		_veh = createVehicle [SDKFlag, _posicion, [],0, "CAN_COLLIDE"];
-		if (hayIFA) then {_veh setFlagTexture SDKFlagTexture};
+		if (foundIFA) then {_veh setFlagTexture SDKFlagTexture};
 		_veh allowDamage false;
 		_vehiculos pushBack _veh;
 		[_veh,"SDKFlag"] remoteExec ["A3A_fnc_flagaction",0,_veh];
-		//[_veh,"unit"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_veh];
-		//[_veh,"vehicle"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_veh];
-		//[_veh,"garage"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_veh];
+		//[_veh,"unit"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_veh];
+		//[_veh,"vehicle"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_veh];
+		//[_veh,"garage"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_veh];
 		};
 	if ((_marcador in recursos) or (_marcador in fabricas)) then
 		{
@@ -53,7 +53,7 @@ if (_marcador != "Synd_HQ") then
 								_nombre = [_marcador] call A3A_fnc_localizar;
 								destroyedCities pushBackUnique _marcador;
 								publicVariable "destroyedCities";
-								["TaskFailed", ["", format ["%1 Destroyed",_nombre]]] remoteExec ["BIS_fnc_showNotification",[buenos,civilian]];
+								["TaskFailed", ["", format ["%1 Destroyed",_nombre]]] remoteExec ["BIS_fnc_showNotification",[good,civilian]];
 								};
 							}];
 						};
@@ -65,16 +65,16 @@ if (_marcador != "Synd_HQ") then
 		};
 	if (_marcador in puertos) then
 		{
-		[_veh,"seaport"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_veh];
+		[_veh,"seaport"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_veh];
 		};
 	};
 _estaticas = staticsToSave select {_x distance _posicion < _size};
 
 _garrison = [];
 _garrison = _garrison + (garrison getVariable [_marcador,[]]);
-_grupo = createGroup buenos;
-_grupoEst = createGroup buenos;
-_grupoMort = createGroup buenos;
+_grupo = createGroup good;
+_grupoEst = createGroup good;
+_grupoMort = createGroup good;
 {
 _index = _garrison findIf {_x in SDKMil};
 if (_index == -1) exitWith {};
@@ -124,7 +124,7 @@ while {(spawner getVariable _marcador != 2) and (_cuenta < _tam)} do
 	sleep 0.5;
 	if (_cuentaGrupo == 8) then
 		{
-		_grupo = createGroup buenos;
+		_grupo = createGroup good;
 		_grupos pushBack _grupo;
 		_cuentaGrupo = 0;
 		};

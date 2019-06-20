@@ -38,7 +38,7 @@ else
 	if (_unit skill "aimingAccuracy" > 0.35) then {_unit setSkill ["aimingAccuracy",0.35]};
 	if (random 40 < skillFIA) then
 		{
-		if (getNumber (configfile >> "CfgWeapons" >> headgear _unit >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") < 2) then {removeHeadgear _unit;_unit addHeadgear (selectRandom cascos)};
+		if (getNumber (configfile >> "CfgWeapons" >> headgear _unit >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") < 2) then {removeHeadgear _unit;_unit addHeadgear (selectRandom helmets)};
 		};
 	if ((_tipo in SDKMil) or (_tipo == staticCrewBuenos)) then
 		{
@@ -113,7 +113,7 @@ else
 								}
 							else
 								{
-								if (hayIFA) then
+								if (foundIFA) then
 									{
 									[_unit, "LIB_PTRD", 10, 0] call BIS_fnc_addWeapon;
 									};
@@ -144,8 +144,8 @@ if (!haveRadio) then
 	if ((_unit != leader _unit) and (_tipo != staticCrewBuenos)) then {_unit unlinkItem "ItemRadio"};
 	};
 
-if ({if (_x in humo) exitWith {1}} count unlockedMagazines > 0) then {_unit addMagazines [selectRandom humo,2]};
-if !(hayIFA) then
+if ({if (_x in smoke) exitWith {1}} count unlockedMagazines > 0) then {_unit addMagazines [selectRandom smoke,2]};
+if !(foundIFA) then
 	{
 	if ((sunOrMoon < 1) and (_tipo != SDKUnarmed)) then
 		{
@@ -216,15 +216,15 @@ if (player == leader _unit) then
 		_muerto = _this select 0;
 		[_muerto] spawn A3A_fnc_postmortem;
 		_killer = _this select 1;
-		if !(hayIFA) then {arrayids pushBackUnique (name _muerto)};
-		if (side _killer == malos) then
+		if !(foundIFA) then {arrayids pushBackUnique (name _muerto)};
+		if (side _killer == bad) then
 			{
 			_nul = [0.25,0,getPos _muerto] remoteExec ["A3A_fnc_citySupportChange",2];
 			[-0.25,0] remoteExec ["A3A_fnc_prestige",2];
 			}
 		else
 			{
-			if (side _killer == muyMalos) then
+			if (side _killer == veryBad) then
 				{
 				[0,-0.25] remoteExec ["A3A_fnc_prestige",2]
 				}
@@ -238,7 +238,7 @@ if (player == leader _unit) then
 			};
 		_muerto setVariable ["spawner",nil,true];
 		}];
-	if ((typeOf _unit != SDKUnarmed) and !hayIFA) then
+	if ((typeOf _unit != SDKUnarmed) and !foundIFA) then
 		{
 		_idUnit = arrayids call BIS_Fnc_selectRandom;
 		arrayids = arrayids - [_idunit];
@@ -247,7 +247,7 @@ if (player == leader _unit) then
 	if (captive player) then {[_unit] spawn A3A_fnc_undercoverAI};
 
 	_unit setVariable ["rearming",false];
-	if ((!haveRadio) and (!hayTFAR) and (!hayACRE) and !(hayIFA)) then
+	if ((!haveRadio) and (!foundTFAR) and (!foundACRE) and !(foundIFA)) then
 		{
 		while {alive _unit} do
 			{
@@ -255,7 +255,7 @@ if (player == leader _unit) then
 			if (("ItemRadio" in assignedItems _unit) and ([player] call A3A_fnc_hasRadio)) exitWith {_unit groupChat format ["This is %1, radiocheck OK",name _unit]};
 			if (unitReady _unit) then
 				{
-				if ((alive _unit) and (_unit distance (getMarkerPos respawnBuenos) > 50) and (_unit distance leader group _unit > 500) and ((vehicle _unit == _unit) or ((typeOf (vehicle _unit)) in arrayCivVeh))) then
+				if ((alive _unit) and (_unit distance (getMarkerPos respawnGood) > 50) and (_unit distance leader group _unit > 500) and ((vehicle _unit == _unit) or ((typeOf (vehicle _unit)) in arrayCivVeh))) then
 					{
 					hint format ["%1 lost communication, he will come back with you if possible", name _unit];
 					[_unit] join rezagados;
@@ -263,7 +263,7 @@ if (player == leader _unit) then
 					_unit doMove position player;
 					_tiempo = time + 900;
 					waitUntil {sleep 1;(!alive _unit) or (_unit distance player < 500) or (time > _tiempo)};
-					if ((_unit distance player >= 500) and (alive _unit)) then {_unit setPos (getMarkerPos respawnBuenos)};
+					if ((_unit distance player >= 500) and (alive _unit)) then {_unit setPos (getMarkerPos respawnGood)};
 					[_unit] join group player;
 					};
 				};
@@ -276,7 +276,7 @@ else
 		_muerto = _this select 0;
 		_killer = _this select 1;
 		[_muerto] remoteExec ["A3A_fnc_postmortem",2];
-		if ((isPlayer _killer) and (side _killer == buenos)) then
+		if ((isPlayer _killer) and (side _killer == good)) then
 			{
 			if (!isMultiPlayer) then
 				{
@@ -286,14 +286,14 @@ else
 			}
 		else
 			{
-			if (side _killer == malos) then
+			if (side _killer == bad) then
 				{
 				_nul = [0.25,0,getPos _muerto] remoteExec ["A3A_fnc_citySupportChange",2];
 				[-0.25,0] remoteExec ["A3A_fnc_prestige",2];
 				}
 			else
 				{
-				if (side _killer == muyMalos) then
+				if (side _killer == veryBad) then
 					{
 					[0,-0.25] remoteExec ["A3A_fnc_prestige",2]
 					}

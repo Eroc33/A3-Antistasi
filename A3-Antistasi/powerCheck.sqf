@@ -11,14 +11,14 @@ if (_ant1 distance _posicion > _ant2 distance _posicion) exitWith {sideUnknown};
 
 _puesto = [marcadores,_ant1] call BIS_fnc_NearestPosition;
 /*
-if (lados getVariable [_marcador,sideUnknown] == buenos) then
+if (sides getVariable [_marcador,sideUnknown] == good) then
 	{
-	if (lados getVariable [_puesto,sideUnknown] == buenos) then {_result = true};
+	if (sides getVariable [_puesto,sideUnknown] == good) then {_result = true};
 	}
 else
 	{
-	if (lados getVariable [_puesto,sideUnknown] == malos) then {_result = true};
+	if (sides getVariable [_puesto,sideUnknown] == bad) then {_result = true};
 	};*/
-private _lado = lados getVariable [_puesto,sideUnknown];
+private _lado = sides getVariable [_puesto,sideUnknown];
 //_result
 _lado

@@ -7,7 +7,7 @@ if (player != player getVariable "owner") exitWith {hint "You cannot access the 
 if ([player,300] call A3A_fnc_enemyNearCheck) exitWith {Hint "You cannot manage the Garage with enemies nearby"};
 vehInGarageShow = [];
 _hayAire = false;
-_aeropuertos = aeropuertos select {(lados getVariable [_x,sideUnknown] == buenos) and (player inArea _x)};
+_aeropuertos = airports select {(sides getVariable [_x,sideUnknown] == good) and (player inArea _x)};
 if (count _aeropuertos > 0) then {_hayAire = true};
 {
 if ((_x in vehPlanes)) then
@@ -20,7 +20,7 @@ else
 	};
 } forEach (if (pool) then {vehInGarage} else {personalGarage});
 if (count vehInGarageShow == 0) exitWith {hintC "The Garage is empty or the vehicles you have are not suitable to recover in the place you are.\n\nAir vehicles need to be recovered near Airport flags."};
-_cercano = [marcadores select {lados getVariable [_x,sideUnknown] == buenos},player] call BIS_fnc_nearestPosition;
+_cercano = [marcadores select {sides getVariable [_x,sideUnknown] == good},player] call BIS_fnc_nearestPosition;
 if !(player inArea _cercano) exitWith {hint "You need to be close to one of your garrisons to be able to retrieve a vehicle from your garage"};
 cuentaGarage = 0;
 _tipo = vehInGarageShow select cuentaGarage;

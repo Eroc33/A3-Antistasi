@@ -14,15 +14,15 @@ _posicion = getMarkerPos _marcador;
 _POWs = [];
 
 _tiempolim = if (_dificil) then {30} else {120};//120
-if (hayIFA) then {_tiempolim = _tiempolim * 2};
+if (foundIFA) then {_tiempolim = _tiempolim * 2};
 _fechalim = [date select 0, date select 1, date select 2, date select 3, (date select 4) + _tiempolim];
 _fechalimnum = dateToNumber _fechalim;
 
 _nombredest = [_marcador] call A3A_fnc_localizar;
 
-[[buenos,civilian],"RES",[format ["A group of POWs is awaiting for execution in %1. We must rescue them before %2:%3. Bring them to HQ",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4],"POW Rescue",_marcador],_posicion,false,0,true,"run",true] call BIS_fnc_taskCreate;
+[[good,civilian],"RES",[format ["A group of POWs is awaiting for execution in %1. We must rescue them before %2:%3. Bring them to HQ",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4],"POW Rescue",_marcador],_posicion,false,0,true,"run",true] call BIS_fnc_taskCreate;
 //_blacklistbld = ["Land_Cargo_HQ_V1_F", "Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F","Land_Cargo_Tower_V1_F","Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F","Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F","Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F","Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F","Land_Cargo_Patrol_V1_F","Land_Cargo_Patrol_V2_F","Land_Cargo_Patrol_V3_F"];
-misiones pushBack ["RES","CREATED"]; publicVariable "misiones";
+missions pushBack ["RES","CREATED"]; publicVariable "missions";
 _poscasa = [];
 _cuenta = 0;
 //_casas = nearestObjects [_posicion, ["house"], 50];
@@ -52,7 +52,7 @@ else
 		_poscasa pushBack _postmp;
 		};
 	};
-_grpPOW = createGroup buenos;
+_grpPOW = createGroup good;
 for "_i" from 0 to _cuenta do
 	{
 	_unit = _grpPOW createUnit [SDKUnarmed, (_poscasa select _i), [], 0, "NONE"];
@@ -71,7 +71,7 @@ for "_i" from 0 to _cuenta do
 	sleep 1;
 	//if (alive _unit) then {_unit playMove "UnaErcPoslechVelitele1";};
 	_POWS pushBack _unit;
-	[_unit,"prisionero"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_unit];
+	[_unit,"prisionero"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_unit];
 	[_unit] call A3A_fnc_reDress;
 	};
 
@@ -79,7 +79,7 @@ sleep 5;
 
 {_x allowDamage true} forEach _POWS;
 
-waitUntil {sleep 1; ({alive _x} count _POWs == 0) or ({(alive _x) and (_x distance getMarkerPos respawnBuenos < 50)} count _POWs > 0) or (dateToNumber date > _fechalimnum)};
+waitUntil {sleep 1; ({alive _x} count _POWs == 0) or ({(alive _x) and (_x distance getMarkerPos respawnGood < 50)} count _POWs > 0) or (dateToNumber date > _fechalimnum)};
 
 if (dateToNumber date > _fechalimnum) then
 	{
@@ -106,7 +106,7 @@ if (dateToNumber date > _fechalimnum) then
 		};
 	};
 
-waitUntil {sleep 1; ({alive _x} count _POWs == 0) or ({(alive _x) and (_x distance getMarkerPos respawnBuenos < 50)} count _POWs > 0)};
+waitUntil {sleep 1; ({alive _x} count _POWs == 0) or ({(alive _x) and (_x distance getMarkerPos respawnGood < 50)} count _POWs > 0)};
 
 _bonus = if (_dificil) then {2} else {1};
 
@@ -120,13 +120,13 @@ else
 	{
 	sleep 5;
 	["RES",[format ["A group of POWs is awaiting for execution in %1. We must rescue them before %2:%3. Bring them to HQ",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4],"POW Rescue",_marcador],_posicion,"SUCCEEDED","run"] call A3A_fnc_taskUpdate;
-	_cuenta = {(alive _x) and (_x distance getMarkerPos respawnBuenos < 150)} count _POWs;
+	_cuenta = {(alive _x) and (_x distance getMarkerPos respawnGood < 150)} count _POWs;
 	_hr = 2 * (_cuenta);
 	_resourcesFIA = 100 * _cuenta*_bonus;
 	[_hr,_resourcesFIA] remoteExec ["A3A_fnc_resourcesFIA",2];
 	[0,10*_bonus,_posicion] remoteExec ["A3A_fnc_citySupportChange",2];
 	//[_cuenta,0] remoteExec ["A3A_fnc_prestige",2];
-	{if (_x distance getMarkerPos respawnBuenos < 500) then {[_cuenta,_x] call A3A_fnc_playerScoreAdd}} forEach (allPlayers - (entities "HeadlessClient_F"));
+	{if (_x distance getMarkerPos respawnGood < 500) then {[_cuenta,_x] call A3A_fnc_playerScoreAdd}} forEach (allPlayers - (entities "HeadlessClient_F"));
 	[round (_cuenta*_bonus/2),theBoss] call A3A_fnc_playerScoreAdd;
 	{[_x] join _grpPOW; [_x] orderGetin false} forEach _POWs;
 	};
@@ -137,7 +137,7 @@ _municion = [];
 _armas = [];
 {
 _unit = _x;
-if (_unit distance getMarkerPos respawnBuenos < 150) then
+if (_unit distance getMarkerPos respawnGood < 150) then
 	{
 	{if (not(([_x] call BIS_fnc_baseWeapon) in unlockedWeapons)) then {_armas pushBack ([_x] call BIS_fnc_baseWeapon)}} forEach weapons _unit;
 	{if (not(_x in unlockedMagazines)) then {_municion pushBack _x}} forEach magazines _unit;

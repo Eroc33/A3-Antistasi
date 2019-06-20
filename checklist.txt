@@ -1,0 +1,326 @@
+                                         | local | global | comments |
+roadsDBcherna.sqf                        |=======|========|          |
+roadsDBAltis.sqf                         |=======|========|          |
+roadsDB.sqf                              |=======|========|          |
+initVar.sqf                              |~~~~~~~|        |          |
+wavedCA.sqf                              |=======|        |          |
+CONVOY.sqf                               |=======|        |          |
+patrolCA.sqf                             |=======|        |          |
+briefing.sqf                             |=======|        |          |
+initPlayerLocal.sqf                      |=======|        |          |
+initZones.sqf                            |=======|        |          |
+autoRearm.sqf                            |=======|        |          |
+Shit Jeroen.sqf                          |=======|        |          |
+saveFuncs.sqf                            |=======|        |          |
+ataqueAAF.sqf                            |=======|        |          |
+createAIaerop.sqf                        |=======|        |          |
+attackDrillAI.sqf                        |=======|        |          |
+Shit Jeroen1.sqf                         |=======|        |          |
+distancias5.sqf                          |=======|        |          |
+distancias4.sqf                          |=======|        |          |
+construir.sqf                            |=======|        |          |
+CSATpunish.sqf                           |=======|        |          |
+missionrequest.sqf                       |=======|        |          |
+saveLoop.sqf                             |=======|        |          |
+defendDrillAI.sqf                        |=======|        |          |
+createAIcontroles.sqf                    |=======|        |          |
+createAIpuestos.sqf                      |=======|        |          |
+loadAccount.sqf                          |=======|        |          |
+flagaction.sqf                           |=======|        |          |
+FIAinit.sqf                              |       |        |          |
+AIVEHinit.sqf                            |       |        |          |
+undercover.sqf                           |       |        |          |
+DES_Heli.sqf                             |       |        |          |
+AS_Traidor.sqf                           |       |        |          |
+RES_Refugiados.sqf                       |       |        |          |
+addFIAsquadHC.sqf                        |       |        |          |
+ayudar.sqf                               |       |        |          |
+markerChange.sqf                         |       |        |          |
+artySupport.sqf                          |       |        |          |
+LOG_Bank.sqf                             |       |        |          |
+resourcecheck.sqf                        |       |        |          |
+autoLoot.sqf                             |       |        |          |
+onPlayerRespawn.sqf                      |       |        |          |
+createAIrecursos.sqf                     |       |        |          |
+garage2.sqf                              |       |        |          |
+cityinfo.sqf                             |       |        |          |
+ataqueHQ.sqf                             |       |        |          |
+createCIV.sqf                            |       |        |          |
+malosRHSUSAF.sqf                         |       |        |          |
+FIAinitBASES.sqf                         |       |        |          |
+initServer.sqf                           |       |        |          |
+LOG_Suministros.sqf                      |       |        |          |
+patrolReinf.sqf                          |       |        |          |
+Composition_table.sqf                    |       |        |          |
+actionRevive.sqf                         |       |        |          |
+buildMinefield.sqf                       |       |        |          |
+AAFroadPatrol.sqf                        |       |        |          |
+inconsciente.sqf                         |       |        |          |
+addFIAveh.sqf                            |       |        |          |
+muyMalosRHSAFRF.sqf                      |       |        |          |
+arsenalManage.sqf                        |       |        |          |
+fastTravelRadio.sqf                      |       |        |          |
+RES_Prisioneros.sqf                      |       |        |          |
+NATOinit.sqf                             |       |        |          |
+malosRHSGREF.sqf                         |       |        |          |
+REP_Antena.sqf                           |       |        |          |
+initGarrisons.sqf                        |       |        |          |
+LOG_Ammo.sqf                             |       |        |          |
+placementselection.sqf                   |       |        |          |
+DES_Vehicle.sqf                          |       |        |          |
+malosVanillaAltis.sqf                    |       |        |          |
+buenosRHSUSAF.sqf                        |       |        |          |
+malosVanilla.sqf                         |       |        |          |
+createSDKgarrisons.sqf                   |       |        |          |
+muyMalosVanilla.sqf                      |       |        |          |
+napalm.sqf                               |       |        |          |
+airstrike.sqf                            |       |        |          |
+tags.sqf                                 |       |        |          |
+malosVanillaAltisB.sqf                   |       |        |          |
+staticMGDrill.sqf                        |       |        |          |
+addToGarrison.sqf                        |       |        |          |
+buenosVanilla.sqf                        |       |        |          |
+buenosRHSGREF.sqf                        |       |        |          |
+muyMalosVanillaAltis.sqf                 |       |        |          |
+munitionTransfer.sqf                     |       |        |          |
+garrisonDialog.sqf                       |       |        |          |
+buenosVanillaAltis.sqf                   |       |        |          |
+muyMalosIFA.sqf                          |       |        |          |
+crearPuestosFIA.sqf                      |       |        |          |
+malosIFA.sqf                             |       |        |          |
+musica.sqf                               |       |        |          |
+vehStats.sqf                             |       |        |          |
+intelFound.sqf                           |       |        |          |
+buenosVanillaAltisB.sqf                  |       |        |          |
+economicsAI.sqf                          |       |        |          |
+initPetros.sqf                           |       |        |          |
+handleDamage.sqf                         |       |        |          |
+init.sqf                                 |       |        |          |
+buenosIFA.sqf                            |       |        |          |
+AS_Oficial.sqf                           |       |        |          |
+NATObomb.sqf                             |       |        |          |
+milBuildings.sqf                         |       |        |          |
+AS_specOP.sqf                            |       |        |          |
+airdrop.sqf                              |       |        |          |
+fastrope.sqf                             |       |        |          |
+inconscienteAAF.sqf                      |       |        |          |
+onPlayerDisconnect.sqf                   |       |        |          |
+rebuildAssets.sqf                        |       |        |          |
+artilleria.sqf                           |       |        |          |
+squad_recruit.sqf                        |       |        |          |
+WPCreate.sqf                             |       |        |          |
+reinforcementsAI.sqf                     |       |        |          |
+init.sqf                                 |       |        |          |
+typeOfSoldier.sqf                        |       |        |          |
+createAIciudades.sqf                     |       |        |          |
+createFIApuestos2.sqf                    |       |        |          |
+CON_Puestos.sqf                          |       |        |          |
+puestoDialog.sqf                         |       |        |          |
+napalmDamage.sqf                         |       |        |          |
+DES_Antena.sqf                           |       |        |          |
+handleDamageAAF.sqf                      |       |        |          |
+statistics.sqf                           |       |        |          |
+mortarDrill.sqf                          |       |        |          |
+transfer.sqf                             |       |        |          |
+init.sqf                                 |       |        |          |
+MON_artillery_add.sqf                    |       |        |          |
+mineSweep.sqf                            |       |        |          |
+respawn.sqf                              |       |        |          |
+NATOFT.sqf                               |       |        |          |
+powerReorg.sqf                           |       |        |          |
+AAFKilledEH.sqf                          |       |        |          |
+AIreactOnKill.sqf                        |       |        |          |
+garageVehicle.sqf                        |       |        |          |
+assignStavros.sqf                        |       |        |          |
+mrkUpdate.sqf                            |       |        |          |
+pedirAyuda.sqf                           |       |        |          |
+recompile.sqf                            |       |        |          |
+controlunit.sqf                          |       |        |          |
+RHSdress.sqf                             |       |        |          |
+surrenderAction.sqf                      |       |        |          |
+moveHQ.sqf                               |       |        |          |
+cobertura.sqf                            |       |        |          |
+inmuneConvoy.sqf                         |       |        |          |
+garrisonUpdate.sqf                       |       |        |          |
+NATOCrate.sqf                            |       |        |          |
+dismissPlayerGroup.sqf                   |       |        |          |
+buy_vehicle.sqf                          |       |        |          |
+ambientCivs.sqf                          |       |        |          |
+reinfplayer.sqf                          |       |        |          |
+mineDialog.sqf                           |       |        |          |
+staticAutoT.sqf                          |       |        |          |
+unitTraits.sqf                           |       |        |          |
+CSATCrate.sqf                            |       |        |          |
+carry.sqf                                |       |        |          |
+sellVehicle.sqf                          |       |        |          |
+destroyBuilding.sqf                      |       |        |          |
+dismissSquad.sqf                         |       |        |          |
+playerMarkers.sqf                        |       |        |          |
+crearControles.sqf                       |       |        |          |
+buildHQ.sqf                              |       |        |          |
+squadOptions.sqf                         |       |        |          |
+spawnGroup.sqf                           |=======|========|          |
+garrisonAdd.sqf                          |       |        |          |
+WPCreateAltis.sqf                        |       |        |          |
+addSquadVeh.sqf                          |       |        |          |
+stealStatic.sqf                          |       |        |          |
+moveHQObject.sqf                         |       |        |          |
+commsMP.sqf                              |       |        |          |
+controlHCsquad.sqf                       |       |        |          |
+Init.sqf                                 |       |        |          |
+vehicleMarkers.sqf                       |=======|        |          |
+Init.sqf                                 |       |        |          |
+Init.sqf                                 |       |        |          |
+fogCheck.sqf                             |       |        |          |
+autoGarrison.sqf                         |=======|========|          |
+dialogHQ.sqf                             |       |        |          |
+resourcesFIA.sqf                         |       |        |          |
+mrkWIN.sqf                               |       |        |          |
+ACEpvpReDress.sqf                        |       |        |          |
+zoneCheck.sqf                            |=======|        |          |
+Init.sqf                                 |       |        |          |
+hideInBuilding.sqf                       |       |        |          |
+prestige.sqf                             |       |        |          |
+difficultyMenu.sqf                       |       |        |          |
+unitGetToCover.sqf                       |       |        |          |
+CIVinit.sqf                              |       |        |          |
+capturar.sqf                             |       |        |          |
+Init.sqf                                 |       |        |          |
+cargoSeats.sqf                           |       |        |          |
+findSafeRoadToUnload.sqf                 |       |        |          |
+puertasLand.sqf                          |       |        |          |
+minefieldAAF.sqf                         |       |        |          |
+radioJam.sqf                             |       |        |          |
+returnMuzzle.sqf                         |       |        |          |
+Init.sqf                                 |       |        |          |
+undercoverAI.sqf                         |       |        |          |
+mortarPos.sqf                            |       |        |          |
+garrisonReorg.sqf                        |       |        |          |
+taskUpdate.sqf                           |       |        |          |
+citySupportChange.sqf                    |       |        |          |
+createSDKgarrisonsTemp.sqf               |       |        |          |
+VEHdespawner.sqf                         |       |        |          |
+airbomb.sqf                              |       |        |          |
+unit_recruit.sqf                         |       |        |          |
+initFuncs.sqf                            |       |        |          |
+guardDog.sqf                             |       |        |          |
+playerScoreAdd.sqf                       |       |        |          |
+mortyAI.sqf                              |       |        |          |
+castigo.sqf                              |       |        |          |
+remoteBattle.sqf                         |       |        |          |
+isTheSameIsland.sqf                      |       |        |          |
+buy_vehicle_civ.sqf                      |       |        |          |
+addBombRun.sqf                           |       |        |          |
+NATOQuadbike.sqf                         |       |        |          |
+cajaAAF.sqf                              |       |        |          |
+cubrirConHumo.sqf                        |       |        |          |
+stavrosInit.sqf                          |       |        |          |
+distanceUnits.sqf                        |       |        |          |
+memberAdd.sqf                            |       |        |          |
+civVEHinit.sqf                           |       |        |          |
+doFlank.sqf                              |       |        |          |
+landThreatEval.sqf                       |       |        |          |
+donateMoney.sqf                          |       |        |          |
+vaciar.sqf                               |       |        |          |
+findBasesForConvoy.sqf                   |       |        |          |
+localizar.sqf                            |       |        |          |
+malosFFAA.sqf                            |       |        |          |
+FIAskillAdd.sqf                          |       |        |          |
+addTimeForIdle.sqf                       |       |        |          |
+skiptime.sqf                             |       |        |          |
+FIAradio.sqf                             |       |        |          |
+nonMemberDistance.sqf                    |       |        |          |
+powerCheck.sqf                           |       |        |          |
+garrisonSize.sqf                         |       |        |          |
+Init.sqf                                 |       |        |          |
+randomRifle.sqf                          |       |        |          |
+init.sqf                                 |       |        |          |
+underAttack.sqf                          |       |        |          |
+isBuildingPosition.sqf                   |       |        |          |
+garrisonInfo.sqf                         |       |        |          |
+AILoadInfo.sqf                           |       |        |          |
+modBlacklist.sqf                         |       |        |          |
+useFlares.sqf                            |       |        |          |
+Init.sqf                                 |       |        |          |
+mortarSupport.sqf                        |       |        |          |
+liberatePOW.sqf                          |       |        |          |
+teclas.sqf                               |       |        |          |
+patrolDestinos.sqf                       |       |        |          |
+healandrepair.sqf                        |       |        |          |
+VANTinfo.sqf                             |       |        |          |
+assaultBuilding.sqf                      |       |        |          |
+garbageCleaner.sqf                       |       |        |          |
+liberaterefugee.sqf                      |       |        |          |
+firstLoad.sqf                            |       |        |          |
+unlockVehicle.sqf                        |=======|        |          |
+smokeCoverAuto.sqf                       |       |        |          |
+revealToPlayer.sqf                       |       |        |          |
+isInRoof.sqf                             |       |        |          |
+interrogar.sqf                           |       |        |          |
+groupDespawner.sqf                       |       |        |          |
+chetos.sqf                               |       |        |          |
+numericRank.sqf                          |       |        |          |
+hayLOS.sqf                               |       |        |          |
+radioCheck.sqf                           |       |        |          |
+airportCanAttack.sqf                     |       |        |          |
+commResign.sqf                           |       |        |          |
+Init.sqf                                 |       |        |          |
+stavrosSteal.sqf                         |       |        |          |
+tierCheck.sqf                            |       |        |          |
+membersList.sqf                          |       |        |          |
+markerAlpha.sqf                          |       |        |          |
+apagon.sqf                               |       |        |          |
+scheduler.sqf                            |       |        |          |
+clearForest.sqf                          |       |        |          |
+playerHasBeenPvPCheck.sqf                |       |        |          |
+recallGroup.sqf                          |       |        |          |
+isFrontline.sqf                          |       |        |          |
+borrarTask.sqf                           |       |        |          |
+destroyCity.sqf                          |       |        |          |
+enemyList.sqf                            |       |        |          |
+citiesToCivPatrol.sqf                    |       |        |          |
+findNearestGoodRoad.sqf                  |       |        |          |
+vehAvailable.sqf                         |       |        |          |
+nodefinder.sqf                           |       |        |          |
+Init.sqf                                 |       |        |          |
+deleteControles.sqf                      |       |        |          |
+timingCA.sqf                             |       |        |          |
+Init.sqf                                 |       |        |          |
+recompile.sqf                            |       |        |          |
+fuegoSupresor.sqf                        |       |        |          |
+Init.sqf                                 |       |        |          |
+canConquer.sqf                           |       |        |          |
+init.sqf                                 |       |        |          |
+Init.sqf                                 |       |        |          |
+onOffLamp.sqf                            |       |        |          |
+autoHealFnc.sqf                          |       |        |          |
+hasRadio.sqf                             |       |        |          |
+vehiclePrice.sqf                         |       |        |          |
+canFight.sqf                             |       |        |          |
+postmortem.sqf                           |       |        |          |
+reinitY.sqf                              |       |        |          |
+enemigoCercano.sqf                       |       |        |          |
+removeVehFromPool.sqf                    |       |        |          |
+enemyNearCheck.sqf                       |       |        |          |
+Init.sqf                                 |       |        |          |
+missionrequestAUTO.sqf                   |       |        |          |
+Init.sqf                                 |       |        |          |
+Init.sqf                                 |       |        |          |
+init.sqf                                 |       |        |          |
+Init.sqf                                 |       |        |          |
+initRevive.sqf                           |       |        |          |
+Init.sqf                                 |       |        |          |
+Init.sqf                                 |       |        |          |
+isMember.sqf                             |       |        |          |
+resourcesPlayer.sqf                      |       |        |          |
+ranksMP.sqf                              |       |        |          |
+sizeMarker.sqf                           |       |        |          |
+isMedic.sqf                              |       |        |          |
+reDress.sqf                              |       |        |          |
+addHC.sqf                                |       |        |          |
+cleanserVeh.sqf                          |       |        |          |
+rearmCall.sqf                            |       |        |          |
+fatalWound.sqf                           |       |        |          |
+resourcecheckSkipTime.sqf                |       |        |          |
+Init.sqf                                 |       |        |          |
+isWindowPosition.sqf                     |       |        |          |

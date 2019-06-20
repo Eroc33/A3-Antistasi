@@ -18,10 +18,10 @@ if ({"SmokeLauncher" in (_veh weaponsTurret _x)} count (allTurrets _veh) > 0) th
 	}
 else
 	{
-	if !(hayIFA) then
+	if !(foundIFA) then
 		{
 		private ["_pos","_humo"];
-		_tipoHumo = selectRandom humo;
+		_tipoHumo = selectRandom smoke;
 		for "_i" from 0 to 8 do
 			{
 			_pos = position _veh getPos [(28 + random 2),_i*40];

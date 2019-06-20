@@ -10,12 +10,12 @@ if (!isMultiPlayer) then
     diag_log "Starting Antistasi SP";
     call compile preprocessFileLineNumbers "initVar.sqf";//this is the file where you can modify a few things.
     initVar = true;
-    respawnMalos setMarkerAlpha 0;
+    respawnBad setMarkerAlpha 0;
     "respawn_east" setMarkerAlpha 0;
     [] execVM "briefing.sqf";
     diag_log format ["Antistasi SP. InitVar done. Version: %1",antistasiVersion];
     _nul = [] execVM "musica.sqf";
-    {if (/*(side _x == buenos) and */(_x != comandante) and (_x != Petros)) then {_grupete = group _x; deleteVehicle _x; deleteGroup _grupete}} forEach allUnits;
+    {if (/*(side _x == good) and */(_x != comandante) and (_x != Petros)) then {_grupete = group _x; deleteVehicle _x; deleteGroup _grupete}} forEach allUnits;
     _serverHasID = profileNameSpace getVariable ["ss_ServerID",nil];
     if(isNil "_serverHasID") then
         {
@@ -38,7 +38,7 @@ if (!isMultiPlayer) then
     membershipEnabled = false;
     switchCom = false;
     tkPunish = false;
-    distanciaMiss = if (hayIFA) then {2000} else {4000};
+    distanciaMiss = if (foundIFA) then {2000} else {4000};
     skillMult = 1;
     minWeaps = 24;
     civTraffic = 1;
@@ -64,7 +64,7 @@ if (!isMultiPlayer) then
             };
         }];
     deleteMarker "respawn_east";
-    if (buenos == independent) then {deleteMarker "respawn_west"} else {deleteMarker "respawn_guerrila"};
+    if (good == independent) then {deleteMarker "respawn_west"} else {deleteMarker "respawn_guerrila"};
     };
 
 

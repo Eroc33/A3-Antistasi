@@ -1,0 +1,2 @@
+CREATE/wavedCA.sqf: capitalization of "_grupoUav"/"_grupouav" inconsistent probably not intended
+CREATE/patrolCA.sqf: _aeropuertos misspelled as _areopuertos

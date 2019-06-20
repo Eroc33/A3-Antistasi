@@ -10,8 +10,8 @@ _soldados = [];
 _posicion = getMarkerPos (_marcador);
 
 _num = [_marcador] call A3A_fnc_sizeMarker;
-_lado = lados getVariable [_marcador,sideUnknown];
-if ({if ((getMarkerPos _x inArea _marcador) and (lados getVariable [_x,sideUnknown] != _lado)) exitWith {1}} count marcadores > 0) exitWith {};
+_lado = sides getVariable [_marcador,sideUnknown];
+if ({if ((getMarkerPos _x inArea _marcador) and (sides getVariable [_x,sideUnknown] != _lado)) exitWith {1}} count marcadores > 0) exitWith {};
 _num = round (_num / 100);
 
 _datos = server getVariable _marcador;
@@ -23,22 +23,22 @@ _esAAF = true;
 if (_marcador in destroyedCities) then
 	{
 	_esAAF = false;
-	_params = [_posicion,muyMalos,CSATSpecOp];
+	_params = [_posicion,veryBad,CSATSpecOp];
 	}
 else
 	{
-	if (_lado == malos) then
+	if (_lado == bad) then
 		{
 		_num = round (_num * (_prestigeOPFOR + _prestigeBLUFOR)/100);
 		_frontera = [_marcador] call A3A_fnc_isFrontline;
 		if (_frontera) then
 			{
 			_num = _num * 2;
-			_params = [_posicion, malos, gruposNATOSentry];
+			_params = [_posicion, bad, groupsNATOSentry];
 			}
 		else
 			{
-			_params = [_posicion, malos, gruposNATOGen];
+			_params = [_posicion, bad, groupsNATOGen];
 			};
 		}
 	else
@@ -46,8 +46,8 @@ else
 		_esAAF = false;
 		_num = round (_num * (_prestigeBLUFOR/100));
 		_array = [];
-		{if (random 20 < skillFIA) then {_array pushBack (_x select 0)} else {_array pushBack (_x select 1)}} forEach gruposSDKsentry;
-		_params = [_posicion, buenos, _array];
+		{if (random 20 < skillFIA) then {_array pushBack (_x select 0)} else {_array pushBack (_x select 1)}} forEach groupsSDKsentry;
+		_params = [_posicion, good, _array];
 		};
 	};
 if (_num < 1) then {_num = 1};
@@ -85,7 +85,7 @@ waitUntil {sleep 1;((spawner getVariable _marcador == 2)) or ({[_x,_marcador] ca
 
 if (({[_x,_marcador] call A3A_fnc_canConquer} count _soldados == 0) and (_esAAF)) then
 	{
-	[[_posicion,malos,"",false],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
+	[[_posicion,bad,"",false],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
 	};
 
 waitUntil {sleep 1;(spawner getVariable _marcador == 2)};

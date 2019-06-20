@@ -12,14 +12,14 @@ while {true} do
 	nextTick = time + 600;
 	waitUntil {sleep 15; time >= nextTick};
 	if (isMultiplayer) then {waitUntil {sleep 10; isPlayer theBoss}};
-	_suppBoost = 1+ ({lados getVariable [_x,sideUnknown] == buenos} count puertos);
+	_suppBoost = 1+ ({sides getVariable [_x,sideUnknown] == good} count puertos);
 	_recAddSDK = 25;//0
 	_hrAddBLUFOR = 0;//0
 	_popFIA = 0;
 	_popAAF = 0;
 	_popCSAT = 0;
 	_popTotal = 0;
-	_bonusFIA = 1 + (0.25*({(lados getVariable [_x,sideUnknown] == buenos) and !(_x in destroyedCities)} count fabricas));
+	_bonusFIA = 1 + (0.25*({(sides getVariable [_x,sideUnknown] == good) and !(_x in destroyedCities)} count fabricas));
 	{
 	_ciudad = _x;
 	_recAddCiudadSDK = 0;
@@ -34,7 +34,7 @@ while {true} do
 	_popTotal = _popTotal + _numCiv;
 	_popFIA = _popFIA + (_numCiv * (_prestigeSDK / 100));
 	_popAAF = _popAAF + (_numCiv * (_prestigeNATO / 100));
-	_multiplicandorec = if (_power != buenos) then {0.5} else {1};
+	_multiplicandorec = if (_power != good) then {0.5} else {1};
 	//if (not _power) then {_multiplicandorec = 0.5};
 
 	if (_ciudad in destroyedCities) then
@@ -49,11 +49,11 @@ while {true} do
 		_hrAddCiudad = (_numciv * (_prestigeSDK / 10000));///20000 originalmente
 		switch (_power) do
 			{
-			case buenos: {[-1,_suppBoost,_ciudad] spawn A3A_fnc_citySupportChange};
-			case malos: {[1,-1,_ciudad] spawn A3A_fnc_citySupportChange};
-			case muyMalos: {[-1,-1,_ciudad] spawn A3A_fnc_citySupportChange};
+			case good: {[-1,_suppBoost,_ciudad] spawn A3A_fnc_citySupportChange};
+			case bad: {[1,-1,_ciudad] spawn A3A_fnc_citySupportChange};
+			case veryBad: {[-1,-1,_ciudad] spawn A3A_fnc_citySupportChange};
 			};
-		if (lados getVariable [_ciudad,sideUnknown] == malos) then
+		if (sides getVariable [_ciudad,sideUnknown] == bad) then
 			{
 			_recAddCiudadSDK = (_recAddCiudadSDK/2);
 			_hrAddCiudad = (_hrAddCiudad/2);
@@ -62,13 +62,13 @@ while {true} do
 	_recAddSDK = _recAddSDK + _recAddCiudadSDK;
 	_hrAddBLUFOR = _hrAddBLUFOR + _hrAddCiudad;
 	// revuelta civil!!
-	if ((_prestigeNATO < _prestigeSDK) and (lados getVariable [_ciudad,sideUnknown] == malos)) then
+	if ((_prestigeNATO < _prestigeSDK) and (sides getVariable [_ciudad,sideUnknown] == bad)) then
 		{
-		["TaskSucceeded", ["", format ["%1 joined %2",[_ciudad, false] call A3A_fnc_fn_location,nameBuenos]]] remoteExec ["BIS_fnc_showNotification",buenos];
-		lados setVariable [_ciudad,buenos,true];
+		["TaskSucceeded", ["", format ["%1 joined %2",[_ciudad, false] call A3A_fnc_fn_location,nameBuenos]]] remoteExec ["BIS_fnc_showNotification",good];
+		sides setVariable [_ciudad,good,true];
 		_nul = [5,0] remoteExec ["A3A_fnc_prestige",2];
 		_mrkD = format ["Dum%1",_ciudad];
-		_mrkD setMarkerColor colorBuenos;
+		_mrkD setMarkerColor colorGood;
 		garrison setVariable [_ciudad,[],true];
 		sleep 5;
 		{_nul = [_ciudad,_x] spawn A3A_fnc_deleteControles} forEach controles;
@@ -82,24 +82,24 @@ while {true} do
 			};
 		[] call A3A_fnc_tierCheck;
 		};
-	if ((_prestigeNATO > _prestigeSDK) and (lados getVariable [_ciudad,sideUnknown] == buenos)) then
+	if ((_prestigeNATO > _prestigeSDK) and (sides getVariable [_ciudad,sideUnknown] == good)) then
 		{
-		["TaskFailed", ["", format ["%1 joined %2",[_ciudad, false] call A3A_fnc_fn_location,nameMalos]]] remoteExec ["BIS_fnc_showNotification",buenos];
-		lados setVariable [_ciudad,malos,true];
+		["TaskFailed", ["", format ["%1 joined %2",[_ciudad, false] call A3A_fnc_fn_location,nameMalos]]] remoteExec ["BIS_fnc_showNotification",good];
+		sides setVariable [_ciudad,bad,true];
 		_nul = [-5,0] remoteExec ["A3A_fnc_prestige",2];
 		_mrkD = format ["Dum%1",_ciudad];
-		_mrkD setMarkerColor colorMalos;
+		_mrkD setMarkerColor colorBad;
 		garrison setVariable [_ciudad,[],true];
 		sleep 5;
 		[] call A3A_fnc_tierCheck;
 		};
 	} forEach ciudades;
 	if (_popCSAT > (_popTotal / 3)) then {["destroyedCities",false,true] remoteExec ["BIS_fnc_endMission"]};
-	if ((_popFIA > _popAAF) and ({lados getVariable [_x,sideUnknown] == buenos} count aeropuertos == count aeropuertos)) then {["end1",true,true,true,true] remoteExec ["BIS_fnc_endMission",0]};
+	if ((_popFIA > _popAAF) and ({sides getVariable [_x,sideUnknown] == good} count airports == count airports)) then {["end1",true,true,true,true] remoteExec ["BIS_fnc_endMission",0]};
 	/*
 	{
 	_fabrica = _x;
-	if (lados getVariable [_fabrica,sideUnknown] == buenos) then
+	if (sides getVariable [_fabrica,sideUnknown] == good) then
 		{
 		if (not(_fabrica in destroyedCities)) then {_bonusFIA = _bonusFIA + 0.25};
 		};
@@ -107,7 +107,7 @@ while {true} do
 	*/
 	{
 	_recurso = _x;
-	if (lados getVariable [_recurso,sideUnknown] == buenos) then
+	if (sides getVariable [_recurso,sideUnknown] == good) then
 		{
 		if (not(_recurso in destroyedCities)) then {_recAddSDK = _recAddSDK + (300 * _bonusFIA)};
 		};
@@ -120,18 +120,18 @@ while {true} do
 	//_updated = false;
 	_updated = [] call A3A_fnc_arsenalManage;
 	if (_updated != "") then {_texto = format ["%1<br/>Arsenal Updated<br/><br/>%2",_texto,_updated]};
-	[petros,"taxRep",_texto] remoteExec ["A3A_fnc_commsMP",[buenos,civilian]];
+	[petros,"taxRep",_texto] remoteExec ["A3A_fnc_commsMP",[good,civilian]];
 	_hrAddBLUFOR = _hrAddBLUFOR + (server getVariable "hr");
 	_recAddSDK = _recAddSDK + (server getVariable "resourcesFIA");
 	server setVariable ["hr",_hrAddBLUFOR,true];
 	server setVariable ["resourcesFIA",_recAddSDK,true];
-	bombRuns = bombRuns + (({lados getVariable [_x,sideUnknown] == buenos} count aeropuertos) * 0.25);
-	[petros,"taxRep",_texto] remoteExec ["A3A_fnc_commsMP",[buenos,civilian]];
+	bombRuns = bombRuns + (({sides getVariable [_x,sideUnknown] == good} count airports) * 0.25);
+	[petros,"taxRep",_texto] remoteExec ["A3A_fnc_commsMP",[good,civilian]];
 	[] call A3A_fnc_economicsAI;
 	if (isMultiplayer) then
 		{
 		[] spawn A3A_fnc_assigntheBoss;
-		difficultyCoef = floor ((({side group _x == buenos} count playableUnits) - ({side group _x != buenos} count playableUnits)) / 5);
+		difficultyCoef = floor ((({side group _x == good} count playableUnits) - ({side group _x != good} count playableUnits)) / 5);
 		publicVariable "difficultyCoef";
 		};
 	if ((!bigAttackInProgress) and (random 100 < 50)) then {[] call A3A_fnc_missionRequestAUTO};
@@ -162,7 +162,7 @@ while {true} do
 		_posibles = [];
 		{
 		_marcador = [marcadores, _x] call BIS_fnc_nearestPosition;
-		if ((lados getVariable [_marcador,sideUnknown] == malos) and (spawner getVariable _marcador == 2)) exitWith
+		if ((sides getVariable [_marcador,sideUnknown] == bad) and (spawner getVariable _marcador == 2)) exitWith
 			{
 			_posibles pushBack [_marcador,_x];
 			};
@@ -178,16 +178,16 @@ while {true} do
 		_cambiado = false;
 		{
 		_chance = 5;
-		if ((_x in recursos) and (lados getVariable [_x,sideUnknown] == muyMalos)) then {_chace = 20};
+		if ((_x in recursos) and (sides getVariable [_x,sideUnknown] == veryBad)) then {_chace = 20};
 		if (random 100 < _chance) then
 			{
 			_cambiado = true;
 			destroyedCities = destroyedCities - [_x];
 			_nombre = [_x] call A3A_fnc_localizar;
-			["TaskSucceeded", ["", format ["%1 Rebuilt",_nombre]]] remoteExec ["BIS_fnc_showNotification",[buenos,civilian]];
+			["TaskSucceeded", ["", format ["%1 Rebuilt",_nombre]]] remoteExec ["BIS_fnc_showNotification",[good,civilian]];
 			sleep 2;
 			};
-		} forEach (destroyedCities - ciudades) select {lados getVariable [_x,sideUnknown] != buenos};
+		} forEach (destroyedCities - ciudades) select {sides getVariable [_x,sideUnknown] != good};
 		if (_cambiado) then {publicVariable "destroyedCities"};
 		};
 	if (isDedicated) then

@@ -5,7 +5,7 @@ _frontera = [_marcador] call A3A_fnc_isFrontline;
 
 _nVeh = 0;
 
-if (_marcador in aeropuertos) then
+if (_marcador in airports) then
 	{
 	_nveh = _nveh + round (_size/60);
 	if (_frontera) then {_nveh = _nveh * 2};
@@ -24,7 +24,7 @@ else
 		}
 	else
 		{
-		_nveh = if (lados getVariable [_marcador,sideUnknown] == malos) then {round (_size/70)} else {round (_size/50)};
+		_nveh = if (sides getVariable [_marcador,sideUnknown] == bad) then {round (_size/70)} else {round (_size/50)};
 		};
 	if (_frontera) then {_nveh = _nveh + 1};
 	};

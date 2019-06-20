@@ -34,7 +34,7 @@ else
 				_driver = driver _veh;
 				if (!isNull _driver) then
 					{
-					if (side group _driver != buenos) then
+					if (side group _driver != good) then
 						{
 						if !(_unit getVariable ["spawner",false]) then
 							{
@@ -58,7 +58,7 @@ else
 _skill = (tierWar + difficultyCoef) * 0.1 * skillMult;
 if ((faction _unit != factionGEN) and (faction _unit != factionFIA)) then
 	{
-	if (side _unit == malos) then
+	if (side _unit == bad) then
 		{
 		_skill = _skill + 0.1;
 		}
@@ -83,7 +83,7 @@ else
 	else
 		{
 		_skill = _skill min 0.2;
-		if ((tierWar > 1) and !hayIFA) then
+		if ((tierWar > 1) and !foundIFA) then
 			{
 			_rifleFinal = primaryWeapon _unit;
 			_magazines = getArray (configFile / "CfgWeapons" / _rifleFinal / "magazines");
@@ -108,11 +108,11 @@ if (not(_tipo in sniperUnits)) then
 	};
 
 _hmd = hmd _unit;
-if !(hayIFA) then
+if !(foundIFA) then
 	{
 	if (sunOrMoon < 1) then
 		{
-		if (!hayRHS) then
+		if (!foundRHS) then
 			{
 			if ((faction _unit != factionMachoMalos) and (faction _unit != factionMachoMuyMalos) and (_unit != leader (group _unit))) then
 				{
@@ -194,7 +194,7 @@ if !(hayIFA) then
 		}
 	else
 		{
-		if (!hayRHS) then
+		if (!foundRHS) then
 			{
 			if ((faction _unit != factionMachoMalos) and (faction _unit != factionMachoMuyMalos)) then
 				{
@@ -236,5 +236,5 @@ if (_revelar) then
 	{
 	{
 	_unit reveal [_x,1.5];
-	} forEach allUnits select {(vehicle _x isKindOf "Air") and (_x distance _unit <= distanciaSPWN)}
+	} forEach allUnits select {(vehicle _x isKindOf "Air") and (_x distance _unit <= distanceSPWN)}
 	};

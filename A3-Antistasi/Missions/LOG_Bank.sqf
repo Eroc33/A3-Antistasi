@@ -11,10 +11,10 @@ _grpContacto = grpNull;
 _tsk = "";
 _posicion = getPosASL _banco;
 
-_posbase = getMarkerPos respawnBuenos;
+_posbase = getMarkerPos respawnGood;
 
 _tiempolim = if (_dificil) then {60} else {120};
-if (hayIFA) then {_tiempolim = _tiempolim * 2};
+if (foundIFA) then {_tiempolim = _tiempolim * 2};
 _fechalim = [date select 0, date select 1, date select 2, date select 3, (date select 4) + _tiempolim];
 _fechalimnum = dateToNumber _fechalim;
 
@@ -26,7 +26,7 @@ _mrkfin setMarkerShape "ICON";
 //_mrkfin setMarkerColor "ColorBlue";
 //_mrkfin setMarkerText "Bank";
 
-_pos = (getMarkerPos respawnBuenos) findEmptyPosition [1,50,"C_Van_01_box_F"];
+_pos = (getMarkerPos respawnGood) findEmptyPosition [1,50,"C_Van_01_box_F"];
 
 _camion = "C_Van_01_box_F" createVehicle _pos;
 {_x reveal _camion} forEach (allPlayers - (entities "HeadlessClient_F"));
@@ -43,8 +43,8 @@ _camion addEventHandler ["GetIn",
 
 [_camion,"Mission Vehicle"] spawn A3A_fnc_inmuneConvoy;
 
-[[buenos,civilian],"LOG",[format ["We know Gendarmes are guarding a big amount of money in the bank of %1. Take this truck and go there before %2:%3, hold the truck close to tha bank's main entrance for 2 minutes and the money will be transferred to the truck. Bring it back to HQ and the money will be ours.",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4],"Bank Robbery",_mrkfin],_posicion,false,0,true,"Interact",true] call BIS_fnc_taskCreate;
-misiones pushBack ["LOG","CREATED"]; publicVariable "misiones";
+[[good,civilian],"LOG",[format ["We know Gendarmes are guarding a big amount of money in the bank of %1. Take this truck and go there before %2:%3, hold the truck close to tha bank's main entrance for 2 minutes and the money will be transferred to the truck. Bring it back to HQ and the money will be ours.",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4],"Bank Robbery",_mrkfin],_posicion,false,0,true,"Interact",true] call BIS_fnc_taskCreate;
+missions pushBack ["LOG","CREATED"]; publicVariable "missions";
 _mrk = createMarkerLocal [format ["%1patrolarea", floor random 100], _posicion];
 _mrk setMarkerShapeLocal "RECTANGLE";
 _mrk setMarkerSizeLocal [30,30];
@@ -57,7 +57,7 @@ _grupos = [];
 _soldados = [];
 for "_i" from 1 to 4 do
 	{
-	_grupo = if (_dificil) then {[_posicion,malos, gruposNATOSentry] call A3A_fnc_spawnGroup} else {[_posicion,malos, gruposNATOGen] call A3A_fnc_spawnGroup};
+	_grupo = if (_dificil) then {[_posicion,bad, groupsNATOSentry] call A3A_fnc_spawnGroup} else {[_posicion,bad, groupsNATOGen] call A3A_fnc_spawnGroup};
 	sleep 1;
 	_nul = [leader _grupo, _mrk, "SAFE","SPAWNED", "NOVEH2", "FORTIFY"] execVM "scripts\UPSMON.sqf";
 	{[_x,""] call A3A_fnc_NATOinit; _soldados pushBack _x} forEach units _grupo;
@@ -77,38 +77,38 @@ if ((dateToNumber date > _fechalimnum) or (!alive _camion)) then
 else
 	{
 	_cuenta = 120*_bonus;//120
-	[[_posicion,malos,"",true],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
+	[[_posicion,bad,"",true],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
 	[10*_bonus,-20*_bonus,_marcador] remoteExec ["A3A_fnc_citySupportChange",2];
-	["TaskFailed", ["", format ["Bank of %1 being assaulted",_nombredest]]] remoteExec ["BIS_fnc_showNotification",malos];
+	["TaskFailed", ["", format ["Bank of %1 being assaulted",_nombredest]]] remoteExec ["BIS_fnc_showNotification",bad];
 	{_amigo = _x;
 	if (_amigo distance _camion < 300) then
 		{
 		if ((captive _amigo) and (isPlayer _amigo)) then {[_amigo,false] remoteExec ["setCaptive",0,_amigo]; _amigo setCaptive false};
-		{if (side _x == malos) then {_x reveal [_amigo,4]};
+		{if (side _x == bad) then {_x reveal [_amigo,4]};
 		} forEach allUnits;
 		};
-	} forEach ([distanciaSPWN,0,_posicion,buenos] call A3A_fnc_distanceUnits);
+	} forEach ([distanceSPWN,0,_posicion,good] call A3A_fnc_distanceUnits);
 	_exit = false;
 	while {(_cuenta > 0) or (_camion distance _posicion < 7) and (alive _camion) and (dateToNumber date < _fechalimnum)} do
 		{
 		while {(_cuenta > 0) and (_camion distance _posicion < 7) and (alive _camion)} do
 			{
 			_formato = format ["%1", _cuenta];
-			{if (isPlayer _x) then {[petros,"countdown",_formato] remoteExec ["A3A_fnc_commsMP",_x]}} forEach ([80,0,_camion,buenos] call A3A_fnc_distanceUnits);
+			{if (isPlayer _x) then {[petros,"countdown",_formato] remoteExec ["A3A_fnc_commsMP",_x]}} forEach ([80,0,_camion,good] call A3A_fnc_distanceUnits);
 			sleep 1;
 			_cuenta = _cuenta - 1;
 			};
 		if (_cuenta > 0) then
 			{
 			_cuenta = 120*_bonus;//120
-			if (_camion distance _posicion > 6) then {{[petros,"hint","Don't get the truck far from the bank or count will restart"] remoteExec ["A3A_fnc_commsMP",_x]} forEach ([200,0,_camion,buenos] call A3A_fnc_distanceUnits)};
+			if (_camion distance _posicion > 6) then {{[petros,"hint","Don't get the truck far from the bank or count will restart"] remoteExec ["A3A_fnc_commsMP",_x]} forEach ([200,0,_camion,good] call A3A_fnc_distanceUnits)};
 			waitUntil {sleep 1; (!alive _camion) or (_camion distance _posicion < 7) or (dateToNumber date < _fechalimnum)};
 			}
 		else
 			{
 			if (alive _camion) then
 				{
-				{if (isPlayer _x) then {[petros,"hint","Drive the Truck back to base to finish this mission"] remoteExec ["A3A_fnc_commsMP",_x]}} forEach ([80,0,_camion,buenos] call A3A_fnc_distanceUnits);
+				{if (isPlayer _x) then {[petros,"hint","Drive the Truck back to base to finish this mission"] remoteExec ["A3A_fnc_commsMP",_x]}} forEach ([80,0,_camion,good] call A3A_fnc_distanceUnits);
 				_exit = true;
 				};
 			//waitUntil {sleep 1; (!alive _camion) or (_camion distance _posicion > 7) or (dateToNumber date < _fechalimnum)};
@@ -143,7 +143,7 @@ deleteVehicle _camion;
 
 _nul = [1200,"LOG"] spawn A3A_fnc_borrarTask;
 
-waitUntil {sleep 1; !([distanciaSPWN,1,_posicion,buenos] call A3A_fnc_distanceUnits)};
+waitUntil {sleep 1; !([distanceSPWN,1,_posicion,good] call A3A_fnc_distanceUnits)};
 
 {_grupo = _x;
 {deleteVehicle _x} forEach units _grupo;

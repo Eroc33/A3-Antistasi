@@ -10,9 +10,9 @@ while {true} do
 	private _antenas = [];
 	{
 	_puesto = [puestos,_x] call BIS_fnc_nearestPosition;
-	if (lados getVariable [_puesto,sideUnknown] != _lado) then {_antenas pushBack _x};
+	if (sides getVariable [_puesto,sideUnknown] != _lado) then {_antenas pushBack _x};
 	} forEach antenas;
-	if (_lado != buenos) then {_antenas pushBack [cajaVeh]};
+	if (_lado != good) then {_antenas pushBack [cajaVeh]};
 	if !(_antenas isEqualTo []) then
 		{
 		_jammer = [_antenas,player] call BIS_fnc_nearestPosition;

@@ -12,7 +12,7 @@ _angOrig = [_posbase,_posmarcador] call BIS_fnc_dirTo;
 _angOrig = _angOrig - 45;
 _ang = _angOrig + random 90;
 _intentos = 1;
-//_distancia = (distanciaSPWN/2) + 101;
+//_distancia = (distanceSPWN/2) + 101;
 _distancia = 500;
 
 _pos = [];
@@ -49,7 +49,7 @@ if (_fallo) exitWith {false};
 for "_i" from 1 to 60 do
 	{
 	_mina = createMine ["APERSMine",_pos,[],100];
-	if (lados getVariable [_marcador,sideUnknown] == malos) then {malos revealMine _mina} else {muyMalos revealMine _mina};
+	if (sides getVariable [_marcador,sideUnknown] == bad) then {bad revealMine _mina} else {veryBad revealMine _mina};
 	};
 
 //[-4000] remoteExec ["resourcesAAF",2];

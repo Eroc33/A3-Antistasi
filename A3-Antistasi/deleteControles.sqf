@@ -10,6 +10,6 @@ _cercano = [(marcadores - controles),_pos] call BIS_fnc_nearestPosition;
 if (_cercano == _marcador) then
 	{
 	waitUntil {sleep 1;(spawner getVariable _control == 2)};
-	_lado = lados getVariable [_marcador,sideUnknown];
-	lados setVariable [_control,_lado,true];
+	_lado = sides getVariable [_marcador,sideUnknown];
+	sides setVariable [_control,_lado,true];
 	};

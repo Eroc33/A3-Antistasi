@@ -15,12 +15,12 @@ _vehiculos = [];
 
 _frontera = [_marcador] call A3A_fnc_isFrontline;
 
-_lado = muyMalos;
+_lado = veryBad;
 
 _esFIA = false;
-if (lados getVariable [_marcador,sideUnknown] == malos) then
+if (sides getVariable [_marcador,sideUnknown] == bad) then
 	{
-	_lado = malos;
+	_lado = bad;
 	if ((random 10 <= (tierWar + difficultyCoef)) and !(_frontera)) then
 		{
 		_esFIA = true;
@@ -48,12 +48,12 @@ if ((spawner getVariable _marcador != 2) and _frontera) then
 			_vehiculos pushBack _bunker;
 			_bunker setDir _dirveh;
 			_pos = getPosATL _bunker;
-			_tipoVeh = if (_lado==malos) then {staticATmalos} else {staticATmuyMalos};
+			_tipoVeh = if (_lado==bad) then {staticATmalos} else {staticATmuyMalos};
 			_veh = _tipoVeh createVehicle _posicion;
 			_vehiculos pushBack _veh;
 			_veh setPos _pos;
 			_veh setDir _dirVeh + 180;
-			_tipoUnit = if (_lado==malos) then {staticCrewmalos} else {staticCrewMuyMalos};
+			_tipoUnit = if (_lado==bad) then {staticCrewmalos} else {staticCrewMuyMalos};
 			_unit = _grupo createUnit [_tipoUnit, _posicion, [], 0, "NONE"];
 			[_unit,_marcador] call A3A_fnc_NATOinit;
 			[_veh] call A3A_fnc_AIVEHinit;
@@ -62,7 +62,7 @@ if ((spawner getVariable _marcador != 2) and _frontera) then
 			}
 		else
 			{
-			_tipoGrupo = selectRandom gruposFIAMid;
+			_tipoGrupo = selectRandom groupsFIAMid;
 			_grupo = [_posicion, _lado, _tipoGrupo,false,true] call A3A_fnc_spawnGroup;
 			if !(isNull _grupo) then
 				{
@@ -81,7 +81,7 @@ if ((spawner getVariable _marcador != 2) and _frontera) then
 
 _mrk = createMarkerLocal [format ["%1patrolarea", random 100], _posicion];
 _mrk setMarkerShapeLocal "RECTANGLE";
-_mrk setMarkerSizeLocal [(distanciaSPWN/2),(distanciaSPWN/2)];
+_mrk setMarkerSizeLocal [(distanceSPWN/2),(distanceSPWN/2)];
 _mrk setMarkerTypeLocal "hd_warning";
 _mrk setMarkerColorLocal "ColorRed";
 _mrk setMarkerBrushLocal "DiagGrid";
@@ -98,20 +98,20 @@ if (_tam < ([_marcador] call A3A_fnc_garrisonSize)) then
 	}
 else
 	{
-	if ({if ((getMarkerPos _x inArea _mrk) and (lados getVariable [_x,sideUnknown] != _lado)) exitWIth {1}} count marcadores > 0) then {_patrol = false};
+	if ({if ((getMarkerPos _x inArea _mrk) and (sides getVariable [_x,sideUnknown] != _lado)) exitWIth {1}} count marcadores > 0) then {_patrol = false};
 	};
 if (_patrol) then
 	{
 	_cuenta = 0;
 	while {(spawner getVariable _marcador != 2) and (_cuenta < 4)} do
 		{
-		_arrayGrupos = if (_lado == malos) then
+		_arrayGrupos = if (_lado == bad) then
 			{
-			if (!_esFIA) then {gruposNATOsmall} else {gruposFIASmall};
+			if (!_esFIA) then {groupsNATOsmall} else {groupsFIASmall};
 			}
 		else
 			{
-			gruposCSATsmall
+			groupsCSATsmall
 			};
 		if ([_marcador,false] call A3A_fnc_fogCheck < 0.3) then {_arrayGrupos = _arrayGrupos - sniperGroups};
 		_tipoGrupo = selectRandom _arrayGrupos;
@@ -133,10 +133,10 @@ if (_patrol) then
 		};
 	};
 
-_tipoVeh = if (_lado == malos) then {NATOFlag} else {CSATFlag};
+_tipoVeh = if (_lado == bad) then {NATOFlag} else {CSATFlag};
 _bandera = createVehicle [_tipoVeh, _posicion, [],0, "CAN_COLLIDE"];
 _bandera allowDamage false;
-[_bandera,"take"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_bandera];
+[_bandera,"take"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_bandera];
 _vehiculos pushBack _bandera;
 
 if (not(_marcador in destroyedCities)) then
@@ -162,7 +162,7 @@ if (not(_marcador in destroyedCities)) then
 						_nombre = [_marcador] call A3A_fnc_localizar;
 						destroyedCities pushBackUnique _marcador;
 						publicVariable "destroyedCities";
-						["TaskFailed", ["", format ["%1 Destroyed",_nombre]]] remoteExec ["BIS_fnc_showNotification",[buenos,civilian]];
+						["TaskFailed", ["", format ["%1 Destroyed",_nombre]]] remoteExec ["BIS_fnc_showNotification",[good,civilian]];
 						};
 					}];
 				};
@@ -175,7 +175,7 @@ if (not(_marcador in destroyedCities)) then
 _pos = _posicion findEmptyPosition [5,_size,"I_Truck_02_covered_F"];//donde pone 5 antes ponía 10
 if (count _pos > 0) then
 	{
-	_tipoVeh = if (_lado == malos) then
+	_tipoVeh = if (_lado == bad) then
 		{
 		if (!_esFIA) then {vehNATOTrucks} else {[vehFIATruck]};
 		}
@@ -219,4 +219,4 @@ if (alive _x) then
 //if (!isNull _periodista) then {deleteVehicle _periodista};
 {deleteGroup _x} forEach _grupos;
 {deleteVehicle _x} forEach _civs;
-{if (!([distanciaSPWN-_size,1,_x,buenos] call A3A_fnc_distanceUnits)) then {deleteVehicle _x}} forEach _vehiculos;
+{if (!([distanceSPWN-_size,1,_x,good] call A3A_fnc_distanceUnits)) then {deleteVehicle _x}} forEach _vehiculos;

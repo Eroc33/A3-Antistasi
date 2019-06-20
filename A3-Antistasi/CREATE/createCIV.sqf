@@ -11,7 +11,7 @@ _datos = server getVariable _marcador;
 _numCiv = _datos select 0;
 _numVeh = _datos select 1;
 //_roads = _datos select 2;
-_roads = carreteras getVariable _marcador;//
+_roads = roads getVariable _marcador;//
 //_prestigeOPFOR = _datos select 3;
 //_prestigeBLUFOR = _datos select 4;
 
@@ -51,7 +51,7 @@ while {(spawner getVariable _marcador != 2) and (_cuenta < _numVeh) and (_cuenta
 	_road = roadAt _p1;
 	if (!isNull _road) then
 		{
-		if ((count (nearestObjects [_p1, ["Car", "Truck"], 5]) == 0) and !([50,1,_road,buenos] call A3A_fnc_distanceUnits)) then
+		if ((count (nearestObjects [_p1, ["Car", "Truck"], 5]) == 0) and !([50,1,_road,good] call A3A_fnc_distanceUnits)) then
 			{
 			_roadcon = roadsConnectedto (_road);
 			_p2 = getPos (_roadcon select 0);
@@ -63,7 +63,7 @@ while {(spawner getVariable _marcador != 2) and (_cuenta < _numVeh) and (_cuenta
 		    _mrk setMarkerSize [5, 5];
 		    _mrk setMarkerShape "RECTANGLE";
 		    _mrk setMarkerBrush "SOLID";
-		    _mrk setMarkerColor colorBuenos;
+		    _mrk setMarkerColor colorGood;
 		    //_mrk setMarkerText _nombre;
 		    */
 			_veh = _tipoveh createVehicle _pos;
@@ -76,7 +76,7 @@ while {(spawner getVariable _marcador != 2) and (_cuenta < _numVeh) and (_cuenta
 	_cuenta = _cuenta + 1;
 	};
 
-_mrkMar = if !(hayIFA) then {seaSpawn select {getMarkerPos _x inArea _marcador}} else {[]};
+_mrkMar = if !(foundIFA) then {seaSpawn select {getMarkerPos _x inArea _marcador}} else {[]};
 if (count _mrkMar > 0) then
 	{
 	for "_i" from 0 to (round (random 3)) do
@@ -146,7 +146,7 @@ if ([_marcador,false] call A3A_fnc_fogCheck > 0.2) then
 					_veh addEventHandler ["HandleDamage",
 						{
 						_veh = _this select 0;
-						if (side(_this select 3) == buenos) then
+						if (side(_this select 3) == good) then
 							{
 							_condu = driver _veh;
 							if (side _condu == civilian) then {_condu leaveVehicle _veh};
@@ -162,7 +162,7 @@ if ([_marcador,false] call A3A_fnc_fogCheck > 0.2) then
 					_civ moveInDriver _veh;
 					_grupoP addVehicle _veh;
 					_grupoP setBehaviour "CARELESS";
-					_posDestino = selectRandom (carreteras getVariable (_patrolCiudades select _cuentaPatrol));
+					_posDestino = selectRandom (roads getVariable (_patrolCiudades select _cuentaPatrol));
 					_wp = _grupoP addWaypoint [_posDestino,0];
 					_wp setWaypointType "MOVE";
 					_wp setWaypointSpeed "FULL";
@@ -186,17 +186,17 @@ waitUntil {sleep 1;(spawner getVariable _marcador == 2)};
 {deleteVehicle _x} forEach _civs;
 {deleteGroup _x} forEach _grupos;
 {
-if (!([distanciaSPWN-_size,1,_x,buenos] call A3A_fnc_distanceUnits)) then
+if (!([distanceSPWN-_size,1,_x,good] call A3A_fnc_distanceUnits)) then
 	{
 	if (_x in reportedVehs) then {reportedVehs = reportedVehs - [_x]; publicVariable "reportedVehs"};
 	deleteVehicle _x;
 	}
 } forEach _vehiculos;
 {
-waitUntil {sleep 1; !([distanciaSPWN,1,_x,buenos] call A3A_fnc_distanceUnits)};
+waitUntil {sleep 1; !([distanceSPWN,1,_x,good] call A3A_fnc_distanceUnits)};
 deleteVehicle _x} forEach _civsPatrol;
 {
-if (!([distanciaSPWN,1,_x,buenos] call A3A_fnc_distanceUnits)) then
+if (!([distanceSPWN,1,_x,good] call A3A_fnc_distanceUnits)) then
 	{
 	if (_x in reportedVehs) then {reportedVehs = reportedVehs - [_x]; publicVariable "reportedVehs"};
 	deleteVehicle _x

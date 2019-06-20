@@ -117,7 +117,7 @@ class A3A
         class VANTinfo {file="AI\VANTinfo.sqf";};
         class vehicleMarkers {file="AI\vehicleMarkers.sqf";};
         //class AAthreatEval {file="AI\AAthreatEval.sqf";};
-        //class hayLOS {file="AI\hayLOS.sqf";};
+        //class foundLOS {file="AI\foundLOS.sqf";};
 	}
 	
 	class CREATE

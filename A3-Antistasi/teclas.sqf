@@ -24,7 +24,7 @@ else
 	{
 	if (_key == 207) then
 		{
-		if (!hayACEhearing) then
+		if (!foundACEhearing) then
 			{
 			if (soundVolume <= 0.5) then
 				{

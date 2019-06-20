@@ -12,7 +12,7 @@ while {true} do
 	sleep 30;
 	};
 if ((!alive _morty) or (!alive _ayudante)) exitWith {};
-private _tipoVeh = if (side _morty == malos) then {NATOMortar} else {CSATMortar};
+private _tipoVeh = if (side _morty == bad) then {NATOMortar} else {CSATMortar};
 private _pos = [];
 while {true} do
 	{

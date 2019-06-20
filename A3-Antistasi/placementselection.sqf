@@ -19,7 +19,7 @@ hintC_arr_EH = findDisplay 72 displayAddEventHandler ["unload",
 	}];
 
 private ["_posicionTel","_marcador","_marcadores"];
-_marcadores = marcadores select {lados getVariable [_x,sideUnknown] != buenos};
+_marcadores = marcadores select {sides getVariable [_x,sideUnknown] != good};
 _posicionTel = [];
 if (isNil "placementDone") then
 	{
@@ -57,7 +57,7 @@ while {true} do
 	if (!isNil "placementDone") then
 		{
 		{
-		if ((side _x == malos) or (side _x == muyMalos)) then
+		if ((side _x == bad) or (side _x == veryBad)) then
 			{
 			if (_x distance _posicionTel < 500) then {_enemigos = true};
 			};
@@ -72,9 +72,9 @@ if (visiblemap) then
 	if (isNil "placementDone") then
 		{
 		{
-		if (getMarkerPos _x distance _posicionTel < distanciaSPWN) then
+		if (getMarkerPos _x distance _posicionTel < distanceSPWN) then
 			{
-			lados setVariable [_x,buenos,true];
+			sides setVariable [_x,good,true];
 			};
 		} forEach controles;
 		petros setPos _posicionTel;
@@ -83,13 +83,13 @@ if (visiblemap) then
 		{
 		_controles = controles select {!(isOnRoad (getMarkerPos _x))};
 		{
-		if (getMarkerPos _x distance _posicionTel < distanciaSPWN) then
+		if (getMarkerPos _x distance _posicionTel < distanceSPWN) then
 			{
-			lados setVariable [_x,buenos,true];
+			sides setVariable [_x,good,true];
 			};
 		} forEach _controles;
 		_viejo = petros;
-		grupoPetros = createGroup buenos;
+		grupoPetros = createGroup good;
 		publicVariable "grupoPetros";
         petros = grupoPetros createUnit [tipoPetros, _posicionTel, [], 0, "NONE"];
         grupoPetros setGroupId ["Maru","GroupColor4"];
@@ -97,14 +97,14 @@ if (visiblemap) then
         if (worldName == "Tanoa") then {petros setName "Maru"} else {petros setName "Petros"};
         petros disableAI "MOVE";
         petros disableAI "AUTOTARGET";
-        if (group _viejo == grupoPetros) then {[Petros,"mission"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],petros]} else {[Petros,"buildHQ"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],petros]};
+        if (group _viejo == grupoPetros) then {[Petros,"mission"] remoteExec ["A3A_fnc_flagaction",[good,civilian],petros]} else {[Petros,"buildHQ"] remoteExec ["A3A_fnc_flagaction",[good,civilian],petros]};
         _nul= [] execVM "initPetros.sqf";
         deleteVehicle _viejo;
         publicVariable "petros";
 		};
-	respawnBuenos setMarkerPos _posicionTel;
-	[respawnBuenos,1] remoteExec ["setMarkerAlphaLocal",[buenos,civilian]];
-	[respawnBuenos,0] remoteExec ["setMarkerAlphaLocal",[malos,muyMalos]];
+	respawnGood setMarkerPos _posicionTel;
+	[respawnGood,1] remoteExec ["setMarkerAlphaLocal",[good,civilian]];
+	[respawnGood,0] remoteExec ["setMarkerAlphaLocal",[bad,veryBad]];
 	if (isMultiplayer) then {hint "Please wait while moving HQ Assets to selected position";sleep 5};
 	_pos = [_posicionTel, 3, getDir petros] call BIS_Fnc_relPos;
 	fuego setPos _pos;
@@ -122,7 +122,7 @@ if (visiblemap) then
 	_rnd = _rnd + 45;
 	_pos = [getPos fuego, 3, _rnd] call BIS_Fnc_relPos;
 	cajaVeh setPos _pos;
-	if (isNil "placementDone") then {if (isMultiplayer) then {{if ((side _x == buenos) or (side _x == civilian)) then {_x setPos getPos petros}} forEach playableUnits} else {theBoss setPos (getMarkerPos respawnBuenos)}};
+	if (isNil "placementDone") then {if (isMultiplayer) then {{if ((side _x == good) or (side _x == civilian)) then {_x setPos getPos petros}} forEach playableUnits} else {theBoss setPos (getMarkerPos respawnGood)}};
 	theBoss allowDamage true;
 	if (isMultiplayer) then
 		{
@@ -143,7 +143,7 @@ if (visiblemap) then
 	openmap [false,false];
 	};
 {deleteMarkerLocal _x} forEach _mrkDum;
-"Synd_HQ" setMarkerPos (getMarkerPos respawnBuenos);
-posHQ = getMarkerPos respawnBuenos; publicVariable "posHQ";
+"Synd_HQ" setMarkerPos (getMarkerPos respawnGood);
+posHQ = getMarkerPos respawnGood; publicVariable "posHQ";
 if (isNil "placementDone") then {placementDone = true; publicVariable "placementDone"};
 chopForest = false; publicVariable "chopForest";

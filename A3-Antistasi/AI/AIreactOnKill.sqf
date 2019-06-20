@@ -22,7 +22,7 @@ if (fleeing _x) then
 					_marcador = (leader _grupo) getVariable "marcador";
 					if (!isNil "_marcador") then
 						{
-						if (_marcador in aeropuertos) then {_super = true};
+						if (_marcador in airports) then {_super = true};
 						};
 					if (vehicle _killer == _killer) then
 						{
@@ -59,7 +59,7 @@ else
 					{
 					if (sunOrMoon < 1) then
 						{
-						if ((hayIFA and (typeOf _x in squadLeaders)) or (count (getArray (configfile >> "CfgWeapons" >> primaryWeapon _x >> "muzzles")) == 2)) then
+						if ((foundIFA and (typeOf _x in squadLeaders)) or (count (getArray (configfile >> "CfgWeapons" >> primaryWeapon _x >> "muzzles")) == 2)) then
 							{
 							[_x,_enemy] spawn A3A_fnc_useFlares;
 							};
@@ -71,7 +71,7 @@ else
 			{
 			if ((sunOrMoon <1) and !haveNV) then
 				{
-				if ((hayIFA and (typeOf _x in squadLeaders)) or (count (getArray (configfile >> "CfgWeapons" >> primaryWeapon _x >> "muzzles")) == 2)) then
+				if ((foundIFA and (typeOf _x in squadLeaders)) or (count (getArray (configfile >> "CfgWeapons" >> primaryWeapon _x >> "muzzles")) == 2)) then
 					{
 					[_x] call A3A_fnc_useFlares;
 					};

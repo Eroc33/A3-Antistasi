@@ -707,7 +707,7 @@ class Mission
 				position[]={9200.1191,220.03395,8720.8213};
 				angles[]={0.013327583,0,6.2405477};
 			};
-			name="carreteras";
+			name="roads";
 			id=17;
 			type="Logic";
 		};
@@ -4692,7 +4692,7 @@ class Mission
 				position[]={9202.8047,219.96167,8718.4854};
 				angles[]={0.03996804,0,6.2538638};
 			};
-			name="lados";
+			name="sides";
 			id=580;
 			type="Logic";
 			atlOffset=1.5258789e-005;

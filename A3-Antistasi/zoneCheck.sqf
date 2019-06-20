@@ -1,54 +1,54 @@
 if (!isServer) exitWith {};
 
-private ["_marcador","_lado","_salir","_enemy1","_enemy2","_winner"];
+private ["_marker","_side","_exit","_enemy1","_enemy2","_winner"];
 
-_marcador = _this select 0;
-_lado = _this select 1;
-if ((isNil "_marcador") or (isNil "_lado")) exitWith {};
+_marker = _this select 0;
+_side = _this select 1;
+if ((isNil "_marker") or (isNil "_side")) exitWith {};
 waitUntil {!zoneCheckInProgress};
 zoneCheckInProgress = true;
-_salir = true;
+_exit = true;
 _enemy1 = "";
 _enemy2 = "";
 
-if ((_lado == buenos) and (lados getVariable [_marcador,sideUnknown] == buenos)) then
+if ((_side == good) and (sides getVariable [_marker,sideUnknown] == good)) then
 	{
-	_salir = false;
-	_enemy1 = muyMalos;
-	_enemy2 = malos;
+	_exit = false;
+	_enemy1 = veryBad;
+	_enemy2 = bad;
 	}
 else
 	{
-	if ((_lado == malos) and (lados getVariable [_marcador,sideUnknown] == malos)) then
+	if ((_side == bad) and (sides getVariable [_marker,sideUnknown] == bad)) then
 		{
-		_salir = false;
-		_enemy1 = muyMalos;
-		_enemy2 = buenos;
+		_exit = false;
+		_enemy1 = veryBad;
+		_enemy2 = good;
 		}
 	else
 		{
-		if ((_lado == muyMalos) and (lados getVariable [_marcador,sideUnknown] == muyMalos)) then
+		if ((_side == veryBad) and (sides getVariable [_marker,sideUnknown] == veryBad)) then
 			{
-			_salir = false;
-			_enemy1 = malos;
-			_enemy2 = buenos;
+			_exit = false;
+			_enemy1 = bad;
+			_enemy2 = good;
 			};
 		};
 	};
 
-if (_salir) exitWith {zoneCheckInProgress = false};
-_salir = true;
+if (_exit) exitWith {zoneCheckInProgress = false};
+_exit = true;
 
-if ({((_x getVariable ["spawner",false]) and ((side group _x) in [_enemy1,_enemy2])) and ([_x,_marcador] call A3A_fnc_canConquer)} count allUnits > 3*({([_x,_marcador] call A3A_fnc_canConquer) and (_x getVariable ["marcador",""] == _marcador)} count allUnits)) then
+if ({((_x getVariable ["spawner",false]) and ((side group _x) in [_enemy1,_enemy2])) and ([_x,_marker] call A3A_fnc_canConquer)} count allUnits > 3*({([_x,_marker] call A3A_fnc_canConquer) and (_x getVariable ["marcador",""] == _marker)} count allUnits)) then
 	{
-	_salir = false;
+	_exit = false;
 	};
-if (_salir) exitWith {zoneCheckInProgress = false};
+if (_exit) exitWith {zoneCheckInProgress = false};
 
 _winner = _enemy1;
-if ({(_x getVariable ["spawner",false]) and (side group _x == _enemy1) and ([_x,_marcador] call A3A_fnc_canConquer)} count allUnits <= {(_x getVariable ["spawner",false]) and (side group _x == _enemy2) and ([_x,_marcador] call A3A_fnc_canConquer)} count allUnits) then {_winner = _enemy2};
+if ({(_x getVariable ["spawner",false]) and (side group _x == _enemy1) and ([_x,_marker] call A3A_fnc_canConquer)} count allUnits <= {(_x getVariable ["spawner",false]) and (side group _x == _enemy2) and ([_x,_marker] call A3A_fnc_canConquer)} count allUnits) then {_winner = _enemy2};
 
-[_winner,_marcador] remoteExec ["A3A_fnc_markerChange",2];
+[_winner,_marker] remoteExec ["A3A_fnc_markerChange",2];
 
-waitUntil {sleep 1; lados getVariable [_marcador,sideUnknown] == _winner};
+waitUntil {sleep 1; sides getVariable [_marker,sideUnknown] == _winner};
 zoneCheckInProgress = false;

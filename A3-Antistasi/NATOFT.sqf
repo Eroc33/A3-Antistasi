@@ -1,8 +1,8 @@
 _chequeo = false;
 _lado = side (group player);
-_enemyFaction = if (_lado == malos) then {muyMalos} else {malos};
+_enemyFaction = if (_lado == bad) then {veryBad} else {bad};
 {_enemigo = _x;
-if (((side _enemigo == _enemyFaction) or (side _enemigo == buenos)) and (_enemigo distance player < 500) and (not(captive _enemigo))) exitWith {_chequeo = true};
+if (((side _enemigo == _enemyFaction) or (side _enemigo == good)) and (_enemigo distance player < 500) and (not(captive _enemigo))) exitWith {_chequeo = true};
 } forEach allUnits;
 
 if (_chequeo) exitWith {Hint "You cannot Fast Travel while enemies are nearby"};
@@ -23,10 +23,10 @@ _posicionTel = posicionTel;
 
 if (count _posicionTel > 0) then
 	{
-	_mrkENY = marcadores select {lados getVariable [_x,sideUnknown] != _lado};
+	_mrkENY = marcadores select {sides getVariable [_x,sideUnknown] != _lado};
 	_marcadores = +marcadores;
 	_mrkRespawn = "";
-	if (_lado == malos) then
+	if (_lado == bad) then
 		{
 		_marcadores pushBack "respawn_west";
 		_mrkRespawn = "respawn_west";
@@ -38,12 +38,12 @@ if (count _posicionTel > 0) then
 		};
 	_base = [_marcadores, _posicionTel] call BIS_Fnc_nearestPosition;
 
-	if ((lados getVariable [_base,sideUnknown] == buenos) or (_base in _mrkENY)) exitWith {hint "You cannot Fast Travel to an enemy controlled zone"; openMap [false,false]};
+	if ((sides getVariable [_base,sideUnknown] == good) or (_base in _mrkENY)) exitWith {hint "You cannot Fast Travel to an enemy controlled zone"; openMap [false,false]};
 
-	if ((!(_base in aeropuertos)) and (!(_base in puertos)) and (!(_base in puestos)) and (_base != _mrkRespawn)) exitWith {hint "You can only Fast Travel to Airbases, Outposts and Seaports"; openMap [false,false]};
+	if ((!(_base in airports)) and (!(_base in puertos)) and (!(_base in puestos)) and (_base != _mrkRespawn)) exitWith {hint "You can only Fast Travel to Airbases, Outposts and Seaports"; openMap [false,false]};
 
 	{
-		if (((side (group _x) == buenos) or (side (group _x) == _enemyFaction)) and (_x distance (getMarkerPos _base) < 500) and (not(captive _x))) then {_chequeo = true};
+		if (((side (group _x) == good) or (side (group _x) == _enemyFaction)) and (_x distance (getMarkerPos _base) < 500) and (not(captive _x))) then {_chequeo = true};
 	} forEach allUnits;
 
 	if (_chequeo) exitWith {Hint "You cannot Fast Travel to an area under attack or with enemies in the surrounding area"; openMap [false,false]};

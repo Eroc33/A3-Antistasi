@@ -28,15 +28,15 @@ else
 
 fuego inflame false;
 
-//respawnBuenos setMarkerPos [0,0,0];
-respawnBuenos setMarkerAlpha 0;
+//respawnGood setMarkerPos [0,0,0];
+respawnGood setMarkerAlpha 0;
 _garrison = garrison getVariable ["Synd_HQ", []];
 _posicion = getMarkerPos "Synd_HQ";
 if (count _garrison > 0) then
 	{
 	_coste = 0;
 	_hr = 0;
-	if ({(alive _x) and (!captive _x) and ((side _x == malos) or (side _x == muyMalos)) and (_x distance _posicion < 500)} count allUnits > 0) then
+	if ({(alive _x) and (!captive _x) and ((side _x == bad) or (side _x == veryBad)) and (_x distance _posicion < 500)} count allUnits > 0) then
 		{
 		hint "HQ Garrison will stay here and hold the enemy";
 		}
@@ -44,11 +44,11 @@ if (count _garrison > 0) then
 		{
 		_size = ["Synd_HQ"] call A3A_fnc_sizeMarker;
 		{
-		if ((side group _x == buenos) and (not(_x getVariable ["spawner",false])) and (_x distance _posicion < _size) and (_x != petros)) then
+		if ((side group _x == good) and (not(_x getVariable ["spawner",false])) and (_x distance _posicion < _size) and (_x != petros)) then
 			{
 			if (!alive _x) then
 				{
-				if (typeOf _x in soldadosSDK) then
+				if (typeOf _x in soldiersSDK) then
 					{
 					if (typeOf _x == staticCrewBuenos) then {_coste = _coste - ([SDKMortar] call A3A_fnc_vehiclePrice)};
 					_hr = _hr - 1;

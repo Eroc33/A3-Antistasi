@@ -6,8 +6,8 @@ if (captive _player) exitWith {hint "You are Undercover already"};
 private ["_compromised","_cambiar","_aeropuertos","_arrayCivVeh","_player","_size","_base"];
 
 _cambiar = "";
-_aeropuertos = aeropuertos + puestos + (controles select {isOnRoad (getMarkerPos _x)});
-_aeropuertos1 = aeropuertos;
+_aeropuertos = airports + puestos + (controles select {isOnRoad (getMarkerPos _x)});
+_aeropuertos1 = airports;
 _arrayCivVeh = arrayCivVeh + [civHeli] + civBoats;
 _compromised = _player getVariable "compromised";
 
@@ -40,7 +40,7 @@ else
 
 if (_cambiar != "") exitWith {};
 
-if ({((side _x== muyMalos) or (side _x== malos)) and (((_x knowsAbout _player > 1.4) and (_x distance _player < 500)) or (_x distance _player < 350))} count allUnits > 0) exitWith
+if ({((side _x== veryBad) or (side _x== bad)) and (((_x knowsAbout _player > 1.4) and (_x distance _player < 500)) or (_x distance _player < 350))} count allUnits > 0) exitWith
 	{
 	hint "You cannot go Undercover while enemies are spotting you";
 	if (vehicle _player != _player) then
@@ -53,7 +53,7 @@ if ({((side _x== muyMalos) or (side _x== malos)) and (((_x knowsAbout _player > 
 
 _base = [_aeropuertos,_player] call BIS_fnc_nearestPosition;
 _size = [_base] call A3A_fnc_sizeMarker;
-if ((_player distance getMarkerPos _base < _size*2) and (not(lados getVariable [_base,sideUnknown] == buenos))) exitWith {hint "You cannot go Undercover near Airports, Outposts or Roadblocks"};
+if ((_player distance getMarkerPos _base < _size*2) and (not(sides getVariable [_base,sideUnknown] == good))) exitWith {hint "You cannot go Undercover near Airports, Outposts or Roadblocks"};
 
 ["Undercover ON",0,0,4,0,0,4] spawn bis_fnc_dynamicText;
 
@@ -96,16 +96,16 @@ while {_cambiar == ""} do
 							{
 							if (count (_veh nearRoads 50) == 0) then
 								{
-								if ({((side _x== muyMalos) or (side _x== malos)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_cambiar = "Carretera"};
+								if ({((side _x== veryBad) or (side _x== bad)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_cambiar = "Carretera"};
 								};
 							};
-						if (hayACE) then
+						if (foundACE) then
 							{
-			  				if (((position _player nearObjects ["DemoCharge_Remote_Ammo", 5]) select 0) mineDetectedBy malos) then
+			  				if (((position _player nearObjects ["DemoCharge_Remote_Ammo", 5]) select 0) mineDetectedBy bad) then
 								{
 								_cambiar = "SpotBombTruck";
 								};
-							if (((position _player nearObjects ["SatchelCharge_Remote_Ammo", 5]) select 0) mineDetectedBy malos) then
+							if (((position _player nearObjects ["SatchelCharge_Remote_Ammo", 5]) select 0) mineDetectedBy bad) then
 								{
 								_cambiar = "SpotBombTruck";
 								};
@@ -118,7 +118,7 @@ while {_cambiar == ""} do
 			{
 			if ((primaryWeapon _player != "") or (secondaryWeapon _player != "") or (handgunWeapon _player != "") or (vest _player != "") or (getNumber (configfile >> "CfgWeapons" >> headgear _player >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") > 2) or (hmd _player != "") or (not(uniform _player in civUniforms))) then
 				{
-				if ({((side _x== muyMalos) or (side _x== malos)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_cambiar = "Vestido2"} else {_cambiar = "Vestido"};
+				if ({((side _x== veryBad) or (side _x== bad)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_cambiar = "Vestido2"} else {_cambiar = "Vestido"};
 				};
 			if (dateToNumber date < _compromised) then
 				{
@@ -131,11 +131,11 @@ while {_cambiar == ""} do
 				{
 				_base = [_aeropuertos,_player] call BIS_fnc_nearestPosition;
 				//_size = [_base] call A3A_fnc_sizeMarker;
-				if ((_player inArea _base) and (lados getVariable [_base,sideUnknown] != buenos)) then
+				if ((_player inArea _base) and (sides getVariable [_base,sideUnknown] != good)) then
 					{
 					if !(_estaEnControl) then
 						{
-						_aggro = if (lados getVariable [_base,sideUnknown] == malos) then {prestigeNATO} else {prestigeCSAT};
+						_aggro = if (sides getVariable [_base,sideUnknown] == bad) then {prestigeNATO} else {prestigeCSAT};
 						if (random 100 < _aggro) then
 							{
 							_cambiar = "Control";
@@ -157,7 +157,7 @@ while {_cambiar == ""} do
 					{
 					_base = [_aeropuertos1,_player] call BIS_fnc_nearestPosition;
 					_size = [_base] call A3A_fnc_sizeMarker;
-					if ((_player distance2d getMarkerPos _base < _size*3) and ((lados getVariable [_base,sideUnknown] == malos) or (lados getVariable [_base,sideUnknown] == muyMalos))) then
+					if ((_player distance2d getMarkerPos _base < _size*3) and ((sides getVariable [_base,sideUnknown] == bad) or (sides getVariable [_base,sideUnknown] == veryBad))) then
 						{
 						_cambiar = "NoFly";
 						};

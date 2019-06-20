@@ -6,7 +6,7 @@ if (typeOf _unit == "Fin_random_F") exitWith {};
 
 _unit setVariable ["surrendered",true];
 
-if (side _unit == malos) then
+if (side _unit == bad) then
 	{
 	_nul = [-2,0,getPos _unit] remoteExec ["A3A_fnc_citySupportChange",2];
 	}
@@ -74,5 +74,5 @@ if (!isNil "_marcador") then
 sleep 10;
 _unit allowDamage true;
 if (isMultiplayer) then {[_unit,false] remoteExec ["enableSimulationGlobal",2]} else {_unit enableSimulation false};
-[_unit,"interrogar"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_unit];
-[_unit,"capturar"]remoteExec ["A3A_fnc_flagaction",[buenos,civilian],_unit];
+[_unit,"interrogar"] remoteExec ["A3A_fnc_flagaction",[good,civilian],_unit];
+[_unit,"capturar"]remoteExec ["A3A_fnc_flagaction",[good,civilian],_unit];

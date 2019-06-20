@@ -11,15 +11,15 @@ _tsk = "";
 _posicion = getMarkerPos _marcador;
 
 _tiempolim = if (_dificil) then {30} else {60};
-if (hayIFA) then {_tiempolim = _tiempolim * 2};
+if (foundIFA) then {_tiempolim = _tiempolim * 2};
 _fechalim = [date select 0, date select 1, date select 2, date select 3, (date select 4) + _tiempolim];
 _fechalimnum = dateToNumber _fechalim;
 _nombredest = [_marcador] call A3A_fnc_localizar;
 _taskDescription = format ["%1 population is in need of supplies. We may improve our relationship with that city if we are the ones who provide them. I reserved a transport truck with supplies near our HQ. Drive the transport truck to %1 city center. Hold it there for 2 minutes and it's done. Do this before %2:%3. You may allways sell those supplies here, that money can be welcome. Just sell the truck and job is done",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4];
 
-[[buenos,civilian],"LOG",[_taskDescription,"City Supplies",_marcador],_posicion,false,0,true,"Heal",true] call BIS_fnc_taskCreate;
-misiones pushBack ["LOG","CREATED"]; publicVariable "misiones";
-_pos = (getMarkerPos respawnBuenos) findEmptyPosition [1,50,"C_Van_01_box_F"];
+[[good,civilian],"LOG",[_taskDescription,"City Supplies",_marcador],_posicion,false,0,true,"Heal",true] call BIS_fnc_taskCreate;
+missions pushBack ["LOG","CREATED"]; publicVariable "missions";
+_pos = (getMarkerPos respawnGood) findEmptyPosition [1,50,"C_Van_01_box_F"];
 
 //Creating the box
 _camion = "Land_PaperBox_01_open_boxes_F" createVehicle _pos;
@@ -54,8 +54,8 @@ if ((dateToNumber date > _fechalimnum) or (isNull _camion)) then
 else
 	{
 	_cuenta = 120*_bonus;//120
-	[[_posicion,malos,"",false],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
-	["TaskFailed", ["", format ["%2 deploying supplies in %1",_nombredest,nameBuenos]]] remoteExec ["BIS_fnc_showNotification",malos];
+	[[_posicion,bad,"",false],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
+	["TaskFailed", ["", format ["%2 deploying supplies in %1",_nombredest,nameBuenos]]] remoteExec ["BIS_fnc_showNotification",bad];
 	{_amigo = _x;
 	if (captive _amigo) then
 		{
@@ -63,33 +63,33 @@ else
 		_amigo setCaptive false;
 		};
 	{
-	if ((side _x == malos) and (_x distance _posicion < distanciaSPWN)) then
+	if ((side _x == bad) and (_x distance _posicion < distanceSPWN)) then
 		{
 		if (_x distance _posicion < 300) then {_x doMove _posicion} else {_x reveal [_amigo,4]};
 		};
 	if ((side _x == civilian) and (_x distance _posicion < 300) and (vehicle _x == _x)) then {_x doMove position _camion};
 	} forEach allUnits;
-	} forEach ([300,0,_camion,buenos] call A3A_fnc_distanceUnits);
+	} forEach ([300,0,_camion,good] call A3A_fnc_distanceUnits);
 	while {(_cuenta > 0)/* or (_camion distance _posicion < 40)*/ and (dateToNumber date < _fechalimnum) and !(isNull _camion)} do
 		{
-		while {(_cuenta > 0) and (_camion distance _posicion < 40) and ({[_x] call A3A_fnc_canFight} count ([80,0,_camion,buenos] call A3A_fnc_distanceUnits) == count ([80,0,_camion,buenos] call A3A_fnc_distanceUnits)) and ({(side _x == malos) and (_x distance _camion < 50)} count allUnits == 0) and (dateToNumber date < _fechalimnum) and (isNull attachedTo _camion)} do
+		while {(_cuenta > 0) and (_camion distance _posicion < 40) and ({[_x] call A3A_fnc_canFight} count ([80,0,_camion,good] call A3A_fnc_distanceUnits) == count ([80,0,_camion,good] call A3A_fnc_distanceUnits)) and ({(side _x == bad) and (_x distance _camion < 50)} count allUnits == 0) and (dateToNumber date < _fechalimnum) and (isNull attachedTo _camion)} do
 			{
 			_formato = format ["%1", _cuenta];
-			{if (isPlayer _x) then {[petros,"countdown",_formato] remoteExec ["A3A_fnc_commsMP",_x]}} forEach ([80,0,_camion,buenos] call A3A_fnc_distanceUnits);
+			{if (isPlayer _x) then {[petros,"countdown",_formato] remoteExec ["A3A_fnc_commsMP",_x]}} forEach ([80,0,_camion,good] call A3A_fnc_distanceUnits);
 			sleep 1;
 			_cuenta = _cuenta - 1;
 			};
 		if (_cuenta > 0) then
 			{
 			_cuenta = 120*_bonus;//120
-			if (((_camion distance _posicion > 40) or (not([80,1,_camion,buenos] call A3A_fnc_distanceUnits)) or ({(side _x == malos) and (_x distance _camion < 50)} count allUnits != 0)) and (alive _camion)) then {{[petros,"hint","Don't get the truck far from the city center, and stay close to it, and clean all BLUFOR presence in the surroundings or count will restart"] remoteExec ["A3A_fnc_commsMP",_x]} forEach ([100,0,_camion,buenos] call A3A_fnc_distanceUnits)};
-			waitUntil {sleep 1; ((_camion distance _posicion < 40) and ([80,1,_camion,buenos] call A3A_fnc_distanceUnits) and ({(side _x == malos) and (_x distance _camion < 50)} count allUnits == 0)) or (dateToNumber date > _fechalimnum) or (isNull _camion)};
+			if (((_camion distance _posicion > 40) or (not([80,1,_camion,good] call A3A_fnc_distanceUnits)) or ({(side _x == bad) and (_x distance _camion < 50)} count allUnits != 0)) and (alive _camion)) then {{[petros,"hint","Don't get the truck far from the city center, and stay close to it, and clean all BLUFOR presence in the surroundings or count will restart"] remoteExec ["A3A_fnc_commsMP",_x]} forEach ([100,0,_camion,good] call A3A_fnc_distanceUnits)};
+			waitUntil {sleep 1; ((_camion distance _posicion < 40) and ([80,1,_camion,good] call A3A_fnc_distanceUnits) and ({(side _x == bad) and (_x distance _camion < 50)} count allUnits == 0)) or (dateToNumber date > _fechalimnum) or (isNull _camion)};
 			};
 		if (_cuenta < 1) exitWith {};
 		};
 		if ((dateToNumber date < _fechalimnum) and !(isNull _camion)) then
 			{
-			[petros,"hint","Supplies Delivered"] remoteExec ["A3A_fnc_commsMP",[buenos,civilian]];
+			[petros,"hint","Supplies Delivered"] remoteExec ["A3A_fnc_commsMP",[good,civilian]];
 			["LOG",[_taskDescription,"City Supplies",_marcador],_posicion,"SUCCEEDED","Heal"] call A3A_fnc_taskUpdate;
 			{if (_x distance _posicion < 500) then {[10*_bonus,_x] call A3A_fnc_playerScoreAdd}} forEach (allPlayers - (entities "HeadlessClient_F"));
 			[5*_bonus,theBoss] call A3A_fnc_playerScoreAdd;
@@ -113,6 +113,6 @@ _emptybox = "Land_PaperBox_01_open_empty_F" createVehicle _ecpos;
 
 //_nul = [_tsk,true] call BIS_fnc_deleteTask;
 _nul = [1200,"LOG"] spawn A3A_fnc_borrarTask;
-waitUntil {sleep 1; (not([distanciaSPWN,1,_camion,buenos] call A3A_fnc_distanceUnits)) or (_camion distance (getMarkerPos respawnBuenos) < 60)};
+waitUntil {sleep 1; (not([distanceSPWN,1,_camion,good] call A3A_fnc_distanceUnits)) or (_camion distance (getMarkerPos respawnGood) < 60)};
 
 deleteVehicle _emptybox;

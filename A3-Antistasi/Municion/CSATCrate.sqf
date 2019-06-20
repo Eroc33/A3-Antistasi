@@ -22,7 +22,7 @@ if (typeOf _crate == vehCSATAmmoTruck) then
 
 for "_i" from 0 to _var1 do
 	{
-	_cosa = selectRandom (armasCSAT + antitanqueAAF);
+	_cosa = selectRandom (weaponsCSAT + antitankAAF);
 	if (!(_cosa in unlockedWeapons)) then
 		{
 		_num = 1+ (floor random 12);
@@ -42,21 +42,21 @@ for "_i" from 0 to _var2 do
 	};
 for "_i" from 0 to _var2 do
 	{
-	_cosa = selectRandom municionCSAT;
+	_cosa = selectRandom ammunitionCSAT;
 	if (!(_cosa in unlockedMagazines)) then {_crate addMagazineCargoGlobal [_cosa, 10]};
 	};
 for "_i" from 1 to _var3 do
 	{
-	_cosa = selectRandom minasAAF;
+	_cosa = selectRandom minesAAF;
 	_num = 1 + (floor random 5);
 	_crate addMagazineCargoGlobal [_cosa, _num];
 	};
 
-if !(hayIFA) then
+if !(foundIFA) then
 	{
 	for "_i" from 1 to _var4 do
 		{
-		_cosa = selectRandom opticasAAF;
+		_cosa = selectRandom opticsAAF;
 		if (not(_cosa in unlockedItems)) then
 			{
 			_crate addItemCargoGlobal [_cosa, 1 + (floor random 2)];

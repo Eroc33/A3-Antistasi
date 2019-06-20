@@ -9,7 +9,7 @@ if (_muerto getVariable ["spawner",false]) then
 [_muerto] spawn A3A_fnc_postmortem;
 _grupo = group _muerto;
 _lado = side (group _muerto);
-if (hayACE) then
+if (foundACE) then
 	{
 	if ((isNull _killer) || (_killer == _muerto)) then
 		{
@@ -17,14 +17,14 @@ if (hayACE) then
 		};
 	};
 //if (_killer isEqualType "") then {diag_log format ["Antistasi error in A3A_fnc_AAFKilledEH, params: %1",_this]};
-if (side (group _killer) == buenos) then
+if (side (group _killer) == good) then
 	{
 	if (isPlayer _killer) then
 		{
 		[1,_killer] call A3A_fnc_playerScoreAdd;
 		if (captive _killer) then
 			{
-			if (_killer distance _muerto < distanciaSPWN) then
+			if (_killer distance _muerto < distanceSPWN) then
 				{
 				[_killer,false] remoteExec ["setCaptive",0,_killer];
 				_killer setCaptive false;
@@ -52,7 +52,7 @@ if (side (group _killer) == buenos) then
 		};
 	if (count weapons _muerto < 1) then
 		{
-		if (_lado == malos) then
+		if (_lado == bad) then
 			{
 			[0,-2,getPos _muerto] remoteExec ["A3A_fnc_citySupportChange",2];
 			[1,0] remoteExec ["A3A_fnc_prestige",2];
@@ -65,7 +65,7 @@ if (side (group _killer) == buenos) then
 	else
 		{
 		[-1,1,getPos _muerto] remoteExec ["A3A_fnc_citySupportChange",2];
-		if (_lado == malos) then
+		if (_lado == bad) then
 			{
 			[0.1,0] remoteExec ["A3A_fnc_prestige",2];
 			}
@@ -77,7 +77,7 @@ if (side (group _killer) == buenos) then
 	}
 else
 	{
-	if (_lado == malos) then
+	if (_lado == bad) then
 		{
 		[-0.25,0,getPos _muerto] remoteExec ["A3A_fnc_citySupportChange",2];
 		}
@@ -91,7 +91,7 @@ _garrisoned = true;
 if (isNil "_marcador") then {_marcador = _muerto getVariable ["origen",""]; _garrisoned = false};
 if (_marcador != "") then
 	{
-	if (lados getVariable [_marcador,sideUnknown] == _lado) then
+	if (sides getVariable [_marcador,sideUnknown] == _lado) then
 		{
 		[typeOf _muerto,_lado,_marcador,-1] remoteExec ["A3A_fnc_garrisonUpdate",2];
 		if (_garrisoned) then {[_marcador,_lado] remoteExec ["A3A_fnc_zoneCheck",2]};

@@ -8,12 +8,12 @@ if (isNull _viejo) exitWith {};
 waitUntil {alive player};
 
 _nul = [_viejo] spawn A3A_fnc_postmortem;
-if !(hayACEMedical) then
+if !(foundACEMedical) then
 	{
 	_viejo setVariable ["INCAPACITATED",false,true];
 	_nuevo setVariable ["INCAPACITATED",false,true];
 	};
-if (side group player == buenos) then
+if (side group player == good) then
 	{
 	_owner = _viejo getVariable ["owner",_viejo];
 
@@ -51,7 +51,7 @@ if (side group player == buenos) then
     _nuevo addOwnedMine _x;
     } count (getAllOwnedMines (_viejo));
 
-	//if (!hayACEMedical) then {[_nuevo] call A3A_fnc_initRevive};
+	//if (!foundACEMedical) then {[_nuevo] call A3A_fnc_initRevive};
 	disableUserInput false;
 	//_nuevo enableSimulation true;
 	if (_viejo == theBoss) then
@@ -65,14 +65,14 @@ if (side group player == buenos) then
 	removeBackpackGlobal _nuevo;
 	removeVest _nuevo;
 	if ((not("ItemGPS" in unlockedItems)) and ("ItemGPS" in (assignedItems _nuevo))) then {_nuevo unlinkItem "ItemGPS"};
-	if ((!hayTFAR) and (!hayACRE) and ("ItemRadio" in (assignedItems player)) and (!haveRadio)) then {player unlinkItem "ItemRadio"};
+	if ((!foundTFAR) and (!foundACRE) and ("ItemRadio" in (assignedItems player)) and (!haveRadio)) then {player unlinkItem "ItemRadio"};
 	if (!isPlayer (leader group player)) then {(group player) selectLeader player};
 	player addEventHandler ["FIRED",
 		{
 		_player = _this select 0;
 		if (captive _player) then
 			{
-			if ({if (((side _x == malos) or (side _x == muyMalos)) and (_x distance player < 300)) exitWith {1}} count allUnits > 0) then
+			if ({if (((side _x == bad) or (side _x == veryBad)) and (_x distance player < 300)) exitWith {1}} count allUnits > 0) then
 				{
 				[_player,false] remoteExec ["setCaptive",0,_player];
 				_player setCaptive false;
@@ -110,7 +110,7 @@ if (side group player == buenos) then
 			_tipo = typeOf _contenedor;
 			if (((_contenedor isKindOf "Man") and (!alive _contenedor)) or (_tipo == NATOAmmoBox) or (_tipo == CSATAmmoBox)) then
 				{
-				if ({if (((side _x== muyMalos) or (side _x== malos)) and (_x knowsAbout _jugador > 1.4)) exitWith {1}} count allUnits > 0) then
+				if ({if (((side _x== veryBad) or (side _x== bad)) and (_x knowsAbout _jugador > 1.4)) exitWith {1}} count allUnits > 0) then
 					{
 					[_jugador,false] remoteExec ["setCaptive",0,_jugador];
 					_jugador setCaptive false;
@@ -183,7 +183,7 @@ if (side group player == buenos) then
 		_player = _this select 0;
 		if (captive _player) then
 			{
-			if ({((side _x== muyMalos) or (side _x== malos)) and (_x knowsAbout player > 1.4)} count allUnits > 0) then
+			if ({((side _x== veryBad) or (side _x== bad)) and (_x knowsAbout player > 1.4)} count allUnits > 0) then
 				{
 				[_player,false] remoteExec ["setCaptive",0,_player];
 				_player setCaptive false;
@@ -241,6 +241,6 @@ else
 	{
 	_viejo setVariable ["spawner",nil,true];
 	_nuevo setVariable ["spawner",true,true];
-	if (hayRHS) then {[player] call A3A_fnc_RHSdress};
-	if (hayACE) then {[] call A3A_fnc_ACEpvpReDress};
+	if (foundRHS) then {[player] call A3A_fnc_RHSdress};
+	if (foundACE) then {[] call A3A_fnc_ACEpvpReDress};
 	};

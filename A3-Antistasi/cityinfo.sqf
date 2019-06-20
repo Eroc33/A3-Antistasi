@@ -34,7 +34,7 @@ while {visibleMap} do
 		_posicionTel = posicionTel;
 		_sitio = [marcadores, _posicionTel] call BIS_Fnc_nearestPosition;
 		_texto = "Click on the zone";
-		_nameFaction = if (lados getVariable [_sitio,sideUnknown] == buenos) then {nameBuenos} else {if (lados getVariable [_sitio,sideUnknown] == malos) then {nameMalos} else {nameMuyMalos}};
+		_nameFaction = if (sides getVariable [_sitio,sideUnknown] == good) then {nameBuenos} else {if (sides getVariable [_sitio,sideUnknown] == bad) then {nameMalos} else {nameMuyMalos}};
 		if (_sitio == "Synd_HQ") then
 			{
 			_texto = format ["%2 HQ%1",[_sitio] call A3A_fnc_garrisonInfo,nameBuenos];
@@ -52,9 +52,9 @@ while {visibleMap} do
 			_result = "NONE";
 			switch (_power) do
 				{
-				case buenos: {_result = format ["%1",nameBuenos]};
-				case malos: {_result = format ["%1",nameMalos]};
-				case muyMalos: {_result = format ["%1",nameMuyMalos]};
+				case good: {_result = format ["%1",nameBuenos]};
+				case bad: {_result = format ["%1",nameMalos]};
+				case veryBad: {_result = format ["%1",nameMuyMalos]};
 				};
 			/*_ant1 = [antenas,_posicion] call BIS_fnc_nearestPosition;
 			_ant2 = [antenasMuertas, _posicion] call BIS_fnc_nearestPosition;
@@ -65,23 +65,23 @@ while {visibleMap} do
 			else
 				{
 				_puesto = [marcadores,_ant1] call BIS_fnc_NearestPosition;
-				if (lados getVariable [_sitio,sideUnknown] == buenos) then
+				if (sides getVariable [_sitio,sideUnknown] == good) then
 					{
-					if (lados getVariable [_puesto,sideUnknown] == buenos) then {_result = format ["%1",nameBuenos]} else {if (lados getVariable [_puesto,sideUnknown] == muyMalos) then {_result = "NONE"}};
+					if (sides getVariable [_puesto,sideUnknown] == good) then {_result = format ["%1",nameBuenos]} else {if (sides getVariable [_puesto,sideUnknown] == veryBad) then {_result = "NONE"}};
 					}
 				else
 					{
-					if (lados getVariable [_puesto,sideUnknown] == buenos) then {_result = format ["%1",nameBuenos]} else {if (lados getVariable [_puesto,sideUnknown] == muyMalos) then {_result = "NONE"}};
+					if (sides getVariable [_puesto,sideUnknown] == good) then {_result = format ["%1",nameBuenos]} else {if (sides getVariable [_puesto,sideUnknown] == veryBad) then {_result = "NONE"}};
 					};
 				};
 			*/
 			_texto = format ["%1\nInfluence: %2",_texto,_result];
 			if (_sitio in destroyedCities) then {_texto = format ["%1\nDESTROYED",_texto]};
-			if (lados getVariable [_sitio,sideUnknown] == buenos) then {_texto = format ["%1\n%2",_texto,[_sitio] call A3A_fnc_garrisonInfo]};
+			if (sides getVariable [_sitio,sideUnknown] == good) then {_texto = format ["%1\n%2",_texto,[_sitio] call A3A_fnc_garrisonInfo]};
 			};
-		if (_sitio in aeropuertos) then
+		if (_sitio in airports) then
 			{
-			if (not(lados getVariable [_sitio,sideUnknown] == buenos)) then
+			if (not(sides getVariable [_sitio,sideUnknown] == good)) then
 				{
 				_texto = format ["%1 Airport",_nameFaction];
 				_busy = [_sitio,true] call A3A_fnc_airportCanAttack;
@@ -96,7 +96,7 @@ while {visibleMap} do
 			};
 		if (_sitio in recursos) then
 			{
-			if (not(lados getVariable [_sitio,sideUnknown] == buenos)) then
+			if (not(sides getVariable [_sitio,sideUnknown] == good)) then
 				{
 				_texto = format ["%1 Resources",_nameFaction];
 				_garrison = count (garrison getVariable _sitio);
@@ -110,7 +110,7 @@ while {visibleMap} do
 			};
 		if (_sitio in fabricas) then
 			{
-			if (not(lados getVariable [_sitio,sideUnknown] == buenos)) then
+			if (not(sides getVariable [_sitio,sideUnknown] == good)) then
 				{
 				_texto = format ["%1 Factory",_nameFaction];
 				_garrison = count (garrison getVariable _sitio);
@@ -124,7 +124,7 @@ while {visibleMap} do
 			};
 		if (_sitio in puestos) then
 			{
-			if (not(lados getVariable [_sitio,sideUnknown] == buenos)) then
+			if (not(sides getVariable [_sitio,sideUnknown] == good)) then
 				{
 				_texto = format ["%1 Grand Outpost",_nameFaction];
 				_busy = [_sitio,true] call A3A_fnc_airportCanAttack;
@@ -139,7 +139,7 @@ while {visibleMap} do
 			};
 		if (_sitio in puertos) then
 			{
-			if (not(lados getVariable [_sitio,sideUnknown] == buenos)) then
+			if (not(sides getVariable [_sitio,sideUnknown] == good)) then
 				{
 				_texto = format ["%1 Seaport",_nameFaction];
 				_garrison = count (garrison getVariable _sitio);

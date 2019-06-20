@@ -51,7 +51,7 @@ petros addMPEventHandler ["mpkilled",
     _killer = _this select 1;
     if (isServer) then
         {
-        if ((side _killer == muyMalos) or (side _killer == malos) and !(isPlayer _killer) and !(isNull _killer)) then
+        if ((side _killer == veryBad) or (side _killer == bad) and !(isPlayer _killer) and !(isNull _killer)) then
              {
             _nul = [] spawn
                 {
@@ -64,19 +64,19 @@ petros addMPEventHandler ["mpkilled",
                };
             if (!isPlayer theBoss) then
                 {
-                {["petrosDead",false,1,false,false] remoteExec ["BIS_fnc_endMission",_x]} forEach (playableUnits select {(side _x != buenos) and (side _x != civilian)})
+                {["petrosDead",false,1,false,false] remoteExec ["BIS_fnc_endMission",_x]} forEach (playableUnits select {(side _x != good) and (side _x != civilian)})
                 }
             else
                 {
                 {
-                if (side _x == malos) then {_x setPos (getMarkerPos respawnMalos)};
+                if (side _x == bad) then {_x setPos (getMarkerPos respawnBad)};
                 } forEach playableUnits;
                 };
             }
         else
             {
             _viejo = petros;
-            grupoPetros = createGroup buenos;
+            grupoPetros = createGroup good;
             publicVariable "grupoPetros";
             petros = grupoPetros createUnit [tipoPetros, position _viejo, [], 0, "NONE"];
             publicVariable "petros";
@@ -85,7 +85,7 @@ petros addMPEventHandler ["mpkilled",
             if (worldName == "Tanoa") then {petros setName "Maru"} else {petros setName "Petros"};
             petros disableAI "MOVE";
             petros disableAI "AUTOTARGET";
-            if (group _viejo == grupoPetros) then {[Petros,"mission"]remoteExec ["A3A_fnc_flagaction",[buenos,civilian],petros]} else {[Petros,"buildHQ"] remoteExec ["A3A_fnc_flagaction",[buenos,civilian],petros]};
+            if (group _viejo == grupoPetros) then {[Petros,"mission"]remoteExec ["A3A_fnc_flagaction",[good,civilian],petros]} else {[Petros,"buildHQ"] remoteExec ["A3A_fnc_flagaction",[good,civilian],petros]};
             [] execVM "initPetros.sqf";
             deleteVehicle _viejo;
             };

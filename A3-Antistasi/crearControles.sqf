@@ -32,16 +32,16 @@ if (_posroad distance _pos > 400) then
                         _mrk setMarkerSize [30,30];
                         _mrk setMarkerShape "RECTANGLE";
                         _mrk setMarkerBrush "SOLID";
-                        _mrk setMarkerColor colorBuenos;
+                        _mrk setMarkerColor colorGood;
                         _mrk setMarkerText _nombre;
                         if (not debug) then {_mrk setMarkerAlpha 0};
-                        if (lados getVariable [_marcador,sideUnknown] == malos) then
+                        if (sides getVariable [_marcador,sideUnknown] == bad) then
                                 {
-                                lados setVariable [_nombre,malos,true];
+                                sides setVariable [_nombre,bad,true];
                                 }
                         else
                                 {
-                                if (lados getVariable [_marcador,sideUnknown] == muyMalos) then {lados setVariable [_nombre,muyMalos,true]} else {lados setVariable [_nombre,buenos,true]};
+                                if (sides getVariable [_marcador,sideUnknown] == veryBad) then {sides setVariable [_nombre,veryBad,true]} else {sides setVariable [_nombre,good,true]};
                                 };
                         controles pushBackUnique _nombre;
                         marcadores pushBackUnique _nombre;

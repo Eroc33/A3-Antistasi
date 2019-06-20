@@ -1,11 +1,11 @@
 
 if (player != theBoss) exitWith {hint "Only our Commander has access to this function"};
 //if (!allowPlayerRecruit) exitWith {hint "Server is very loaded. \nWait one minute or change FPS settings in order to fulfill this request"};
-if (markerAlpha respawnBuenos == 0) exitWith {hint "You cant recruit a new squad while you are moving your HQ"};
-if (!([player] call A3A_fnc_hasRadio)) exitWith {if !(hayIFA) then {hint "You need a radio in your inventory to be able to give orders to other squads"} else {hint "You need a Radio Man in your group to be able to give orders to other squads"}};
+if (markerAlpha respawnGood == 0) exitWith {hint "You cant recruit a new squad while you are moving your HQ"};
+if (!([player] call A3A_fnc_hasRadio)) exitWith {if !(foundIFA) then {hint "You need a radio in your inventory to be able to give orders to other squads"} else {hint "You need a Radio Man in your group to be able to give orders to other squads"}};
 _chequeo = false;
 {
-	if (((side _x == muyMalos) or (side _x == malos)) and (_x distance petros < 500) and ([_x] call A3A_fnc_canFight) and !(isPlayer _x)) exitWith {_chequeo = true};
+	if (((side _x == veryBad) or (side _x == bad)) and (_x distance petros < 500) and ([_x] call A3A_fnc_canFight) and !(isPlayer _x)) exitWith {_chequeo = true};
 } forEach allUnits;
 
 if (_chequeo) exitWith {Hint "You cannot Recruit Squads with enemies near your HQ"};
@@ -18,7 +18,7 @@ _exit = false;
 if (_tipoGrupo isEqualType "") then
 	{
 	if (_tipoGrupo == "not_supported") then {_exit = true; hint "The group or vehicle type you request is not supported in your modset"};
-	if (hayIFA and ((_tipoGrupo == SDKMortar) or (_tipoGrupo == SDKMGStatic)) and !debug) then {_exit = true; hint "The group or vehicle type you request is not supported in your modset"};
+	if (foundIFA and ((_tipoGrupo == SDKMortar) or (_tipoGrupo == SDKMGStatic)) and !debug) then {_exit = true; hint "The group or vehicle type you request is not supported in your modset"};
 	};
 
 if (activeGREF) then
@@ -72,7 +72,7 @@ else
 		_coste = _coste + ([vehSDKTruck] call A3A_fnc_vehiclePrice)
 		};
 	};
-if ((_conMochis != "") and hayIFA) exitWith {hint "Your current modset does not support packing / unpacking static weapons"; garageVeh = nil};
+if ((_conMochis != "") and foundIFA) exitWith {hint "Your current modset does not support packing / unpacking static weapons"; garageVeh = nil};
 
 if (_hr < _costeHR) then {_exit = true;hint format ["You do not have enough HR for this request (%1 required)",_costeHR]};
 
@@ -82,21 +82,21 @@ if (_exit) exitWith {garageVeh = nil};
 
 _nul = [- _costeHR, - _coste] remoteExec ["A3A_fnc_resourcesFIA",2];
 
-_pos = getMarkerPos respawnBuenos;
+_pos = getMarkerPos respawnGood;
 
 _road = [_pos] call A3A_fnc_findNearestGoodRoad;
 _bypassAI = false;
 if (_esinf) then
 	{
-	_pos = [(getMarkerPos respawnBuenos), 30, random 360] call BIS_Fnc_relPos;
+	_pos = [(getMarkerPos respawnGood), 30, random 360] call BIS_Fnc_relPos;
 	if (_tipoGrupo isEqualType []) then
 		{
-		_grupo = [_pos, buenos, _formato,true] call A3A_fnc_spawnGroup;
-		//if (_tipogrupo isEqualTo gruposSDKSquad) then {_format = "Squd-"};
-		if (_tipogrupo isEqualTo gruposSDKmid) then {_format = "Tm-"};
-		if (_tipogrupo isEqualTo gruposSDKAT) then {_format = "AT-"};
-		if (_tipogrupo isEqualTo gruposSDKSniper) then {_format = "Snpr-"};
-		if (_tipogrupo isEqualTo gruposSDKSentry) then {_format = "Stry-"};
+		_grupo = [_pos, good, _formato,true] call A3A_fnc_spawnGroup;
+		//if (_tipogrupo isEqualTo groupsSDKSquad) then {_format = "Squd-"};
+		if (_tipogrupo isEqualTo groupsSDKmid) then {_format = "Tm-"};
+		if (_tipogrupo isEqualTo groupsSDKAT) then {_format = "AT-"};
+		if (_tipogrupo isEqualTo groupsSDKSniper) then {_format = "Snpr-"};
+		if (_tipogrupo isEqualTo groupsSDKSentry) then {_format = "Stry-"};
 		if (_conMochis == "MG") then
 			{
 			((units _grupo) select ((count (units _grupo)) - 2)) addBackpackGlobal soporteStaticSDKB2;
@@ -115,14 +115,14 @@ if (_esinf) then
 		}
 	else
 		{
-		_grupo = [_pos, buenos, _formato,true] call A3A_fnc_spawnGroup;
+		_grupo = [_pos, good, _formato,true] call A3A_fnc_spawnGroup;
 		_grupo setVariable ["staticAutoT",false,true];
 		if (_tipogrupo == SDKMortar) then {_format = "Mort-"};
 		if (_tipoGrupo == SDKMGStatic) then {_format = "MG-"};
 		[_grupo,_tipoGrupo] spawn A3A_fnc_MortyAI;
 		_bypassAI = true;
 		};
-	_format = format ["%1%2",_format,{side (leader _x) == buenos} count allGroups];
+	_format = format ["%1%2",_format,{side (leader _x) == good} count allGroups];
 	_grupo setGroupId [_format];
 	}
 else
@@ -130,11 +130,11 @@ else
 	_pos = position _road findEmptyPosition [1,30,vehSDKTruck];
 	_vehicle = if (_tipoGrupo == staticAABuenos) then
 		{
-		if (activeGREF) then {[_pos, 0,"rhsgref_ins_g_ural_Zu23", buenos] call bis_fnc_spawnvehicle} else {[_pos, 0,vehSDKTruck, buenos] call bis_fnc_spawnvehicle};
+		if (activeGREF) then {[_pos, 0,"rhsgref_ins_g_ural_Zu23", good] call bis_fnc_spawnvehicle} else {[_pos, 0,vehSDKTruck, good] call bis_fnc_spawnvehicle};
 		}
 	else
 		{
-		[_pos, 0,_tipoGrupo, buenos] call bis_fnc_spawnvehicle
+		[_pos, 0,_tipoGrupo, good] call bis_fnc_spawnvehicle
 		};
 	_camion = _vehicle select 0;
 	_grupo = _vehicle select 2;
@@ -151,8 +151,8 @@ else
 		_mortero setDir (getDir _camion + 180);
 		_morty moveInGunner _mortero;
 		};
-	if (_tipogrupo == vehSDKAT) then {_grupo setGroupId [format ["M.AT-%1",{side (leader _x) == buenos} count allGroups]]};
-	if (_tipogrupo == staticAABuenos) then {_grupo setGroupId [format ["M.AA-%1",{side (leader _x) == buenos} count allGroups]]};
+	if (_tipogrupo == vehSDKAT) then {_grupo setGroupId [format ["M.AT-%1",{side (leader _x) == good} count allGroups]]};
+	if (_tipogrupo == staticAABuenos) then {_grupo setGroupId [format ["M.AA-%1",{side (leader _x) == good} count allGroups]]};
 
 	driver _camion action ["engineOn", vehicle driver _camion];
 	_nul = [_camion] call A3A_fnc_AIVEHinit;

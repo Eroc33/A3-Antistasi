@@ -13,7 +13,7 @@ _vehiculos = [];
 _soldados = [];
 
 _grupo = createGroup _lado;
-_tipoUnit = if (_lado==malos) then {staticCrewmalos} else {staticCrewMuyMalos};
+_tipoUnit = if (_lado==bad) then {staticCrewmalos} else {staticCrewMuyMalos};
 
 for "_i" from 0 to (count _buildings) - 1 do
 	{
@@ -33,7 +33,7 @@ for "_i" from 0 to (count _buildings) - 1 do
 	_tipoB = typeOf _building;
 	if ((_tipoB == "Land_HelipadSquare_F") and (!_frontera)) then
 		{
-		_tipoVeh = if (_lado == malos) then {vehNATOPatrolHeli} else {vehCSATPatrolHeli};
+		_tipoVeh = if (_lado == bad) then {vehNATOPatrolHeli} else {vehCSATPatrolHeli};
 		_veh = createVehicle [_tipoVeh, position _building, [],0, "CAN_COLLIDE"];
 		_veh setDir (getDir _building);
 		_vehiculos pushBack _veh;
@@ -42,7 +42,7 @@ for "_i" from 0 to (count _buildings) - 1 do
 		{
 		if 	((_tipoB == "Land_Cargo_HQ_V1_F") or (_tipoB == "Land_Cargo_HQ_V2_F") or (_tipoB == "Land_Cargo_HQ_V3_F")) then
 			{
-			_tipoVeh = if (_lado == malos) then {staticAAmalos} else {staticAAmuyMalos};
+			_tipoVeh = if (_lado == bad) then {staticAAmalos} else {staticAAmuyMalos};
 			_veh = createVehicle [_tipoVeh, (_building buildingPos 8), [],0, "CAN_COLLIDE"];
 			_veh setPosATL [(getPos _building select 0),(getPos _building select 1),(getPosATL _veh select 2)];
 			_veh setDir (getDir _building);
@@ -56,7 +56,7 @@ for "_i" from 0 to (count _buildings) - 1 do
 			{
 			if 	((_tipoB == "Land_Cargo_Patrol_V1_F") or (_tipoB == "Land_Cargo_Patrol_V2_F") or (_tipoB == "Land_Cargo_Patrol_V3_F")) then
 				{
-				_tipoVeh = if (_lado == malos) then {NATOMG} else {CSATMG};
+				_tipoVeh = if (_lado == bad) then {NATOMG} else {CSATMG};
 				_veh = createVehicle [_tipoVeh, (_building buildingPos 1), [], 0, "CAN_COLLIDE"];
 				_ang = (getDir _building) - 180;
 				_pos = [getPosATL _veh, 2.5, _ang] call BIS_Fnc_relPos;
@@ -72,7 +72,7 @@ for "_i" from 0 to (count _buildings) - 1 do
 				{
 				if 	(_tipoB in listbld) then
 					{
-					_tipoVeh = if (_lado == malos) then {NATOMG} else {CSATMG};
+					_tipoVeh = if (_lado == bad) then {NATOMG} else {CSATMG};
 					_veh = createVehicle [_tipoVeh, (_building buildingPos 11), [], 0, "CAN_COLLIDE"];
 					_unit = _grupo createUnit [_tipoUnit, _posicion, [], 0, "NONE"];
 					[_unit,_marcador] call A3A_fnc_NATOinit;

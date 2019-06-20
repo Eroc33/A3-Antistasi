@@ -51,7 +51,7 @@ else
 	if (_unit skill "aimingAccuracy" > 0.35) then {_unit setSkill ["aimingAccuracy",0.35]};
 	if (random 40 < skillFIA) then
 		{
-		if (getNumber (configfile >> "CfgWeapons" >> headgear _unit >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") < 2) then {removeHeadgear _unit;_unit addHeadgear (selectRandom cascos)};
+		if (getNumber (configfile >> "CfgWeapons" >> headgear _unit >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") < 2) then {removeHeadgear _unit;_unit addHeadgear (selectRandom helmets)};
 		};
 	if (_tipo in SDKMil) then
 		{
@@ -120,7 +120,7 @@ else
 							}
 						else
 							{
-							if (hayIFA) then
+							if (foundIFA) then
 								{
 								[_unit, "LIB_PTRD", 10, 0] call BIS_fnc_addWeapon;
 								};
@@ -144,7 +144,7 @@ else
 _unit selectWeapon (primaryWeapon _unit);
 
 if (!haveRadio) then {_unit unlinkItem "ItemRadio"};
-if !(hayIFA) then
+if !(foundIFA) then
 	{
 	if (sunOrMoon < 1) then
 		{
@@ -196,7 +196,7 @@ if !(hayIFA) then
 			};
 		};
 	};
-if ({if (_x in humo) exitWith {1}} count unlockedMagazines > 0) then {_unit addMagazines [selectRandom humo,2]};
+if ({if (_x in smoke) exitWith {1}} count unlockedMagazines > 0) then {_unit addMagazines [selectRandom smoke,2]};
 
 _EHkilledIdx = _unit addEventHandler ["killed", {
 	_muerto = _this select 0;
@@ -210,21 +210,21 @@ _EHkilledIdx = _unit addEventHandler ["killed", {
 			_killer addRating 1000;
 			};
 		};
-	if (side _killer == malos) then
+	if (side _killer == bad) then
 		{
 		[0,-0.25,getPos _muerto] remoteExec ["A3A_fnc_citySupportChange",2];
 		[-0.25,0] remoteExec ["A3A_fnc_prestige",2];
 		}
 	else
 		{
-		if (side _killer == muyMalos) then {[0,-0.25] remoteExec ["A3A_fnc_prestige",2]};
+		if (side _killer == veryBad) then {[0,-0.25] remoteExec ["A3A_fnc_prestige",2]};
 		};
 	_marcador = _muerto getVariable "marcador";
 	if (!isNil "_marcador") then
 		{
-		if (lados getVariable [_marcador,sideUnknown] == buenos) then
+		if (sides getVariable [_marcador,sideUnknown] == good) then
 			{
-			[typeOf _muerto,buenos,_marcador,-1] remoteExec ["A3A_fnc_garrisonUpdate",2];
+			[typeOf _muerto,good,_marcador,-1] remoteExec ["A3A_fnc_garrisonUpdate",2];
 			_muerto setVariable [_marcador,nil,true];
 			};
 		};
@@ -245,5 +245,5 @@ if (_revelar) then
 	{
 	{
 	_unit reveal [_x,1.5];
-	} forEach allUnits select {(vehicle _x isKindOf "Air") and (_x distance _unit <= distanciaSPWN)};
+	} forEach allUnits select {(vehicle _x isKindOf "Air") and (_x distance _unit <= distanceSPWN)};
 	};

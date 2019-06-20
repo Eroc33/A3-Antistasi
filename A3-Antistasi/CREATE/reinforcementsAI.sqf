@@ -1,5 +1,5 @@
 private ["_aeropuertos","_reinfPlaces","_aeropuerto","_numero","_numGarr","_numReal","_lado","_posibles","_cuenta","_sitio","_posicion"];
-_aeropuertos = aeropuertos select {(lados getVariable [_x,sideUnknown] != buenos) and (spawner getVariable _x == 2)};
+_aeropuertos = airports select {(sides getVariable [_x,sideUnknown] != good) and (spawner getVariable _x == 2)};
 if (count _aeropuertos == 0) exitWith {};
 _reinfPlaces = [];
 {
@@ -7,26 +7,26 @@ _aeropuerto = _x;
 _numero = 8;
 _numGarr = [_aeropuerto] call A3A_fnc_garrisonSize;
 _numReal = count (garrison getVariable _aeropuerto);
-_lado = lados getVariable [_aeropuerto,sideUnknown];
+_lado = sides getVariable [_aeropuerto,sideUnknown];
 if (_numReal + 4 <= _numGarr) then
 	{
 	if (_numReal + 8 <= _numGarr) then
 		{
-		if (_lado == malos) then {[selectRandom gruposNATOSquad,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]} else {[selectRandom gruposCSATSquad,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]};
+		if (_lado == bad) then {[selectRandom groupsNATOSquad,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]} else {[selectRandom groupsCSATSquad,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]};
 		_numero = 0;
 		}
 	else
 		{
-		if (_lado == malos) then {[selectRandom gruposNATOmid,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]} else {[selectRandom gruposCSATmid,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]};
+		if (_lado == bad) then {[selectRandom groupsNATOmid,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]} else {[selectRandom groupsCSATmid,_lado,_aeropuerto,0] remoteExec ["A3A_fnc_garrisonUpdate",2]};
 		_numero = 4;
 		};
 	};
 if ((_numero >= 4) and (reinfPatrols <= 4)) then
 	{
-	_posibles = (puestos + puertos - _reinfPlaces - (killZones getVariable [_aeropuerto,[]])) select {lados getVariable [_x,sideUnknown] == _lado};
+	_posibles = (puestos + puertos - _reinfPlaces - (killZones getVariable [_aeropuerto,[]])) select {sides getVariable [_x,sideUnknown] == _lado};
 	if (_posibles isEqualTo []) then
 		{
-		_posibles = (recursos + fabricas - _reinfPlaces - (killZones getVariable [_aeropuerto,[]])) select {lados getVariable [_x,sideUnknown] == _lado};
+		_posibles = (recursos + fabricas - _reinfPlaces - (killZones getVariable [_aeropuerto,[]])) select {sides getVariable [_x,sideUnknown] == _lado};
 		};
 	_posicion = getMarkerPos _aeropuerto;
 	_posibles = _posibles select {((getMarkerPos _x distance2D _posicion) < distanceForAirAttack) and !(_x in forcedSpawn)};
@@ -45,11 +45,11 @@ if ((_numero >= 4) and (reinfPatrols <= 4)) then
 		} forEach _posibles;
 		if (_sitio != "") then
 			{
-			if ({(getMarkerPos _x distance2d getMarkerPos _sitio < distanciaSPWN) and (lados getVariable [_x,sideUnknown] != _lado)} count aeropuertos == 0) then
+			if ({(getMarkerPos _x distance2d getMarkerPos _sitio < distanceSPWN) and (sides getVariable [_x,sideUnknown] != _lado)} count airports == 0) then
 				{
-				if ({(_x distance2D _posicion < (2*distanciaSPWN)) or (_x distance2D (getMarkerPos _sitio) < (2*distanciaSPWN))} count allPlayers == 0) then
+				if ({(_x distance2D _posicion < (2*distanceSPWN)) or (_x distance2D (getMarkerPos _sitio) < (2*distanceSPWN))} count allPlayers == 0) then
 					{
-					_tipoGrupo = if (_lado == malos) then {if (_numero == 4) then {selectRandom gruposNATOmid} else {selectRandom gruposNATOSquad}} else {if (_numero == 4) then {selectRandom gruposCSATmid} else {selectRandom gruposCSATSquad}};
+					_tipoGrupo = if (_lado == bad) then {if (_numero == 4) then {selectRandom groupsNATOmid} else {selectRandom groupsNATOSquad}} else {if (_numero == 4) then {selectRandom groupsCSATmid} else {selectRandom groupsCSATSquad}};
 					[_tipoGrupo,_lado,_sitio,2] remoteExec ["A3A_fnc_garrisonUpdate",2];
 					}
 				else

@@ -9,16 +9,16 @@ _posDestino = getMarkerPos _mrkDestino;
 _posOrigen = getMarkerPos _mrkOrigen;
 
 _land = if (_posOrigen distance _posDestino > distanceForLandAttack) then {false} else {true};
-_tipoGrupo = if (_lado == malos) then {if (_numero == 4) then {selectRandom gruposNATOmid} else {selectRandom gruposNATOSquad}} else {if (_numero == 4) then {selectRandom gruposCSATmid} else {selectRandom gruposCSATSquad}};
+_tipoGrupo = if (_lado == bad) then {if (_numero == 4) then {selectRandom groupsNATOmid} else {selectRandom groupsNATOSquad}} else {if (_numero == 4) then {selectRandom groupsCSATmid} else {selectRandom groupsCSATSquad}};
 _tipoVeh = "";
 if (_land) then
 	{
-	if (_lado == malos) then {_tipoVeh = selectRandom vehNATOTrucks} else {_tipoVeh = selectRandom vehCSATTrucks};
+	if (_lado == bad) then {_tipoVeh = selectRandom vehNATOTrucks} else {_tipoVeh = selectRandom vehCSATTrucks};
 	}
 else
 	{
-	_vehPool = if (_lado == malos) then {vehNATOTransportHelis} else {vehCSATTransportHelis};
-	if ((_numero > 4) and (count _vehPool > 1) and !hayIFA) then {_vehPool = _vehPool - [vehNATOPatrolHeli,vehCSATPatrolHeli]};
+	_vehPool = if (_lado == bad) then {vehNATOTransportHelis} else {vehCSATTransportHelis};
+	if ((_numero > 4) and (count _vehPool > 1) and !foundIFA) then {_vehPool = _vehPool - [vehNATOPatrolHeli,vehCSATPatrolHeli]};
 	//_vehPool = _vehPool select {(_x isKindOf "Helicopter") and (_x in vehFastRope)};
 	_tipoVeh = selectRandom _vehPool;
 	};
@@ -29,7 +29,7 @@ _grupo = grpNull;
 
 if (_land) then
 	{
-	_indice = aeropuertos find _mrkOrigen;
+	_indice = airports find _mrkOrigen;
 	_spawnPoint = spawnPoints select _indice;
 	_pos = getMarkerPos _spawnPoint;
 	_timeOut = 0;
@@ -154,7 +154,7 @@ _x addEventHandler ["Killed",
 		reinfPatrols = reinfPatrols - 1; publicVariable "reinfPatrols";
 		_origen = _grupo getVariable "origen";
 		_destino = _grupo getVariable "reinfMarker";
-		if (((lados getVariable [_origen,sideUnknown] == malos) and (lados getVariable [_destino,sideUnknown] == malos)) or ((lados getVariable [_origen,sideUnknown] == muyMalos) and (lados getVariable [_destino,sideUnknown] == muyMalos))) then
+		if (((sides getVariable [_origen,sideUnknown] == bad) and (sides getVariable [_destino,sideUnknown] == bad)) or ((sides getVariable [_origen,sideUnknown] == veryBad) and (sides getVariable [_destino,sideUnknown] == veryBad))) then
 			{
 			_killzones = killZones getVariable [_origen,[]];
 			_killzones pushBack _destino;

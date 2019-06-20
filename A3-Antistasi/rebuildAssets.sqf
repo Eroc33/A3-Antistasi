@@ -32,7 +32,7 @@ if (_sitio in puestos) then
 	_antenasMuertas = antenasMuertas select {_x inArea _sitio};
 	if (count _antenasMuertas > 0) then
 		{
-		if (lados getVariable [_sitio, sideUnknown] != buenos) then
+		if (sides getVariable [_sitio, sideUnknown] != good) then
 			{
 			_salir = true;
 			_texto = format ["You cannot rebuild a Radio Tower in an Outpost which does not belong to %1",nameBuenos];
@@ -83,8 +83,8 @@ else
 		{if ([antenas,_x] call BIS_fnc_nearestPosition == _antena) then {[_x,false] spawn A3A_fnc_apagon}} forEach ciudades;
 		_mrk = [mrkAntenas, _antena] call BIS_fnc_nearestPosition;
 		antenas = antenas - [_antena]; antenasmuertas = antenasmuertas + [getPos _antena]; deleteMarker _mrk;
-		["TaskSucceeded",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",buenos];
-		["TaskFailed",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",malos];
+		["TaskSucceeded",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",good];
+		["TaskFailed",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",bad];
 		publicVariable "antenas"; publicVariable "antenasMuertas";
 		}
 		];

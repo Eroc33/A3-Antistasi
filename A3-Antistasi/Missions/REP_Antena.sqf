@@ -10,8 +10,8 @@ _fechalim = [date select 0, date select 1, date select 2, date select 3, (date s
 _fechalimnum = dateToNumber _fechalim;
 _nombredest = [_marcador] call A3A_fnc_localizar;
 
-[[buenos,civilian],"REP",[format ["%4 is rebuilding a radio tower in %1. If we want to keep up the enemy comms breakdown, the work must be stopped. Destroy the repair truck parked nearby or capture the zone. Work will be finished on %2:%3.",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4,nameMalos],"Tower Rebuild Disrupt",_marcador],_posicion,false,0,true,"Destroy",true] call BIS_fnc_taskCreate;
-misiones pushBack ["REP","CREATED"]; publicVariable "misiones";
+[[good,civilian],"REP",[format ["%4 is rebuilding a radio tower in %1. If we want to keep up the enemy comms breakdown, the work must be stopped. Destroy the repair truck parked nearby or capture the zone. Work will be finished on %2:%3.",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4,nameMalos],"Tower Rebuild Disrupt",_marcador],_posicion,false,0,true,"Destroy",true] call BIS_fnc_taskCreate;
+missions pushBack ["REP","CREATED"]; publicVariable "missions";
 _camionCreado = false;
 
 waitUntil {sleep 1;(dateToNumber date > _fechalimnum) or (spawner getVariable _marcador != 2)};
@@ -27,7 +27,7 @@ if (spawner getVariable _marcador != 2) then
 	_veh allowdamage false;
 	_veh setDir (getDir _road);
 	_nul = [_veh] call A3A_fnc_AIVEHinit;
-	_grupo = createGroup malos;
+	_grupo = createGroup bad;
 
 	sleep 5;
 	_veh allowDamage true;
@@ -52,7 +52,7 @@ if (spawner getVariable _marcador != 2) then
 	};
 if (dateToNumber date > _fechalimnum) then
 	{
-	if (lados getVariable [_marcador,sideUnknown] == buenos) then
+	if (sides getVariable [_marcador,sideUnknown] == good) then
 		{
 		["REP",[format ["%4 is rebuilding a radio tower in %1. If we want to keep up the enemy comms breakdown, the work must be stopped. Destroy the repair truck parked nearby or capture the zone. Work will be finished on %2:%3.",_nombredest,numberToDate [2035,_fechalimnum] select 3,numberToDate [2035,_fechalimnum] select 4,nameMalos],"Tower Rebuild Disrupt",_marcador],_posicion,"SUCCEEDED","Destroy"] call A3A_fnc_taskUpdate;
 		[2,0] remoteExec ["A3A_fnc_prestige",2];
@@ -86,8 +86,8 @@ if (dateToNumber date > _fechalimnum) then
 		{if ([antenas,_x] call BIS_fnc_nearestPosition == _antena) then {[_x,false] spawn A3A_fnc_apagon}} forEach ciudades;
 		_mrk = [mrkAntenas, _antena] call BIS_fnc_nearestPosition;
 		antenas = antenas - [_antena]; antenasmuertas = antenasmuertas + [getPos _antena]; deleteMarker _mrk;
-		["TaskSucceeded",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",buenos];
-		["TaskFailed",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",malos];
+		["TaskSucceeded",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",good];
+		["TaskFailed",["", "Radio Tower Destroyed"]] remoteExec ["BIS_fnc_showNotification",bad];
 		publicVariable "antenas"; publicVariable "antenasMuertas";
 		}
 		];
@@ -101,5 +101,5 @@ if (_camionCreado) then
 	{
 	{deleteVehicle _x} forEach units _grupo;
 	deleteGroup _grupo;
-	if (!([distanciaSPWN,1,_veh,buenos] call A3A_fnc_distanceUnits)) then {deleteVehicle _veh};
+	if (!([distanceSPWN,1,_veh,good] call A3A_fnc_distanceUnits)) then {deleteVehicle _veh};
 	};

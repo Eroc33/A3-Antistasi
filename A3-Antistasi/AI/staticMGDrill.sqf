@@ -8,11 +8,11 @@ private _veh = objNull;
 private _lado = side _grupo;
 private _tipoVeh = 	if !(_esMortero) then
 						{
-						if (_lado == malos) then {NATOMG} else {if (_lado == muyMalos) then {CSATMG} else {SDKMGStatic}};
+						if (_lado == bad) then {NATOMG} else {if (_lado == veryBad) then {CSATMG} else {SDKMGStatic}};
 						}
 					else
 						{
-						if (_lado == malos) then {NATOMortar} else {if (_lado == muyMalos) then {CSATMortar} else {SDKMortar}};
+						if (_lado == bad) then {NATOMortar} else {if (_lado == veryBad) then {CSATMortar} else {SDKMortar}};
 						};
 private _mochiG = backPack _gunner;
 private _mochiA = backpack _ayudante;

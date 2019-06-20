@@ -45,8 +45,8 @@ else
 		_controlesNATO = controles;
 		};
 	};
-{lados setVariable [_x,malos,true]} forEach _controlesNATO;
-{lados setVariable [_x,muyMalos,true]} forEach _controlesCSAT;
+{sides setVariable [_x,bad,true]} forEach _controlesNATO;
+{sides setVariable [_x,veryBad,true]} forEach _controlesCSAT;
 {
 _pos = getMarkerPos _x;
 _dmrk = createMarker [format ["Dum%1",_x], _pos];
@@ -59,29 +59,29 @@ if (_x in _mrkCSAT) then
     {
     _dmrk setMarkerType flagCSATmrk;
     _dmrk setMarkerText format ["%1 Airbase",nameMuyMalos];
-    _dmrk setMarkerColor colorMuyMalos;
+    _dmrk setMarkerColor colorVeryBad;
     for "_i" from 1 to _garrNum do
         {
-        _garrison append (selectRandom gruposCSATSquad);
+        _garrison append (selectRandom groupsCSATSquad);
         };
     garrison setVariable [_x,_garrison,true];
-    lados setVariable [_x,muyMalos,true];
+    sides setVariable [_x,veryBad,true];
     }
 else
     {
     _dmrk setMarkerType flagNATOmrk;
     _dmrk setMarkerText format ["%1 Airbase",nameMalos];
-    _dmrk setMarkerColor colorMalos;
+    _dmrk setMarkerColor colorBad;
     for "_i" from 1 to _garrNum do
         {
-        _garrison append (selectRandom gruposNATOSquad);
+        _garrison append (selectRandom groupsNATOSquad);
         };
     garrison setVariable [_x,_garrison,true];
-    lados setVariable [_x,malos,true];
+    sides setVariable [_x,bad,true];
     };
 _nul = [_x] call A3A_fnc_crearControles;
 server setVariable [_x,0,true];//fecha en fomrato dateToNumber en la que estarán idle
-} forEach aeropuertos;
+} forEach airports;
 
 {
 _pos = getMarkerPos _x;
@@ -94,17 +94,17 @@ _dmrk setMarkerType "loc_rock";
 _dmrk setMarkerText "Resources";
 for "_i" from 1 to _garrNum do
    {
-   _garrison append (selectRandom gruposFIASquad);
+   _garrison append (selectRandom groupsFIASquad);
    };
 if (_x in _mrkCSAT) then
 	{
-	_dmrk setMarkerColor colorMuyMalos;
-	lados setVariable [_x,muyMalos,true];
+	_dmrk setMarkerColor colorVeryBad;
+	sides setVariable [_x,veryBad,true];
 	}
 else
 	{
-	_dmrk setMarkerColor colorMalos;
-	lados setVariable [_x,malos,true];
+	_dmrk setMarkerColor colorBad;
+	sides setVariable [_x,bad,true];
 	};
 garrison setVariable [_x,_garrison,true];
 _nul = [_x] call A3A_fnc_crearControles;
@@ -121,17 +121,17 @@ _dmrk setMarkerType "u_installation";
 _dmrk setMarkerText "Factory";
 for "_i" from 1 to _garrNum do
    {
-   _garrison append (selectRandom gruposFIASquad);
+   _garrison append (selectRandom groupsFIASquad);
    };
 if (_x in _mrkCSAT) then
 	{
-	_dmrk setMarkerColor colorMuyMalos;
-    lados setVariable [_x,muyMalos,true];
+	_dmrk setMarkerColor colorVeryBad;
+    sides setVariable [_x,veryBad,true];
 	}
 else
 	{
-	_dmrk setMarkerColor colorMalos;
-    lados setVariable [_x,malos,true];
+	_dmrk setMarkerColor colorBad;
+    sides setVariable [_x,bad,true];
     };
 garrison setVariable [_x,_garrison,true];
 _nul = [_x] call A3A_fnc_crearControles;
@@ -148,33 +148,33 @@ killZones setVariable [_x,[],true];
 _dmrk setMarkerType "loc_bunker";
 if !(_x in _mrkCSAT) then
     {
-    _dmrk setMarkerColor colorMalos;
+    _dmrk setMarkerColor colorBad;
     _dmrk setMarkerText format ["%1 Outpost",nameMalos];
     for "_i" from 1 to _garrNum do
         {
-        _garrison append (selectRandom gruposFIASquad);
+        _garrison append (selectRandom groupsFIASquad);
         };
-    lados setVariable [_x,malos,true];
+    sides setVariable [_x,bad,true];
     }
 else
     {
     _dmrk setMarkerText format ["%1 Outpost",nameMuyMalos];
-    _dmrk setMarkerColor colorMuyMalos;
+    _dmrk setMarkerColor colorVeryBad;
     if (gameMode == 4) then
     	{
     	for "_i" from 1 to _garrNum do
 	       {
-	       _garrison append (selectRandom gruposFIASquad);
+	       _garrison append (selectRandom groupsFIASquad);
 	       };
     	}
     else
     	{
 	    for "_i" from 1 to _garrNum do
 	        {
-	        _garrison append (selectRandom gruposCSATSquad);
+	        _garrison append (selectRandom groupsCSATSquad);
 	        };
 	    };
-    lados setVariable [_x,muyMalos,true];
+    sides setVariable [_x,veryBad,true];
     };
 garrison setVariable [_x,_garrison,true];
 server setVariable [_x,0,true];
@@ -192,25 +192,25 @@ _dmrk setMarkerType "b_naval";
 _dmrk setMarkerText "Sea Port";
 if (_x in _mrkCSAT) then
     {
-    _dmrk setMarkerColor colorMuyMalos;
+    _dmrk setMarkerColor colorVeryBad;
 	for "_i" from 1 to _garrNum do
 	   {
-	   _garrison append (selectRandom gruposCSATSquad);
+	   _garrison append (selectRandom groupsCSATSquad);
 	   };
-    lados setVariable [_x,muyMalos,true];
+    sides setVariable [_x,veryBad,true];
     }
 else
     {
-    _dmrk setMarkerColor colorMalos;
+    _dmrk setMarkerColor colorBad;
     for "_i" from 1 to _garrNum do
         {
-        _garrison append (selectRandom gruposNATOSquad);
+        _garrison append (selectRandom groupsNATOSquad);
         };
-    lados setVariable [_x,malos,true];
+    sides setVariable [_x,bad,true];
     };
 garrison setVariable [_x,_garrison,true];
 _nul = [_x] call A3A_fnc_crearControles;
 } forEach puertos;
 
-lados setVariable ["NATO_carrier",malos,true];
-lados setVariable ["CSAT_carrier",muyMalos,true];
+sides setVariable ["NATO_carrier",bad,true];
+sides setVariable ["CSAT_carrier",veryBad,true];

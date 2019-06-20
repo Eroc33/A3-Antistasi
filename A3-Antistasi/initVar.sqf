@@ -11,9 +11,9 @@ antistasiVersion = "v 1.4.0.2";
 debug = false;//debug variable, not useful for everything..
 
 cleantime = 3600;//time to delete dead bodies, vehicles etc..
-distanciaSPWN = 1000;//initial spawn distance. Less than 1Km makes parked vehicles spawn in your nose while you approach.
-distanciaSPWN1 = 1300;
-distanciaSPWN2 = 500;
+distanceSPWN = 1000;//initial spawn distance. Less than 1Km makes parked vehicles spawn in your nose while you approach.
+distanceSPWN1 = 1300;
+distanceSPWN2 = 500;
 musicON = if (isMultiplayer) then {false} else {true};
 civPerc = 35;
 autoHeal = false;
@@ -29,17 +29,17 @@ minItems = 20;
 minOptics = 12;*/
 maxUnits = 140;
 
-buenos = side group petros;
-malos = if (buenos == independent) then {west} else {independent};
-muyMalos = east;
+good = side group petros;
+bad = if (good == independent) then {west} else {independent};
+veryBad = east;
 
-colorBuenos = if (buenos == independent) then {"colorGUER"} else {"colorBLUFOR"};
-colorMalos = if (buenos == independent) then {"colorBLUFOR"} else {"colorGUER"};
-colorMuyMalos = "colorOPFOR";
+colorGood = if (good == independent) then {"colorGUER"} else {"colorBLUFOR"};
+colorBad = if (good == independent) then {"colorBLUFOR"} else {"colorGUER"};
+colorVeryBad = "colorOPFOR";
 
-respawnBuenos = if (buenos == independent) then {"respawn_guerrila"} else {"respawn_west"};
-respawnMalos = if (buenos == independent) then {"respawn_west"} else {"respawn_guerrila"};
-posHQ = getMarkerPos respawnBuenos;
+respawnGood = if (good == independent) then {"respawn_guerrila"} else {"respawn_west"};
+respawnBad = if (good == independent) then {"respawn_west"} else {"respawn_guerrila"};
+posHQ = getMarkerPos respawnGood;
 
 allMagazines = [];
 _cfgmagazines = configFile >> "cfgmagazines";
@@ -48,8 +48,8 @@ for "_i" from 0 to (count _cfgMagazines) -1 do
 	_magazine = _cfgMagazines select _i;
 	if (isClass _magazine) then
 		{
-		_nombre = configName (_magazine);
-		allMagazines pushBack _nombre;
+		_name = configName (_magazine);
+		allMagazines pushBack _name;
 		};
 	};
 
@@ -59,10 +59,10 @@ mguns = [];
 hguns = [];
 mlaunchers = [];
 rlaunchers = [];
-cascos = [];
+helmets = [];
 //vests = [];
 
-hayRHS = false;
+foundRHS = false;
 
 //lockedWeapons = ["Rangefinder","Laserdesignator"];
 
@@ -98,26 +98,26 @@ _allItems = "
     { getNumber ( _x >> ""type"" ) isEqualTo 131072 } } )
 " configClasses ( configFile >> "cfgWeapons" );
 
-_yaMetidos = [];
+_alreadyInserted = [];
 {
-_nombre = configName _x;
-_nombre = [_nombre] call BIS_fnc_baseWeapon;
-if (not(_nombre in _yaMetidos)) then
+_name = configName _x;
+_name = [_name] call BIS_fnc_baseWeapon;
+if (not(_name in _alreadyInserted)) then
 	{
-	_magazines = getArray (configFile / "CfgWeapons" / _nombre / "magazines");
-	_yaMetidos pushBack _nombre;
-	_weapon = [_nombre] call BIS_fnc_itemType;
+	_magazines = getArray (configFile / "CfgWeapons" / _name / "magazines");
+	_alreadyInserted pushBack _name;
+	_weapon = [_name] call BIS_fnc_itemType;
 	_weaponType = _weapon select 1;
 	switch (_weaponType) do
 		{
-		case "AssaultRifle": {arifles pushBack _nombre};
-		case "MachineGun": {mguns pushBack _nombre};
-		case "SniperRifle": {srifles pushBack _nombre};
-		case "Handgun": {hguns pushBack _nombre};
-		case "MissileLauncher": {mlaunchers pushBack _nombre};
-		case "RocketLauncher": {rlaunchers pushBack _nombre};
-		case "Headgear": {cascos pushBack _nombre};
-		//case "Vest": {vests pushBack _nombre};
+		case "AssaultRifle": {arifles pushBack _name};
+		case "MachineGun": {mguns pushBack _name};
+		case "SniperRifle": {srifles pushBack _name};
+		case "Handgun": {hguns pushBack _name};
+		case "MissileLauncher": {mlaunchers pushBack _name};
+		case "RocketLauncher": {rlaunchers pushBack _name};
+		case "Headgear": {helmets pushBack _name};
+		//case "Vest": {vests pushBack _name};
 		};
 
 	};
@@ -126,27 +126,27 @@ if (not(_nombre in _yaMetidos)) then
 activeAFRF = false;
 activeUSAF = false;
 activeGREF = false;
-hayFFAA = false;
-hayIFA = false;
+foundFFAA = false;
+foundIFA = false;
 myCustomMod = false;
 
 if ("LIB_PTRD" in arifles) then
 	{
-	hayIFA = true;
-	cascos = [];
-	humo = ["LIB_RDG","LIB_NB39"];
+	foundIFA = true;
+	helmets = [];
+	smoke = ["LIB_RDG","LIB_NB39"];
 	}
 else
 	{
-	if ("rhs_weap_akms" in arifles) then {activeAFRF = true; hayRHS = true};
-	if ("ffaa_armas_hkg36k_normal" in arifles) then {hayFFAA = true};
-	if ("rhs_weap_m4a1_d" in arifles) then {activeUSAF = true; hayRHS = true};
-	if ("rhs_weap_m92" in arifles) then {activeGREF = true; hayRHS = true} else {mguns pushBack "LMG_Mk200_BI_F"};
-	cascos = cascos select {getNumber (configfile >> "CfgWeapons" >> _x >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") > 2};
-	humo = ["SmokeShell","SmokeShellRed","SmokeShellGreen","SmokeShellBlue","SmokeShellYellow","SmokeShellPurple","SmokeShellOrange"];
+	if ("rhs_weap_akms" in arifles) then {activeAFRF = true; foundRHS = true};
+	if ("ffaa_armas_hkg36k_normal" in arifles) then {foundFFAA = true};
+	if ("rhs_weap_m4a1_d" in arifles) then {activeUSAF = true; foundRHS = true};
+	if ("rhs_weap_m92" in arifles) then {activeGREF = true; foundRHS = true} else {mguns pushBack "LMG_Mk200_BI_F"};
+	helmets = helmets select {getNumber (configfile >> "CfgWeapons" >> _x >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") > 2};
+	smoke = ["SmokeShell","SmokeShellRed","SmokeShellGreen","SmokeShellBlue","SmokeShellYellow","SmokeShellPurple","SmokeShellOrange"];
 	};
 
-titanLaunchers = if ((!hayRHS) and !hayIFA and !myCustomMod) then
+titanLaunchers = if ((!foundRHS) and !foundIFA and !myCustomMod) then
 	{
 	["launch_B_Titan_F","launch_I_Titan_F","launch_O_Titan_ghex_F","launch_O_Titan_F","launch_B_Titan_tna_F"]
 	}
@@ -154,7 +154,7 @@ else
 	{
 	[]
 	};
-antitanqueAAF = if ((!hayRHS) and !hayIFA and !myCustomMod) then
+antitankAAF = if ((!foundRHS) and !foundIFA and !myCustomMod) then
 	{
 	["launch_I_Titan_F","launch_I_Titan_short_F"]
 	}
@@ -162,47 +162,47 @@ else
 	{
 	[];
 	};//possible Titan weapons that spawn in  ammoboxes
-MantitanqueAAF = if ((!hayRHS) and !hayIFA and !myCustomMod) then
+antitankAAF = if ((!foundRHS) and !foundIFA and !myCustomMod) then
 	{
 	["Titan_AT", "Titan_AP", "Titan_AA"]
 	}
 else
 	{
-	if (hayIFA) then {["LIB_Shg24"]} else {[]};
+	if (foundIFA) then {["LIB_Shg24"]} else {[]};
 	};//possible Titan rockets that spawn in  ammoboxes
-minasAAF = if ((!hayRHS) and !hayIFA and !myCustomMod) then
+minesAAF = if ((!foundRHS) and !foundIFA and !myCustomMod) then
 	{
 	["SLAMDirectionalMine_Wire_Mag","SatchelCharge_Remote_Mag","ClaymoreDirectionalMine_Remote_Mag", "ATMine_Range_Mag","APERSTripMine_Wire_Mag","APERSMine_Range_Mag", "APERSBoundingMine_Range_Mag"]
 	}
 else
 	{
-	if (hayRHS) then
+	if (foundRHS) then
 		{
 		["rhsusf_m112_mag","rhsusf_mine_m14_mag","rhs_mine_M19_mag","rhs_mine_tm62m_mag","rhs_mine_pmn2_mag"]
 		}
 	else
 		{
-		if (hayIFA and !myCustomMod) then {["LIB_PMD6_MINE_mag","LIB_TM44_MINE_mag","LIB_US_TNT_4pound_mag"]} else {[]};
+		if (foundIFA and !myCustomMod) then {["LIB_PMD6_MINE_mag","LIB_TM44_MINE_mag","LIB_US_TNT_4pound_mag"]} else {[]};
 		}
 	};//possible mines that spawn in AAF ammoboxescomment "Exported from Arsenal by Alberto";
-itemsAAF = if ((!hayRHS) and !hayIFA and !myCustomMod) then
+itemsAAF = if ((!foundRHS) and !foundIFA and !myCustomMod) then
 	{
 	["FirstAidKit","Medikit","MineDetector","NVGoggles","ToolKit","muzzle_snds_H","muzzle_snds_L","muzzle_snds_M","muzzle_snds_B","muzzle_snds_H_MG","muzzle_snds_acp","bipod_03_F_oli","muzzle_snds_338_green","muzzle_snds_93mmg_tan","Rangefinder","Laserdesignator","ItemGPS","acc_pointer_IR","ItemRadio"]
 	}
 else
 	{
-	if (hayRHS) then
+	if (foundRHS) then
 		{
 		["FirstAidKit","Medikit","MineDetector","ToolKit","ItemGPS","acc_pointer_IR","ItemRadio"]
 		}
 	else
 		{
-		if (hayIFA and !myCustomMod) then {["FirstAidKit","Medikit","ToolKit","LIB_ToolKit"]} else {["FirstAidKit","Medikit","ToolKit"]};
+		if (foundIFA and !myCustomMod) then {["FirstAidKit","Medikit","ToolKit","LIB_ToolKit"]} else {["FirstAidKit","Medikit","ToolKit"]};
 		}
 	};
-NVGoggles = if (!hayIFA) then {["NVGoggles_OPFOR","NVGoggles_INDEP","O_NVGoggles_hex_F","O_NVGoggles_urb_F","O_NVGoggles_ghex_F","NVGoggles_tna_F","NVGoggles"]} else {[]};
+NVGoggles = if (!foundIFA) then {["NVGoggles_OPFOR","NVGoggles_INDEP","O_NVGoggles_hex_F","O_NVGoggles_urb_F","O_NVGoggles_ghex_F","NVGoggles_tna_F","NVGoggles"]} else {[]};
 
-arrayCivVeh = if !(hayIFA) then
+arrayCivVeh = if !(foundIFA) then
 	{
 	["C_Hatchback_01_F","C_Hatchback_01_sport_F","C_Offroad_01_F","C_SUV_01_F","C_Van_01_box_F","C_Van_01_fuel_F","C_Van_01_transport_F","C_Truck_02_transport_F","C_Truck_02_covered_F","C_Offroad_02_unarmed_F"];
 	}
@@ -211,12 +211,12 @@ else
 	["LIB_DAK_OpelBlitz_Open","LIB_GazM1","LIB_GazM1_dirty","LIB_DAK_Kfz1","LIB_DAK_Kfz1_hood"];
 	};
 
-municionNATO = [];
-armasNATO = [];
-municionCSAT = [];
-armasCSAT = [];
+ammunitionNATO = [];
+weaponsNATO = [];
+ammunitionCSAT = [];
+weaponsCSAT = [];
 
-if (!hayIFA) then
+if (!foundIFA) then
 	{
 	if (!activeUSAF) then
 		{
@@ -224,7 +224,7 @@ if (!hayIFA) then
 		}
 	else
 		{
-		if (buenos == independent) then {call compile preProcessFileLineNumbers "Templates\malosRHSUSAF.sqf"} else {call compile preProcessFileLineNumbers "Templates\buenosRHSUSAF.sqf"};
+		if (good == independent) then {call compile preProcessFileLineNumbers "Templates\malosRHSUSAF.sqf"} else {call compile preProcessFileLineNumbers "Templates\buenosRHSUSAF.sqf"};
 		};
 	if (!activeAFRF) then {call compile preProcessFileLineNumbers "Templates\muyMalosVanilla.sqf"} else {call compile preProcessFileLineNumbers "Templates\muyMalosRHSAFRF.sqf"};
 
@@ -234,7 +234,7 @@ if (!hayIFA) then
 		}
 	else
 		{
-		if (buenos == independent) then {call compile preProcessFileLineNumbers "Templates\buenosRHSGREF.sqf"} else {call compile preProcessFileLineNumbers "Templates\malosRHSGREF.sqf"};
+		if (good == independent) then {call compile preProcessFileLineNumbers "Templates\buenosRHSGREF.sqf"} else {call compile preProcessFileLineNumbers "Templates\malosRHSGREF.sqf"};
 		};
 	}
 else
@@ -249,16 +249,16 @@ medics = SDKMedic + [(FIAsquad select ((count FIAsquad)-1)),(NATOSquad select ((
 sdkTier1 = SDKMil + [staticCrewBuenos] + SDKMG + SDKGL + SDKATman;
 sdkTier2 = SDKMedic + SDKExp + SDKEng;
 sdkTier3 = SDKSL + SDKSniper;
-soldadosSDK = sdkTier1 + sdkTier2 + sdkTier3;
+soldiersSDK = sdkTier1 + sdkTier2 + sdkTier3;
 vehFIA = [vehSDKBike,vehSDKLightArmed,SDKMGStatic,vehSDKLightUnarmed,vehSDKTruck,vehSDKBoat,SDKMortar,staticATBuenos,staticAABuenos,vehSDKRepair];
-gruposSDKmid = [SDKSL,SDKGL,SDKMG,SDKMil];
-gruposSDKAT = [SDKSL,SDKMG,SDKATman,SDKATman,SDKATman];
+groupsSDKmid = [SDKSL,SDKGL,SDKMG,SDKMil];
+groupsSDKAT = [SDKSL,SDKMG,SDKATman,SDKATman,SDKATman];
 //["BanditShockTeam","ParaShockTeam"];
-gruposSDKSquad = [SDKSL,SDKGL,SDKMil,SDKMG,SDKMil,SDKATman,SDKMil,SDKMedic];
-gruposSDKSquadEng = [SDKSL,SDKGL,SDKMil,SDKMG,SDKExp,SDKATman,SDKEng,SDKMedic];
-gruposSDKSquadSupp = [SDKSL,SDKGL,SDKMil,SDKMG,SDKATman,SDKMedic,[staticCrewBuenos,staticCrewBuenos],[staticCrewBuenos,staticCrewBuenos]];
-gruposSDKSniper = [SDKSniper,SDKSniper];
-gruposSDKSentry = [SDKGL,SDKMil];
+groupsSDKSquad = [SDKSL,SDKGL,SDKMil,SDKMG,SDKMil,SDKATman,SDKMil,SDKMedic];
+groupsSDKSquadEng = [SDKSL,SDKGL,SDKMil,SDKMG,SDKExp,SDKATman,SDKEng,SDKMedic];
+groupsSDKSquadSupp = [SDKSL,SDKGL,SDKMil,SDKMG,SDKATman,SDKMedic,[staticCrewBuenos,staticCrewBuenos],[staticCrewBuenos,staticCrewBuenos]];
+groupsSDKSniper = [SDKSniper,SDKSniper];
+groupsSDKSentry = [SDKGL,SDKMil];
 banditUniforms = [];
 uniformsSDK = [];
 {
@@ -276,58 +276,58 @@ if (count _x > 1) then
 _checked = [];
 {
 {
-_tipo = _x;
-if !(_tipo in _checked) then
+_type = _x;
+if !(_type in _checked) then
 	{
-	_checked pushBack _tipo;
-	_loadout = getUnitLoadout _tipo;
+	_checked pushBack _type;
+	_loadout = getUnitLoadout _type;
 	for "_i" from 0 to 2 do
 		{
 		_weapon = [((_loadout select _i) select 0)] call BIS_fnc_baseWeapon;
-		if !(_weapon in armasCSAT) then {armasCSAT pushBack _weapon};
+		if !(_weapon in weaponsCSAT) then {weaponsCSAT pushBack _weapon};
 		};
 	};
 } forEach _x;
-} forEach gruposCSATmid + [CSATSpecOp] + gruposCSATSquad;
+} forEach groupsCSATmid + [CSATSpecOp] + groupsCSATSquad;
 _checked = [];
 {
 {
-_tipo = _x;
-if !(_tipo in _checked) then
+_type = _x;
+if !(_type in _checked) then
 	{
-	_checked pushBack _tipo;
-	_loadout = getUnitLoadout _tipo;
+	_checked pushBack _type;
+	_loadout = getUnitLoadout _type;
 	for "_i" from 0 to 2 do
 		{
 		_weapon = [((_loadout select _i) select 0)] call BIS_fnc_baseWeapon;
-		if !(_weapon in armasNATO) then {armasNATO pushBack _weapon};
+		if !(_weapon in weaponsNATO) then {weaponsNATO pushBack _weapon};
 		};
 	};
 } forEach _x;
-} forEach gruposNATOmid + [NATOSpecOp] + gruposNATOSquad;
+} forEach groupsNATOmid + [NATOSpecOp] + groupsNATOSquad;
 
 {
-_nombre = [_x] call BIS_fnc_baseWeapon;
-_magazines = getArray (configFile / "CfgWeapons" / _nombre / "magazines");
-municionNATO pushBack (_magazines select 0);
-} forEach armasNATO;
+_name = [_x] call BIS_fnc_baseWeapon;
+_magazines = getArray (configFile / "CfgWeapons" / _name / "magazines");
+ammunitionNATO pushBack (_magazines select 0);
+} forEach weaponsNATO;
 {
-_nombre = [_x] call BIS_fnc_baseWeapon;
-_magazines = getArray (configFile / "CfgWeapons" / _nombre / "magazines");
-municionCSAT pushBack (_magazines select 0);
-} forEach armasCSAT;
+_name = [_x] call BIS_fnc_baseWeapon;
+_magazines = getArray (configFile / "CfgWeapons" / _name / "magazines");
+ammunitionCSAT pushBack (_magazines select 0);
+} forEach weaponsCSAT;
 //optic, pointer and flashlight automated detection
-opticasAAF = [];
+opticsAAF = [];
 flashLights = [];
 pointers = [];
 {
 {
 _item = _x;
-if !(_item in (opticasAAF + flashLights + pointers)) then
+if !(_item in (opticsAAF + flashLights + pointers)) then
 	{
 	if (((_item call BIS_fnc_itemType) select 1) == "AccessorySights") then
 		{
-		opticasAAF pushBack _item
+		opticsAAF pushBack _item
 		}
 	else
 		{
@@ -346,10 +346,10 @@ if !(_item in (opticasAAF + flashLights + pointers)) then
 	};
 } forEach (_x call BIS_fnc_compatibleItems);
 
-} forEach (armasNATO + armasCSAT);
-if (hayRHS) then
+} forEach (weaponsNATO + weaponsCSAT);
+if (foundRHS) then
 	{
-	opticasAAF = opticasAAF select {getText (configfile >> "CfgWeapons" >> _x >> "author") == "Red Hammer Studios"};
+	opticsAAF = opticsAAF select {getText (configfile >> "CfgWeapons" >> _x >> "author") == "Red Hammer Studios"};
 	flashlights = flashlights select {getText (configfile >> "CfgWeapons" >> _x >> "author") == "Red Hammer Studios"};
 	pointers = pointers select {getText (configfile >> "CfgWeapons" >> _x >> "author") == "Red Hammer Studios"};
 	};
@@ -370,9 +370,9 @@ vehMRLS = [vehCSATMRLS, vehNATOMRLS];
 vehTransportAir = vehNATOTransportHelis + vehCSATTransportHelis;
 vehFastRope = ["O_Heli_Light_02_unarmed_F","B_Heli_Transport_01_camo_F","RHS_UH60M_d","RHS_Mi8mt_vdv","RHS_Mi8mt_vv","RHS_Mi8mt_Cargo_vv"];
 vehUnlimited = vehNATONormal + vehCSATNormal + [vehNATORBoat,vehNATOPatrolHeli,vehCSATRBoat,vehCSATPatrolHeli,vehNATOUAV,vehNATOUAVSmall,NATOMG,NATOMortar,vehCSATUAV,vehCSATUAVSmall,CSATMG,CSATMortar];
-sniperGroups = [gruposNATOSniper,gruposCSATSniper];
+sniperGroups = [groupsNATOSniper,groupsCSATSniper];
 sniperUnits = ["O_T_Soldier_M_F","O_T_Sniper_F","O_T_ghillie_tna_F","O_V_Soldier_M_ghex_F","B_CTRG_Soldier_M_tna_F","B_T_soldier_M_F","B_T_Sniper_F","B_T_ghillie_tna_F"] + SDKSniper + [FIAMarksman,NATOMarksman,CSATMarksman];
-if (hayRHS) then {sniperUnits = sniperUnits + ["rhsusf_socom_marsoc_sniper","rhs_vdv_marksman_asval"]};
+if (foundRHS) then {sniperUnits = sniperUnits + ["rhsusf_socom_marsoc_sniper","rhs_vdv_marksman_asval"]};
 
 arrayCivs = if (worldName == "Tanoa") then
 	{
@@ -380,7 +380,7 @@ arrayCivs = if (worldName == "Tanoa") then
 	}
 else
 	{
-	if !(hayIFA) then
+	if !(foundIFA) then
 		{
 		["C_man_1","C_man_1_1_F","C_man_1_2_F","C_man_1_3_F","C_man_hunter_1_F","C_man_p_beggar_F","C_man_p_beggar_F_afro","C_man_p_fugitive_F","C_man_p_shorts_1_F","C_man_polo_1_F","C_man_polo_2_F","C_man_polo_3_F","C_man_polo_4_F","C_man_polo_5_F","C_man_polo_6_F","C_man_shorts_1_F","C_man_shorts_2_F","C_man_shorts_3_F","C_man_shorts_4_F","C_scientist_F","C_Orestes","C_Nikos","C_Nikos_aged"]
 		}
@@ -389,9 +389,9 @@ else
 		["LIB_CIV_Assistant","LIB_CIV_Assistant_2","LIB_CIV_Citizen_1","LIB_CIV_Citizen_2","LIB_CIV_Citizen_3","LIB_CIV_Citizen_4","LIB_CIV_Citizen_5","LIB_CIV_Citizen_6","LIB_CIV_Citizen_7","LIB_CIV_Citizen_8","LIB_CIV_Priest","LIB_CIV_Doctor","LIB_CIV_Functionary_3","LIB_CIV_Functionary_2","LIB_CIV_Functionary_4","LIB_CIV_Villager_4","LIB_CIV_Villager_1","LIB_CIV_Villager_2","LIB_CIV_Villager_3","LIB_CIV_Woodlander_1","LIB_CIV_Woodlander_3","LIB_CIV_Woodlander_2","LIB_CIV_Woodlander_4","LIB_CIV_SchoolTeacher","LIB_CIV_SchoolTeacher_2","LIB_CIV_Rocker","LIB_CIV_Worker_3","LIB_CIV_Worker_1","LIB_CIV_Worker_4","LIB_CIV_Worker_2"]
 		};
 	};//array of possible civs. Only euro types picked (this is Greece). Add any civ classnames you wish here
-civBoats = if !(hayIFA) then {["C_Boat_Civil_01_F","C_Scooter_Transport_01_F","C_Boat_Transport_02_F","C_Rubberboat"]} else {[]};
+civBoats = if !(foundIFA) then {["C_Boat_Civil_01_F","C_Scooter_Transport_01_F","C_Boat_Transport_02_F","C_Rubberboat"]} else {[]};
 lamptypes = ["Lamps_Base_F", "PowerLines_base_F","Land_LampDecor_F","Land_LampHalogen_F","Land_LampHarbour_F","Land_LampShabby_F","Land_NavigLight","Land_runway_edgelight","Land_PowerPoleWooden_L_F"];
-if !(hayIFA) then
+if !(foundIFA) then
 	{
 	arrayids = ["Anthis","Costa","Dimitirou","Elias","Gekas","Kouris","Leventis","Markos","Nikas","Nicolo","Panas","Rosi","Samaras","Thanos","Vega"];
 	if (isMultiplayer) then {arrayids = arrayids + ["protagonista"]};
@@ -417,7 +417,7 @@ medicAnims = ["AinvPknlMstpSnonWnonDnon_medic_1","AinvPknlMstpSnonWnonDnon_medic
 
 missionPath = [(str missionConfigFile), 0, -15] call BIS_fnc_trimString;
 
-ladridos = ["Music\dog_bark01.wss", "Music\dog_bark02.wss", "Music\dog_bark03.wss", "Music\dog_bark04.wss", "Music\dog_bark05.wss","Music\dog_maul01.wss","Music\dog_yelp01.wss","Music\dog_yelp02.wss","Music\dog_yelp03.wss"];
+barks = ["Music\dog_bark01.wss", "Music\dog_bark02.wss", "Music\dog_bark03.wss", "Music\dog_bark04.wss", "Music\dog_bark05.wss","Music\dog_maul01.wss","Music\dog_yelp01.wss","Music\dog_yelp02.wss","Music\dog_yelp03.wss"];
 
 UPSMON_Bld_remove = ["Bridge_PathLod_base_F","Land_Slum_House03_F","Land_Bridge_01_PathLod_F","Land_Bridge_Asphalt_PathLod_F","Land_Bridge_Concrete_PathLod_F","Land_Bridge_HighWay_PathLod_F","Land_Bridge_01_F","Land_Bridge_Asphalt_F","Land_Bridge_Concrete_F","Land_Bridge_HighWay_F","Land_Canal_Wall_Stairs_F","warehouse_02_f","cliff_wall_tall_f","cliff_wall_round_f","containerline_02_f","containerline_01_f","warehouse_01_f","quayconcrete_01_20m_f","airstripplatform_01_f","airport_02_terminal_f","cliff_wall_long_f","shop_town_05_f","Land_ContainerLine_01_F"];
 listMilBld = ["Land_Cargo_Tower_V1_F","Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F","Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F","Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F","Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F", "Land_Cargo_Tower_V3_F","Land_Cargo_HQ_V1_F","Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F","Land_Cargo_Patrol_V1_F","Land_Cargo_Patrol_V2_F","Land_Cargo_Patrol_V3_F","Land_HelipadSquare_F"];
@@ -432,7 +432,7 @@ smallCApos = [];
 bigAttackInProgress = false;
 chopForest = false;
 distanceForAirAttack = 10000;
-distanceForLandAttack = if (hayIFA) then {5000} else {3000};
+distanceForLandAttack = if (foundIFA) then {5000} else {3000};
 
 if (worldName == "Tanoa") then
 	{
@@ -445,13 +445,13 @@ if (worldName == "Tanoa") then
 	roadsCW = ["road_13","road_14"];
 	roadsNW = ["road_15"];
 	roadsNE = ["road_16"];
-	carreteras setVariable ["airport",[[[6988.38,7135.59,10.0673],17.0361,"MG"],[[6873.83,7472,3.19066],262.634,"MG"],[[6902.09,7427.71,13.0559],359.999,"MG"],[[6886.75,7445.52,0.0368803],360,"Mort"],[[6888.47,7440.31,0.0368826],0.000531628,"Mort"],[[6882.14,7445.42,0.0368817],360,"Mort"],[[6886.49,7436.58,0.0368807],360,"Mort"],[[6970.32,7188.49,-0.0339937],359.999,"Tank"],[[6960.98,7188.49,-0.0339937],359.999,"Tank"],[[6950.71,7187.42,-0.033505],359.999,"Tank"]]];
+	roads setVariable ["airport",[[[6988.38,7135.59,10.0673],17.0361,"MG"],[[6873.83,7472,3.19066],262.634,"MG"],[[6902.09,7427.71,13.0559],359.999,"MG"],[[6886.75,7445.52,0.0368803],360,"Mort"],[[6888.47,7440.31,0.0368826],0.000531628,"Mort"],[[6882.14,7445.42,0.0368817],360,"Mort"],[[6886.49,7436.58,0.0368807],360,"Mort"],[[6970.32,7188.49,-0.0339937],359.999,"Tank"],[[6960.98,7188.49,-0.0339937],359.999,"Tank"],[[6950.71,7187.42,-0.033505],359.999,"Tank"]]];
 
-    carreteras setVariable ["airport_1",[[[2175.14,13402.4,-0.01863],138.861,"Tank"],[[2183.31,13409.7,-0.0184679],139.687,"Tank"],[[2211.39,13434.4,0.0164337],141.512,"Tank"],[[2221.62,13440.6,0.016408],142.886,"Tank"],[[2221.31,13195,0.0368757],0.000337857,"Mort"],[[2224.09,13197.6,0.038271],1.30051e-005,"Mort"],[[2218.96,13199.1,0.0382385],0.00923795,"Mort"],[[2071.1,13308.5,14.4943],133.738,"MG"]]];
+    roads setVariable ["airport_1",[[[2175.14,13402.4,-0.01863],138.861,"Tank"],[[2183.31,13409.7,-0.0184679],139.687,"Tank"],[[2211.39,13434.4,0.0164337],141.512,"Tank"],[[2221.62,13440.6,0.016408],142.886,"Tank"],[[2221.31,13195,0.0368757],0.000337857,"Mort"],[[2224.09,13197.6,0.038271],1.30051e-005,"Mort"],[[2218.96,13199.1,0.0382385],0.00923795,"Mort"],[[2071.1,13308.5,14.4943],133.738,"MG"]]];
 
-    carreteras setVariable ["airport_2",[[[11803,13051.6,0.0368805],360,"Mort"],[[11813.5,13049.2,0.0368915],0.000145629,"Mort"],[[11799.5,13043.2,0.0368919],360,"Mort"],[[11723.3,13114.6,18.1545],300.703,"MG"],[[11782.3,13058.1,0.0307827],19.6564,"Tank"],[[11810.6,13040.2,0.0368905],360,"Tank"],[[11832.9,13042.1,0.0283785],16.3683,"Tank"]]];
-    carreteras setVariable ["airport_3",[[[11658,3055.02,0.036881],360,"Mort"],[[11662.6,3060.14,0.0368819],0.000294881,"Mort"],[[11664.8,3049.94,0.0368805],360,"Mort"],[[11668.9,3055.64,0.0368805],2.08056e-005,"Mort"],[[11747.8,2982.95,18.1513],249.505,"MG"],[[11784.1,3132.77,0.183631],214.7,"Tank"],[[11720.3,3176.15,0.112019],215.055,"Tank"]]];
-    carreteras setVariable ["airport_4",[[[2092.87,3412.98,0.0372648],0.00414928,"Mort"],[[2091.5,3420.69,0.0369596],360,"Mort"],[[2099.93,3422.53,0.0373936],0.00215797,"Mort"],[[2100.13,3416.28,0.0394554],0.0043371,"Mort"],[[2198.24,3471.03,18.0123],0.00187816,"MG"],[[2133.01,3405.88,-0.0156536],315.528,"Tank"],[[2145.82,3416.83,-0.00544548],316.441,"Tank"],[[2163.9,3432.18,-0.0256157],318.777,"Tank"]]];
+    roads setVariable ["airport_2",[[[11803,13051.6,0.0368805],360,"Mort"],[[11813.5,13049.2,0.0368915],0.000145629,"Mort"],[[11799.5,13043.2,0.0368919],360,"Mort"],[[11723.3,13114.6,18.1545],300.703,"MG"],[[11782.3,13058.1,0.0307827],19.6564,"Tank"],[[11810.6,13040.2,0.0368905],360,"Tank"],[[11832.9,13042.1,0.0283785],16.3683,"Tank"]]];
+    roads setVariable ["airport_3",[[[11658,3055.02,0.036881],360,"Mort"],[[11662.6,3060.14,0.0368819],0.000294881,"Mort"],[[11664.8,3049.94,0.0368805],360,"Mort"],[[11668.9,3055.64,0.0368805],2.08056e-005,"Mort"],[[11747.8,2982.95,18.1513],249.505,"MG"],[[11784.1,3132.77,0.183631],214.7,"Tank"],[[11720.3,3176.15,0.112019],215.055,"Tank"]]];
+    roads setVariable ["airport_4",[[[2092.87,3412.98,0.0372648],0.00414928,"Mort"],[[2091.5,3420.69,0.0369596],360,"Mort"],[[2099.93,3422.53,0.0373936],0.00215797,"Mort"],[[2100.13,3416.28,0.0394554],0.0043371,"Mort"],[[2198.24,3471.03,18.0123],0.00187816,"MG"],[[2133.01,3405.88,-0.0156536],315.528,"Tank"],[[2145.82,3416.83,-0.00544548],316.441,"Tank"],[[2163.9,3432.18,-0.0256157],318.777,"Tank"]]];
 	}
 else
 	{
@@ -459,26 +459,26 @@ else
 		{
 		roadsMrk = ["road","road_1","road_2","road_3","road_4","road_5","road_6","road_7","road_8","road_9","road_10","road_11","road_12","road_13","road_14","road_15","road_16","road_17","road_18","road_19","road_20","road_21","road_22","road_23","road_24","road_25","road_26","road_27","road_28","road_29","road_30","road_31","road_32","road_33","road_34","road_35","road_36","road_37","road_38","road_39","road_40","road_41","road_42"];
 		{_x setMarkerAlpha 0} forEach roadsMrk;
-		carreteras setVariable ["airport",[[[21175.06,7369.336,0],62.362,"Tank"],[[21178.89,7361.573,0.421],62.36,"Tank"],[[20961.332,7295.678,0],0,"Mort"],[[20956.143,7295.142,0],0,"Mort"],[[20961.1,7290.02,0.262632],0,"Mort"]]];
-        carreteras setVariable ["airport_1",[[[23044.8,18745.7,0.0810001],88.275,"Tank"],[[23046.8,18756.8,0.0807302],88.275,"Tank"],[[23214.8,18859.5,0],267.943,"Tank"],[[22981.2,18903.9,0],0,"Mort"],[[22980.1,18907.5,0.553066],0,"Mort"]]];
-        carreteras setVariable ["airport_2",[[[26803.1,24727.7,0.0629988],359.958,"Mort"],[[26809,24728.2,0.03755],359.986,"Mort"],[[26815.2,24729,0.0384922],359.972,"Mort"],[[26821.3,24729.1,0.0407047],359.965,"Mort"],[[26769.1,24638.7,0.290344],131.324,"Tank"],[[26774.2,24643.9,0.282555],134.931,"Tank"]]];
-        carreteras setVariable ["airport_3",[[[14414.9,16327.8,-0.000991821],207.397,"Tank"],[[14471.9,16383.2,0.0378571],359.939,"Mort"],[[14443,16379.2,0.0369205],359.997,"Mort"],[[14449.4,16376.9,0.0369892],359.996,"Mort"],[[14458,16375.9,0.0369167],359.997,"Mort"],[[14447.2,16397.1,3.71081],269.525,"MG"],[[14472.3,16312,12.1993],317.315,"MG"],[[14411,16229,0.000303268],40.6607,"Tank"],[[14404.4,16235,-0.0169964],50.5741,"Tank"],[[14407.2,16331.7,0.0305004],204.588,"Tank"]]];
-        carreteras setVariable ["airport_4",[[[11577.4,11953.6,0.241838],122.274,"Tank"],[[11577.8,11964.3,0.258125],124.324,"Tank"],[[11633.3,11762,0.0372791],359.996,"Mort"],[[11637.3,11768.1,0.043232],0.0110098,"Mort"],[[11637.1,11763.1,0.0394402],0.00529677,"Mort"]],true];
-        carreteras setVariable ["airport_5",[[[9064.02,21531.3,0.00117016],138.075,"Tank"],[[9095.12,21552.8,0.614614],157.935,"Tank"],[[9030.28,21531.1,0.261349],157.935,"Mort"],[[9033.91,21534.7,0.295588],157.935,"Mort"]]];
+		roads setVariable ["airport",[[[21175.06,7369.336,0],62.362,"Tank"],[[21178.89,7361.573,0.421],62.36,"Tank"],[[20961.332,7295.678,0],0,"Mort"],[[20956.143,7295.142,0],0,"Mort"],[[20961.1,7290.02,0.262632],0,"Mort"]]];
+        roads setVariable ["airport_1",[[[23044.8,18745.7,0.0810001],88.275,"Tank"],[[23046.8,18756.8,0.0807302],88.275,"Tank"],[[23214.8,18859.5,0],267.943,"Tank"],[[22981.2,18903.9,0],0,"Mort"],[[22980.1,18907.5,0.553066],0,"Mort"]]];
+        roads setVariable ["airport_2",[[[26803.1,24727.7,0.0629988],359.958,"Mort"],[[26809,24728.2,0.03755],359.986,"Mort"],[[26815.2,24729,0.0384922],359.972,"Mort"],[[26821.3,24729.1,0.0407047],359.965,"Mort"],[[26769.1,24638.7,0.290344],131.324,"Tank"],[[26774.2,24643.9,0.282555],134.931,"Tank"]]];
+        roads setVariable ["airport_3",[[[14414.9,16327.8,-0.000991821],207.397,"Tank"],[[14471.9,16383.2,0.0378571],359.939,"Mort"],[[14443,16379.2,0.0369205],359.997,"Mort"],[[14449.4,16376.9,0.0369892],359.996,"Mort"],[[14458,16375.9,0.0369167],359.997,"Mort"],[[14447.2,16397.1,3.71081],269.525,"MG"],[[14472.3,16312,12.1993],317.315,"MG"],[[14411,16229,0.000303268],40.6607,"Tank"],[[14404.4,16235,-0.0169964],50.5741,"Tank"],[[14407.2,16331.7,0.0305004],204.588,"Tank"]]];
+        roads setVariable ["airport_4",[[[11577.4,11953.6,0.241838],122.274,"Tank"],[[11577.8,11964.3,0.258125],124.324,"Tank"],[[11633.3,11762,0.0372791],359.996,"Mort"],[[11637.3,11768.1,0.043232],0.0110098,"Mort"],[[11637.1,11763.1,0.0394402],0.00529677,"Mort"]],true];
+        roads setVariable ["airport_5",[[[9064.02,21531.3,0.00117016],138.075,"Tank"],[[9095.12,21552.8,0.614614],157.935,"Tank"],[[9030.28,21531.1,0.261349],157.935,"Mort"],[[9033.91,21534.7,0.295588],157.935,"Mort"]]];
 		}
 	else
 		{
 		roadsMrk = ["road","road_1","road_2","road_3","road_4","road_5","road_6","road_7","road_8","road_9","road_10","road_11","road_12","road_13","road_14","road_15","road_16","road_17","road_18","road_19","road_20","road_21","road_22","road_23","road_24","road_25","road_26","road_27","road_28","road_29","road_30","road_31","road_32","road_33","road_34","road_35","road_36","road_37","road_38"];
 		{_x setMarkerAlpha 0} forEach roadsMrk;
-		carreteras setVariable ["airport",[[[12191.2,12605.8,9.43077],0,"MG"],[[12194.2,12599.4,13.3954],0,"AA"],[[12141,12609,0.00088501],0,"Mort"],[[12144.3,12615.9,0],0,"Mort"],[[12156.5,12614.3,0],0,"Mort"],[[12170,12595.9,0.000305176],250.234,"AT"],[[12070.4,12656,0.0098114],23.5329,"Tank"],[[12022.5,12670.9,0.0098114],18.9519,"Tank"]]];
-        carreteras setVariable ["airport_1",[[[4782.75,10251.4,18],0,"AA"],[[4716.17,10215.3,13.1149],278.308,"AA"],[[4713.94,10209.3,9.12177],188.973,"MG"],[[4787.34,10248.9,4.99982],188.303,"MG"],[[4740.75,10333.2,20.3206],232.414,"MG"],[[4818.39,10200.1,0.00982666],239.625,"Tank"],[[4765.22,10330.8,0],0,"Mort"],[[4758.21,10328.1,0],0,"Mort"],[[4751.45,10324.4,0],0,"Mort"],[[4745.39,10320.6,0],0,"Mort"],[[4739.97,10283.2,0.00567627],291.41,"AT"],[[4814.19,10245.1,0.00567627],211.414,"AT"],[[4841.34,10158.9,0.0102844],240.137,"Tank"],[[4865.7,10116.7,0.00970459],239.499,"Tank"],[[4888.33,10074.2,0.00982666],235.077,"Tank"]]];
-        carreteras setVariable ["airport_2",[[[4717.95,2595.24,12.9766],0,"AA"],[[4714.27,2590.97,8.97349],176.197,"MG"],[[4743.55,2567.69,0.0130215],207.155,"Tank"],[[4775.62,2547.37,0.00691605],210.579,"Tank"],[[4719.88,2582.34,0.00566483],261.79,"AT"],[[4826.5,2558.35,0.00150108],0,"Mort"],[[4821.12,2550.32,0.00147152],0,"Mort"],[[4816.59,2543.65,0.00147247],0,"Mort"],[[4812.77,2518.77,0.00566483],150.397,"AT"]]];
+		roads setVariable ["airport",[[[12191.2,12605.8,9.43077],0,"MG"],[[12194.2,12599.4,13.3954],0,"AA"],[[12141,12609,0.00088501],0,"Mort"],[[12144.3,12615.9,0],0,"Mort"],[[12156.5,12614.3,0],0,"Mort"],[[12170,12595.9,0.000305176],250.234,"AT"],[[12070.4,12656,0.0098114],23.5329,"Tank"],[[12022.5,12670.9,0.0098114],18.9519,"Tank"]]];
+        roads setVariable ["airport_1",[[[4782.75,10251.4,18],0,"AA"],[[4716.17,10215.3,13.1149],278.308,"AA"],[[4713.94,10209.3,9.12177],188.973,"MG"],[[4787.34,10248.9,4.99982],188.303,"MG"],[[4740.75,10333.2,20.3206],232.414,"MG"],[[4818.39,10200.1,0.00982666],239.625,"Tank"],[[4765.22,10330.8,0],0,"Mort"],[[4758.21,10328.1,0],0,"Mort"],[[4751.45,10324.4,0],0,"Mort"],[[4745.39,10320.6,0],0,"Mort"],[[4739.97,10283.2,0.00567627],291.41,"AT"],[[4814.19,10245.1,0.00567627],211.414,"AT"],[[4841.34,10158.9,0.0102844],240.137,"Tank"],[[4865.7,10116.7,0.00970459],239.499,"Tank"],[[4888.33,10074.2,0.00982666],235.077,"Tank"]]];
+        roads setVariable ["airport_2",[[[4717.95,2595.24,12.9766],0,"AA"],[[4714.27,2590.97,8.97349],176.197,"MG"],[[4743.55,2567.69,0.0130215],207.155,"Tank"],[[4775.62,2547.37,0.00691605],210.579,"Tank"],[[4719.88,2582.34,0.00566483],261.79,"AT"],[[4826.5,2558.35,0.00150108],0,"Mort"],[[4821.12,2550.32,0.00147152],0,"Mort"],[[4816.59,2543.65,0.00147247],0,"Mort"],[[4812.77,2518.77,0.00566483],150.397,"AT"]]];
 		};
 	};
 listMilBld = ["Land_Cargo_Tower_V1_F","Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F","Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F","Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F","Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F", "Land_Cargo_Tower_V3_F","Land_Cargo_HQ_V1_F","Land_Cargo_HQ_V2_F","Land_Cargo_HQ_V3_F","Land_Cargo_Patrol_V1_F","Land_Cargo_Patrol_V2_F","Land_Cargo_Patrol_V3_F","Land_HelipadSquare_F"];
 listbld = ["Land_Cargo_Tower_V1_F","Land_Cargo_Tower_V1_No1_F","Land_Cargo_Tower_V1_No2_F","Land_Cargo_Tower_V1_No3_F","Land_Cargo_Tower_V1_No4_F","Land_Cargo_Tower_V1_No5_F","Land_Cargo_Tower_V1_No6_F","Land_Cargo_Tower_V1_No7_F","Land_Cargo_Tower_V2_F", "Land_Cargo_Tower_V3_F"];
 swoopShutUp = ["V_RebreatherIA","G_Diving"];
-difficultyCoef = if !(isMultiplayer) then {0} else {floor ((({side group _x == buenos} count playableUnits) - ({side group _x != buenos} count playableUnits)) / 5)};
+difficultyCoef = if !(isMultiplayer) then {0} else {floor ((({side group _x == good} count playableUnits) - ({side group _x != good} count playableUnits)) / 5)};
 if (side (group petros) == west) then {swoopShutUp pushBack "U_B_Wetsuit"} else {swoopShutUp pushBack "U_I_Wetsuit"};
 
 //Pricing values for soldiers, vehicles
@@ -545,9 +545,9 @@ haveNV = false;
 zoneCheckInProgress = false;
 garrisonIsChanging = false;
 playerHasBeenPvP = [];
-misiones = []; publicVariable "misiones";
+missions = []; publicVariable "missions";
 movingMarker = false;
-if !(hayIFA) then
+if !(foundIFA) then
 	{
 	unlockedItems = ["ItemMap","ItemWatch","ItemCompass","FirstAidKit","Medikit","ToolKit","H_Booniehat_khk","H_Booniehat_oli","H_Booniehat_grn","H_Booniehat_dirty","H_Cap_oli","H_Cap_blk","H_MilCap_rucamo","H_MilCap_gry","H_BandMask_blk","H_Bandanna_khk","H_Bandanna_gry","H_Bandanna_camo","H_Shemag_khk","H_Shemag_tan","H_Shemag_olive","H_ShemagOpen_tan","H_Beret_grn","H_Beret_grn_SF","H_Watchcap_camo","H_TurbanO_blk","H_Hat_camo","H_Hat_tan","H_Beret_blk","H_Beret_red","H_Watchcap_khk","G_Balaclava_blk","G_Balaclava_combat","G_Balaclava_lowprofile","G_Balaclava_oli","G_Bandanna_beast","G_Tactical_Black","G_Aviator","G_Shades_Black","acc_flashlight"] + uniformsSDK + civUniforms;//Initial Arsenal available items
 	if (side group petros == independent) then {unlockedItems pushBack "I_UavTerminal"} else {unlockedItems pushBack "B_UavTerminal"};
@@ -562,7 +562,7 @@ else
 
 if (!activeGREF) then
     {
-    if !(hayIFA) then
+    if !(foundIFA) then
     	{
 	    unlockedWeapons = ["hgun_PDW2000_F","hgun_Pistol_01_F","hgun_ACPC2_F","Binocular","SMG_05_F","SMG_02_F"];//"LMG_03_F"
 		unlockedRifles = ["hgun_PDW2000_F","arifle_AKM_F","arifle_AKS_F","SMG_05_F","SMG_02_F"];//standard rifles for AI riflemen, medics engineers etc. are picked from this array. Add only rifles.
@@ -617,7 +617,7 @@ _vest = _loadOut select 4;
 if !(_vest isEqualTo []) then {unlockedItems pushBackUnique (_vest select 0)};
 } forEach [SDKSniper,SDKATman,SDKMedic,SDKMG,SDKExp,SDKGL,SDKMil,SDKSL,SDKEng,[SDKUnarmed],[staticCrewBuenos]];
 
-unlockedBackpacks = if !(hayIFA) then {["B_FieldPack_oli","B_FieldPack_blk","B_FieldPack_ocamo","B_FieldPack_oucamo","B_FieldPack_cbr"]} else {["B_LIB_US_M2Flamethrower","B_LIB_SOV_RA_MGAmmoBag_Empty"]}; //Initial Arsenal available backpacks
+unlockedBackpacks = if !(foundIFA) then {["B_FieldPack_oli","B_FieldPack_blk","B_FieldPack_ocamo","B_FieldPack_oucamo","B_FieldPack_cbr"]} else {["B_LIB_US_M2Flamethrower","B_LIB_SOV_RA_MGAmmoBag_Empty"]}; //Initial Arsenal available backpacks
 //lockedMochis = lockedMochis - unlockedBackpacks;
 unlockedOptics = [];
 unlockedMG = [];
@@ -628,19 +628,19 @@ garageIsUsed = false;
 vehInGarage = [];
 destroyedBuildings = []; //publicVariable "destroyedBuildings";
 reportedVehs = [];
-hayTFAR = false;
-hayACRE = false;
-hayACE = false;
-hayACEhearing = false;
-hayACEMedical = false;
+foundTFAR = false;
+foundACRE = false;
+foundACE = false;
+foundACEhearing = false;
+foundACEMedical = false;
 //TFAR detection and config.
 if (isClass (configFile >> "CfgPatches" >> "task_force_radio")) then
     {
-    hayTFAR = true;
+    foundTFAR = true;
     haveRadio = true;
     unlockedItems = unlockedItems + ["tf_microdagr","tf_anprc148jem"];//making this items Arsenal available.["tf_anprc152"]
     tf_no_auto_long_range_radio = true; publicVariable "tf_no_auto_long_range_radio";//set to false and players will start with LR radio, uncomment the last line of so.
-	if (hayIFA) then
+	if (foundIFA) then
 		{tf_give_personal_radio_to_regular_soldier = false;
 		publicVariable "tf_give_personal_radio_to_regular_soldier";
 		}
@@ -681,7 +681,7 @@ if (isClass (configFile >> "CfgPatches" >> "task_force_radio")) then
 		"ACE_HandFlare_White",
 		"ACE_HandFlare_Red"
 	];
-	if (hayIFA) then {aceItems append ["ACE_LIB_LadungPM","ACE_SpareBarrel"]};
+	if (foundIFA) then {aceItems append ["ACE_LIB_LadungPM","ACE_SpareBarrel"]};
 	publicVariable "aceItems";
 
 	aceBasicMedItems = [
@@ -714,39 +714,39 @@ if (isClass (configFile >> "CfgPatches" >> "task_force_radio")) then
 
 if (!isNil "ace_common_fnc_isModLoaded") then {
 	unlockedItems = unlockedItems + aceItems;
-	if !(hayIFA) then
+	if !(foundIFA) then
 		{
 		unlockedBackpacks pushBackUnique "ACE_TacticalLadder_Pack";
 		unlockedWeapons pushBackUnique "ACE_VMH3";
 		itemsAAF = itemsAAF + ["ACE_Kestrel4500","ACE_ATragMX"];
-		armasNATO = armasNATO + ["ACE_M84"];
+		weaponsNATO = weaponsNATO + ["ACE_M84"];
 		};
-	hayACE = true;
+	foundACE = true;
 	if (isClass (configFile >> "CfgSounds" >> "ACE_EarRinging_Weak")) then {
-		hayACEhearing = true;
+		foundACEhearing = true;
 	};
 	if (isClass (ConfigFile >> "CfgSounds" >> "ACE_heartbeat_fast_3")) then {
 		if (ace_medical_level == 1) then {
-			hayACEMedical = true;
+			foundACEMedical = true;
 			unlockedItems = unlockedItems + aceBasicMedItems;
 		};
 	};
 
 	if (isClass (ConfigFile >> "CfgSounds" >> "ACE_heartbeat_fast_3")) then {
 		if (ace_medical_level == 2) then {
-			hayACEMedical = true;
+			foundACEMedical = true;
 			unlockedItems = unlockedItems + aceBasicMedItems + aceAdvMedItems;
 		};
 	};
 };
 if (isClass(configFile >> "cfgPatches" >> "acre_main")) then
 	{
-	hayACRE = true;
+	foundACRE = true;
 	haveRadio = true;
 	unlockedItems = unlockedItems + ["ACRE_PRC343","ACRE_PRC148","ACRE_PRC152","ACRE_PRC77","ACRE_PRC117F"];
 	};
 
-//allItems = allItems + itemsAAF + opticasAAF + _vests + cascos + NVGoggles;
+//allItems = allItems + itemsAAF + opticsAAF + _vests + helmets + NVGoggles;
 
 if (worldName == "Tanoa") then
 	{
@@ -781,11 +781,11 @@ publicVariable "unlockedMagazines";
 publicVariable "garageIsUsed";
 publicVariable "vehInGarage";
 publicVariable "reportedVehs";
-publicVariable "hayACE";
-publicVariable "hayTFAR";
-publicVariable "hayACRE";
-publicVariable "hayACEhearing";
-publicVariable "hayACEMedical";
+publicVariable "foundACE";
+publicVariable "foundTFAR";
+publicVariable "foundACRE";
+publicVariable "foundACEhearing";
+publicVariable "foundACEMedical";
 publicVariable "revelar";
 publicVariable "prestigeNATO";
 publicVariable "prestigeCSAT";

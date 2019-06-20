@@ -6,7 +6,7 @@ if (_tipo isEqualType "") then
 	_grupos = if (_tipo == staticCrewBuenos) then {[]} else {allGroups select {(leader _x getVariable ["marcador",""] == _marcador) and (count units _x < 8) and (vehicle (leader _x) == leader _x)}};
 	_grupo = if (_grupos isEqualTo []) then
 		{
-		createGroup buenos
+		createGroup good
 		}
 	else
 		{

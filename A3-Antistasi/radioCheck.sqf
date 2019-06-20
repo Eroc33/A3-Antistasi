@@ -12,7 +12,7 @@ if (count antenas > 0) then
 		if ((alive _antena) and (_posicion distance _antena < 3500)) then
 			{
 			_cercano = [marcadores,_antena] call BIS_fnc_nearestPosition;
-			if (not(lados getVariable [_cercano,sideUnknown] == buenos)) then {_ok = true};
+			if (not(sides getVariable [_cercano,sideUnknown] == good)) then {_ok = true};
 			};
 		};
 	};

@@ -11,7 +11,7 @@ _grpContacto = grpNull;
 _tsk = "";
 _posicion = getMarkerPos _marcador;
 _tiempolim = if (_dificil) then {30} else {90};//120
-if (hayIFA) then {_tiempolim = _tiempolim * 2};
+if (foundIFA) then {_tiempolim = _tiempolim * 2};
 _fechalim = [date select 0, date select 1, date select 2, date select 3, (date select 4) + _tiempolim];
 _fechalimnum = dateToNumber _fechalim;
 
@@ -30,9 +30,9 @@ else
 	};
 
 
-[[buenos,civilian],"CON",[_texto,_taskName,_marcador],_posicion,false,0,true,"Target",true] call BIS_fnc_taskCreate;
-misiones pushBack ["CON","CREATED"]; publicVariable "misiones";
-waitUntil {sleep 1; (dateToNumber date > _fechalimnum) or (lados getVariable [_marcador,sideUnknown] == buenos)};
+[[good,civilian],"CON",[_texto,_taskName,_marcador],_posicion,false,0,true,"Target",true] call BIS_fnc_taskCreate;
+missions pushBack ["CON","CREATED"]; publicVariable "missions";
+waitUntil {sleep 1; (dateToNumber date > _fechalimnum) or (sides getVariable [_marcador,sideUnknown] == good)};
 
 if (dateToNumber date > _fechalimnum) then
 	{
@@ -59,7 +59,7 @@ else
 		[0,400] remoteExec ["A3A_fnc_resourcesFIA",2];
 		[-10,0,_posicion] remoteExec ["A3A_fnc_citySupportChange",2];
 		[1200] remoteExec ["A3A_fnc_timingCA",2];
-		{if (isPlayer _x) then {[20,_x] call A3A_fnc_playerScoreAdd}} forEach ([500,0,_posicion,buenos] call A3A_fnc_distanceUnits);
+		{if (isPlayer _x) then {[20,_x] call A3A_fnc_playerScoreAdd}} forEach ([500,0,_posicion,good] call A3A_fnc_distanceUnits);
 		[20,theBoss] call A3A_fnc_playerScoreAdd;
 		}
 	else
@@ -67,7 +67,7 @@ else
 		[0,200] remoteExec ["A3A_fnc_resourcesFIA",2];
 		[-5,0,_posicion] remoteExec ["A3A_fnc_citySupportChange",2];
 		[600] remoteExec ["A3A_fnc_timingCA",2];
-		{if (isPlayer _x) then {[10,_x] call A3A_fnc_playerScoreAdd}} forEach ([500,0,_posicion,buenos] call A3A_fnc_distanceUnits);
+		{if (isPlayer _x) then {[10,_x] call A3A_fnc_playerScoreAdd}} forEach ([500,0,_posicion,good] call A3A_fnc_distanceUnits);
 		[10,theBoss] call A3A_fnc_playerScoreAdd;
 		};
 	};

@@ -150,7 +150,7 @@ if (!([_curandero] call A3A_fnc_canFight) or (_curandero != vehicle _curandero) 
 if (_curandero getVariable ["success",true]) then
 	{
 	_lado = side (group _curado);
-	if ((_lado != side (group _curandero)) and ((_lado == malos) or (_lado == muyMalos))) then
+	if ((_lado != side (group _curandero)) and ((_lado == bad) or (_lado == veryBad))) then
 		{
 		_curado setVariable ["surrendered",true,true];
 		sleep 2;

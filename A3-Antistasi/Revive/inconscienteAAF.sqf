@@ -8,16 +8,16 @@ _injurer = _this select 1;
 _bleedOut = if (surfaceIsWater (position _unit)) then {time + 60} else {time + 300};//300
 _jugadores = false;
 _lado = side (group _unit);
-if ((side _injurer == buenos) and (_lado == malos)) then
+if ((side _injurer == good) and (_lado == bad)) then
 	{
 	_marcador = _unit getVariable ["marcador",""];
 	if (_marcador != "") then
 		{
-		if (!([_marcador] call BIS_fnc_taskExists) and (lados getVariable [_marcador,sideUnknown] == malos)) then {[_marcador,side _injurer,_lado] remoteExec ["A3A_fnc_underAttack",2]};
+		if (!([_marcador] call BIS_fnc_taskExists) and (sides getVariable [_marcador,sideUnknown] == bad)) then {[_marcador,side _injurer,_lado] remoteExec ["A3A_fnc_underAttack",2]};
 		};
 	};
 
-if ({if ((isPlayer _x) and (_x distance _unit < distanciaSPWN2)) exitWith {1}} count allUnits != 0) then
+if ({if ((isPlayer _x) and (_x distance _unit < distanceSPWN2)) exitWith {1}} count allUnits != 0) then
 	{
 	_jugadores = true;
 	[_unit,"heal"] remoteExec ["A3A_fnc_flagaction",0,_unit];
@@ -47,7 +47,7 @@ if (_jugadores) then
 
 if (time >= _bleedOut) exitWith
 	{
-	if (side _injurer == buenos) then
+	if (side _injurer == good) then
 		{
 		if (isPlayer _injurer) then
 			{
@@ -61,11 +61,11 @@ if (time >= _bleedOut) exitWith
 		[-1,1,getPos _unit] remoteExec ["A3A_fnc_citySupportChange",2];
 		switch (_lado) do
 			{
-			case malos:
+			case bad:
 				{
 				[0.1,0] remoteExec ["A3A_fnc_prestige",2];
 				};
-			case muyMalos:
+			case veryBad:
 				{
 				[0,0.25] remoteExec ["A3A_fnc_prestige",2];
 				};

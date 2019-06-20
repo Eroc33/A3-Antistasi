@@ -6,12 +6,12 @@ _veh = cursorTarget;
 if (isNull _veh) exitWith {hint "You are not looking at a vehicle"};
 
 if (!alive _veh) exitWith {hint "You cannot add destroyed vehicles to your garage"};
-_cercanos = marcadores select {lados getVariable [_x,sideUnknown] == buenos};
+_cercanos = marcadores select {sides getVariable [_x,sideUnknown] == good};
 _cercanos = _cercanos select {(player inArea _x) and (_veh inArea _x)};
 
 if (_cercanos isEqualTo []) exitWith {hint format ["You and the vehicle need to be in a %1 garrison surrounding in order to garage a it",nameBuenos]};
 
-//if (player distance2d getMarkerPos respawnBuenos > 50) exitWith {hint "You must be closer than 50 meters to HQ"};
+//if (player distance2d getMarkerPos respawnGood > 50) exitWith {hint "You must be closer than 50 meters to HQ"};
 
 if ({alive _x} count (crew vehicle _veh) > 0) exitWith { hint "In order to store a vehicle, its crew must disembark."};
 
@@ -41,7 +41,7 @@ if (_exit) exitWith {hint "You are not owner of this vehicle therefore you canno
 
 if (_tipoVeh isKindOf "Plane") then
 	{
-	_aeropuertos = aeropuertos select {(lados getVariable [_x,sideUnknown] == buenos) and (player inArea _x)};
+	_aeropuertos = airports select {(sides getVariable [_x,sideUnknown] == good) and (player inArea _x)};
 	if (count _aeropuertos == 0) then {_exit = true};
 	};
 
