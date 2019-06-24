@@ -3,10 +3,10 @@ if (player != player getVariable ["owner",player]) exitWith {hint "You cannot go
 _player = player getVariable ["owner",player];
 if (captive _player) exitWith {hint "You are Undercover already"};
 
-private ["_compromised","_cambiar","_aeropuertos","_arrayCivVeh","_player","_size","_base"];
+private ["_compromised","_change","_airports","_arrayCivVeh","_player","_size","_base"];
 
-_cambiar = "";
-_aeropuertos = airports + puestos + (controles select {isOnRoad (getMarkerPos _x)});
+_change = "";
+_airports = airports + puestos + (controles select {isOnRoad (getMarkerPos _x)});
 _aeropuertos1 = airports;
 _arrayCivVeh = arrayCivVeh + [civHeli] + civBoats;
 _compromised = _player getVariable "compromised";
@@ -16,12 +16,12 @@ if (vehicle _player != _player) then
 	if (not(typeOf(vehicle _player) in _arrayCivVeh)) then
 		{
 		hint "You are not in a civilian vehicle";
-		_cambiar = "Init"
+		_change = "Init"
 		};
 	if (vehicle _player in reportedVehs) then
 		{
 		hint "This vehicle has been reported to the enemy. Change or renew your vehicle in the Garage to go Undercover";
-		_cambiar = "Init";
+		_change = "Init";
 		};
 	}
 else
@@ -29,16 +29,16 @@ else
 	if ((primaryWeapon _player != "") or (secondaryWeapon _player != "") or (handgunWeapon _player != "") or (vest _player != "") or (getNumber (configfile >> "CfgWeapons" >> headgear _player >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") > 2) or (hmd _player != "") or (not(uniform _player in civUniforms))) then
 		{
 		hint "You cannot go Undercover while:\n\nA weapon is visible\nWearing a vest\nWearing a helmet\nWearing NVGs\nWearing a mil uniform";
-		_cambiar = "Init";
+		_change = "Init";
 		};
 	if (dateToNumber date < _compromised) then
 		{
 		hint "You have been reported in the last 30 minutes therefore you cannot go Undercover";
-		_cambiar = "Init";
+		_change = "Init";
 		};
 	};
 
-if (_cambiar != "") exitWith {};
+if (_change != "") exitWith {};
 
 if ({((side _x== veryBad) or (side _x== bad)) and (((_x knowsAbout _player > 1.4) and (_x distance _player < 500)) or (_x distance _player < 350))} count allUnits > 0) exitWith
 	{
@@ -51,7 +51,7 @@ if ({((side _x== veryBad) or (side _x== bad)) and (((_x knowsAbout _player > 1.4
 		};
 	};
 
-_base = [_aeropuertos,_player] call BIS_fnc_nearestPosition;
+_base = [_airports,_player] call BIS_fnc_nearestPosition;
 _size = [_base] call A3A_fnc_sizeMarker;
 if ((_player distance getMarkerPos _base < _size*2) and (not(sides getVariable [_base,sideUnknown] == good))) exitWith {hint "You cannot go Undercover near Airports, Outposts or Roadblocks"};
 
@@ -65,49 +65,49 @@ if (_player == leader group _player) then
 	{if ((!isplayer _x) and (local _x) and (_x getVariable ["owner",_x] == _player)) then {[_x] spawn A3A_fnc_undercoverAI}} forEach units group _player;
 	};
 _estaEnControl = false;
-while {_cambiar == ""} do
+while {_change == ""} do
 	{
 	sleep 1;
 	if (!captive _player) then
 		{
-		_cambiar = "Reported";
+		_change = "Reported";
 		}
 	else
 		{
 		_veh = vehicle _player;
-		_tipo = typeOf _veh;
+		_type = typeOf _veh;
 		if (_veh != _player) then
 			{
-			if (not(_tipo in _arrayCivVeh)) then
+			if (not(_type in _arrayCivVeh)) then
 				{
-				_cambiar = "VNoCivil"
+				_change = "VNoCivil"
 				}
 			else
 				{
 				if (_veh in reportedVehs) then
 					{
-					_cambiar = "VCompromised"
+					_change = "VCompromised"
 					}
 				else
 					{
-					if ((_tipo != civHeli) and (!(_tipo in civBoats))) then
+					if ((_type != civHeli) and (!(_type in civBoats))) then
 						{
 						if !(isOnRoad position _veh) then
 							{
 							if (count (_veh nearRoads 50) == 0) then
 								{
-								if ({((side _x== veryBad) or (side _x== bad)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_cambiar = "Carretera"};
+								if ({((side _x== veryBad) or (side _x== bad)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_change = "Carretera"};
 								};
 							};
 						if (foundACE) then
 							{
 			  				if (((position _player nearObjects ["DemoCharge_Remote_Ammo", 5]) select 0) mineDetectedBy bad) then
 								{
-								_cambiar = "SpotBombTruck";
+								_change = "SpotBombTruck";
 								};
 							if (((position _player nearObjects ["SatchelCharge_Remote_Ammo", 5]) select 0) mineDetectedBy bad) then
 								{
-								_cambiar = "SpotBombTruck";
+								_change = "SpotBombTruck";
 								};
 							};
 						};
@@ -118,18 +118,18 @@ while {_cambiar == ""} do
 			{
 			if ((primaryWeapon _player != "") or (secondaryWeapon _player != "") or (handgunWeapon _player != "") or (vest _player != "") or (getNumber (configfile >> "CfgWeapons" >> headgear _player >> "ItemInfo" >> "HitpointsProtectionInfo" >> "Head" >> "armor") > 2) or (hmd _player != "") or (not(uniform _player in civUniforms))) then
 				{
-				if ({((side _x== veryBad) or (side _x== bad)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_cambiar = "Vestido2"} else {_cambiar = "Vestido"};
+				if ({((side _x== veryBad) or (side _x== bad)) and ((_x knowsAbout _player > 1.4) or (_x distance _player < 350))} count allUnits > 0) then {_change = "Vestido2"} else {_change = "Vestido"};
 				};
 			if (dateToNumber date < _compromised) then
 				{
-				_cambiar = "Compromised";
+				_change = "Compromised";
 				};
 			};
-		if (_cambiar == "") then
+		if (_change == "") then
 			{
-			if ((_tipo != civHeli) and (!(_tipo in civBoats))) then
+			if ((_type != civHeli) and (!(_type in civBoats))) then
 				{
-				_base = [_aeropuertos,_player] call BIS_fnc_nearestPosition;
+				_base = [_airports,_player] call BIS_fnc_nearestPosition;
 				//_size = [_base] call A3A_fnc_sizeMarker;
 				if ((_player inArea _base) and (sides getVariable [_base,sideUnknown] != good)) then
 					{
@@ -138,7 +138,7 @@ while {_cambiar == ""} do
 						_aggro = if (sides getVariable [_base,sideUnknown] == bad) then {prestigeNATO} else {prestigeCSAT};
 						if (random 100 < _aggro) then
 							{
-							_cambiar = "Control";
+							_change = "Control";
 							}
 						else
 							{
@@ -153,13 +153,13 @@ while {_cambiar == ""} do
 				}
 			else
 				{
-				if (_tipo == civHeli) then
+				if (_type == civHeli) then
 					{
 					_base = [_aeropuertos1,_player] call BIS_fnc_nearestPosition;
 					_size = [_base] call A3A_fnc_sizeMarker;
 					if ((_player distance2d getMarkerPos _base < _size*3) and ((sides getVariable [_base,sideUnknown] == bad) or (sides getVariable [_base,sideUnknown] == veryBad))) then
 						{
-						_cambiar = "NoFly";
+						_change = "NoFly";
 						};
 					};
 				};
@@ -176,7 +176,7 @@ if (vehicle _player != _player) then
 
 ["Undercover OFF",0,0,4,0,0,4] spawn bis_fnc_dynamicText;
 [] spawn A3A_fnc_statistics;
-switch _cambiar do
+switch _change do
 	{
 	case "Reported":
 		{
