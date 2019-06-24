@@ -313,14 +313,14 @@ Init.sqf                                 |       |        |          |
 Init.sqf                                 |       |        |          |
 isMember.sqf                             |       |        |          |
 resourcesPlayer.sqf                      |       |        |          |
-ranksMP.sqf                              |       |        |          |
-sizeMarker.sqf                           |       |        |          |
-isMedic.sqf                              |       |        |          |
-reDress.sqf                              |       |        |          |
-addHC.sqf                                |       |        |          |
-cleanserVeh.sqf                          |       |        |          |
-rearmCall.sqf                            |       |        |          |
-fatalWound.sqf                           |       |        |          |
-resourcecheckSkipTime.sqf                |       |        |          |
+ranksMP.sqf                              |=======|========|==========|
+sizeMarker.sqf                           |=======|========|==========|
+isMedic.sqf                              |=======|========|==========|
+reDress.sqf                              |=======|========|==========|
+addHC.sqf                                |=======|========|==========|
+cleanserVeh.sqf                          |=======|========|==========|
+rearmCall.sqf                            |=======|========|==========|
+fatalWound.sqf                           |=======|========|==========|
+resourcecheckSkipTime.sqf                |=======|========|==========|
 Init.sqf                                 |       |        |          |
-isWindowPosition.sqf                     |       |        |          |
+isWindowPosition.sqf                     |=======|========|==========| 
