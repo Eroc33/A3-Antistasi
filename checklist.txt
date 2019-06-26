@@ -39,16 +39,16 @@ markerChange.sqf                         |=======|        |          |
 artySupport.sqf                          |=======|        |          |
 LOG_Bank.sqf                             |=======|        |          |
 resourcecheck.sqf                        |=======|        |          |
-autoLoot.sqf                             |       |        |          |
-onPlayerRespawn.sqf                      |       |        |          |
-createAIrecursos.sqf                     |       |        |          |
-garage2.sqf                              |       |        |          |
-cityinfo.sqf                             |       |        |          |
-ataqueHQ.sqf                             |       |        |          |
-createCIV.sqf                            |       |        |          |
-malosRHSUSAF.sqf                         |       |        |          |
-FIAinitBASES.sqf                         |       |        |          |
-initServer.sqf                           |       |        |          |
+autoLoot.sqf                             |=======|        |          |
+onPlayerRespawn.sqf                      |=======|        |          |
+createAIrecursos.sqf                     |=======|        |          |
+garage2.sqf                              |=======|        |          |
+cityinfo.sqf                             |=======|        |          |
+ataqueHQ.sqf                             |=======|        |          |
+createCIV.sqf                            |=======|        |          |
+malosRHSUSAF.sqf                         |=======|        |          |
+FIAinitBASES.sqf                         |=======|        |          |
+initServer.sqf                           |=======|        |          |
 LOG_Suministros.sqf                      |       |        |          |
 patrolReinf.sqf                          |       |        |          |
 Composition_table.sqf                    |       |        |          |

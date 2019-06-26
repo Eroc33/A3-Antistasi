@@ -175,6 +175,8 @@ $Replacements=@{
     "_recAddCiudadSDK"="_recAddCitySDK";
     "_hrAddCiudad"="_hrAddCity";
     "_multiplicandorec"="_resourceMultiplyer"
+    "_chequeo"="_check";
+    "_cambio"="_change";
 }
 
 foreach ($Find in $Replacements.Keys) {

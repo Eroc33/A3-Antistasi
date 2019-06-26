@@ -19,48 +19,48 @@ _tsk = "";
 [[good,civilian],"DEF_HQ",[format ["Enemy knows our HQ coordinates. They have sent a SpecOp Squad in order to kill %1. Intercept them and kill them. Or you may move our HQ 1Km away so they will loose track",name petros],format ["Defend %1",name petros],respawnGood],_position,true,10,true,"Defend",true] call BIS_fnc_taskCreate;
 [[_side],"DEF_HQ1",[format ["We know %2 HQ coordinates. We have sent a SpecOp Squad in order to kill his leader %1. Help the SpecOp team",name petros, nameBuenos],format ["Kill %1",name petros],respawnGood],_position,true,10,true,"Attack",true] call BIS_fnc_taskCreate;
 missions pushBack ["DEF_HQ","CREATED"]; publicVariable "missions";
-_tiposVeh = if (_side == bad) then {vehNATOAttackHelis} else {vehCSATAttackHelis};
-_tiposVeh = _tiposVeh select {[_x] call A3A_fnc_vehAvailable};
+_vehicleTypes = if (_side == bad) then {vehNATOAttackHelis} else {vehCSATAttackHelis};
+_vehicleTypes = _vehicleTypes select {[_x] call A3A_fnc_vehAvailable};
 
-if (count _tiposVeh > 0) then
+if (count _vehicleTypes > 0) then
 	{
-	_vehicleType = selectRandom _tiposVeh;
+	_vehicleType = selectRandom _vehicleTypes;
 	//_pos = [_position, distanceSPWN * 3, random 360] call BIS_Fnc_relPos;
 	_vehicle=[_originPos, 0, _vehicleType, _side] call bis_fnc_spawnvehicle;
 	_heli = _vehicle select 0;
 	_heliCrew = _vehicle select 1;
-	_grupoheli = _vehicle select 2;
+	_heliGroup = _vehicle select 2;
 	_pilots = _pilots + _heliCrew;
-	_groups pushBack _grupoheli;
+	_groups pushBack _heliGroup;
 	_vehicles pushBack _heli;
 	{[_x] call A3A_fnc_NATOinit} forEach _heliCrew;
 	[_heli] call A3A_fnc_AIVEHinit;
-	_wp1 = _grupoheli addWaypoint [_position, 0];
+	_wp1 = _heliGroup addWaypoint [_position, 0];
 	_wp1 setWaypointType "SAD";
 	//[_heli,"Air Attack"] spawn A3A_fnc_inmuneConvoy;
 	sleep 30;
 	};
-_tiposVeh = if (_side == bad) then {vehNATOTransportHelis} else {vehCSATTransportHelis};
+_vehicleTypes = if (_side == bad) then {vehNATOTransportHelis} else {vehCSATTransportHelis};
 _groupType = if (_side == bad) then {NATOSpecOp} else {CSATSpecOp};
 
 for "_i" from 0 to (round random 2) do
 	{
-	_vehicleType = selectRandom _tiposVeh;
+	_vehicleType = selectRandom _vehicleTypes;
 	//_pos = [_position, distanceSPWN * 3, random 360] call BIS_Fnc_relPos;
 	_vehicle=[_originPos, 0, _vehicleType, _side] call bis_fnc_spawnvehicle;
 	_heli = _vehicle select 0;
 	_heliCrew = _vehicle select 1;
-	_grupoheli = _vehicle select 2;
+	_heliGroup = _vehicle select 2;
 	_pilots = _pilots + _heliCrew;
-	_groups pushBack _grupoheli;
+	_groups pushBack _heliGroup;
 	_vehicles pushBack _heli;
 
-	{_x setBehaviour "CARELESS";} forEach units _grupoheli;
+	{_x setBehaviour "CARELESS";} forEach units _heliGroup;
 	_group = [_originPos, _side, _groupType] call A3A_fnc_spawnGroup;
 	{_x assignAsCargo _heli; _x moveInCargo _heli; _soldiers pushBack _x; [_x] call A3A_fnc_NATOinit} forEach units _group;
 	_groups pushBack _group;
 	//[_heli,"Air Transport"] spawn A3A_fnc_inmuneConvoy;
-	[_heli,_group,_position,_originPos,_grupoHeli] spawn A3A_fnc_fastrope;
+	[_heli,_group,_position,_originPos,_heliGroup] spawn A3A_fnc_fastrope;
 	sleep 10;
 	};
 

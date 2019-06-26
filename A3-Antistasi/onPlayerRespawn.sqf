@@ -1,70 +1,70 @@
 if (isDedicated) exitWith {};
-private ["_nuevo","_viejo"];
-_nuevo = _this select 0;
-_viejo = _this select 1;
+private ["_new","_old"];
+_new = _this select 0;
+_old = _this select 1;
 
-if (isNull _viejo) exitWith {};
+if (isNull _old) exitWith {};
 
 waitUntil {alive player};
 
-_nul = [_viejo] spawn A3A_fnc_postmortem;
+_nul = [_old] spawn A3A_fnc_postmortem;
 if !(foundACEMedical) then
 	{
-	_viejo setVariable ["INCAPACITATED",false,true];
-	_nuevo setVariable ["INCAPACITATED",false,true];
+	_old setVariable ["INCAPACITATED",false,true];
+	_new setVariable ["INCAPACITATED",false,true];
 	};
 if (side group player == good) then
 	{
-	_owner = _viejo getVariable ["owner",_viejo];
+	_owner = _old getVariable ["owner",_old];
 
-	if (_owner != _viejo) exitWith {hint "Died while remote controlling AI"; selectPlayer _owner; disableUserInput false; deleteVehicle _nuevo};
+	if (_owner != _old) exitWith {hint "Died while remote controlling AI"; selectPlayer _owner; disableUserInput false; deleteVehicle _new};
 
-	_nul = [0,-1,getPos _viejo] remoteExec ["A3A_fnc_citySupportChange",2];
+	_nul = [0,-1,getPos _old] remoteExec ["A3A_fnc_citySupportChange",2];
 
-	_score = _viejo getVariable ["score",0];
-	_punish = _viejo getVariable ["punish",0];
-	_dinero = _viejo getVariable ["dinero",0];
-	_dinero = round (_dinero - (_dinero * 0.1));
-	_elegible = _viejo getVariable ["elegible",true];
-	_rango = _viejo getVariable ["rango","PRIVATE"];
+	_score = _old getVariable ["score",0];
+	_punish = _old getVariable ["punish",0];
+	_money = _old getVariable ["dinero",0];
+	_money = round (_money - (_money * 0.1));
+	_elegible = _old getVariable ["elegible",true];
+	_rank = _old getVariable ["rango","PRIVATE"];
 
-	_dinero = round (_dinero - (_dinero * 0.05));
-	if (_dinero < 0) then {_dinero = 0};
+	_money = round (_money - (_money * 0.05));
+	if (_money < 0) then {_money = 0};
 
-	_nuevo setVariable ["score",_score -1,true];
-	_nuevo setVariable ["owner",_nuevo,true];
-	_nuevo setVariable ["punish",_punish,true];
-	_nuevo setVariable ["respawning",false];
-	_nuevo setVariable ["dinero",_dinero,true];
-	//_nuevo setUnitRank (rank _viejo);
-	_nuevo setVariable ["compromised",0];
-	_nuevo setVariable ["elegible",_elegible,true];
-	_nuevo setVariable ["spawner",true,true];
-	_viejo setVariable ["spawner",nil,true];
-	[_nuevo,false] remoteExec ["setCaptive",0,_nuevo];
-	_nuevo setCaptive false;
-	_nuevo setRank (_rango);
-	_nuevo setVariable ["rango",_rango,true];
-	_nuevo setUnitTrait ["camouflageCoef",0.8];
-	_nuevo setUnitTrait ["audibleCoef",0.8];
+	_new setVariable ["score",_score -1,true];
+	_new setVariable ["owner",_new,true];
+	_new setVariable ["punish",_punish,true];
+	_new setVariable ["respawning",false];
+	_new setVariable ["dinero",_money,true];
+	//_new setUnitRank (rank _old);
+	_new setVariable ["compromised",0];
+	_new setVariable ["elegible",_elegible,true];
+	_new setVariable ["spawner",true,true];
+	_old setVariable ["spawner",nil,true];
+	[_new,false] remoteExec ["setCaptive",0,_new];
+	_new setCaptive false;
+	_new setRank (_rank);
+	_new setVariable ["rango",_rank,true];
+	_new setUnitTrait ["camouflageCoef",0.8];
+	_new setUnitTrait ["audibleCoef",0.8];
 	{
-    _nuevo addOwnedMine _x;
-    } count (getAllOwnedMines (_viejo));
+    _new addOwnedMine _x;
+    } count (getAllOwnedMines (_old));
 
-	//if (!foundACEMedical) then {[_nuevo] call A3A_fnc_initRevive};
+	//if (!foundACEMedical) then {[_new] call A3A_fnc_initRevive};
 	disableUserInput false;
-	//_nuevo enableSimulation true;
-	if (_viejo == theBoss) then
+	//_new enableSimulation true;
+	if (_old == theBoss) then
 		{
-		[_nuevo] call A3A_fnc_theBossInit;
+		[_new] call A3A_fnc_theBossInit;
 		};
 
 
-	removeAllItemsWithMagazines _nuevo;
-	{_nuevo removeWeaponGlobal _x} forEach weapons _nuevo;
-	removeBackpackGlobal _nuevo;
-	removeVest _nuevo;
-	if ((not("ItemGPS" in unlockedItems)) and ("ItemGPS" in (assignedItems _nuevo))) then {_nuevo unlinkItem "ItemGPS"};
+	removeAllItemsWithMagazines _new;
+	{_new removeWeaponGlobal _x} forEach weapons _new;
+	removeBackpackGlobal _new;
+	removeVest _new;
+	if ((not("ItemGPS" in unlockedItems)) and ("ItemGPS" in (assignedItems _new))) then {_new unlinkItem "ItemGPS"};
 	if ((!foundTFAR) and (!foundACRE) and ("ItemRadio" in (assignedItems player)) and (!haveRadio)) then {player unlinkItem "ItemRadio"};
 	if (!isPlayer (leader group player)) then {(group player) selectLeader player};
 	player addEventHandler ["FIRED",
@@ -79,12 +79,12 @@ if (side group player == good) then
 				}
 			else
 				{
-				_ciudad = [ciudades,_player] call BIS_fnc_nearestPosition;
-				_size = [_ciudad] call A3A_fnc_sizeMarker;
-				_datos = server getVariable _ciudad;
-				if (random 100 < _datos select 2) then
+				_city = [ciudades,_player] call BIS_fnc_nearestPosition;
+				_size = [_city] call A3A_fnc_sizeMarker;
+				_data = server getVariable _city;
+				if (random 100 < _data select 2) then
 					{
-					if (_player distance getMarkerPos _ciudad < _size * 1.5) then
+					if (_player distance getMarkerPos _city < _size * 1.5) then
 						{
 						[_player,false] remoteExec ["setCaptive",0,_player];
 						_player setCaptive false;
@@ -101,31 +101,31 @@ if (side group player == good) then
 
 	player addEventHandler ["InventoryOpened",
 		{
-		private ["_jugador","_contenedor","_tipo"];
+		private ["_player","_container","_type"];
 		_control = false;
-		_jugador = _this select 0;
-		if (captive _jugador) then
+		_player = _this select 0;
+		if (captive _player) then
 			{
-			_contenedor = _this select 1;
-			_tipo = typeOf _contenedor;
-			if (((_contenedor isKindOf "Man") and (!alive _contenedor)) or (_tipo == NATOAmmoBox) or (_tipo == CSATAmmoBox)) then
+			_container = _this select 1;
+			_type = typeOf _container;
+			if (((_container isKindOf "Man") and (!alive _container)) or (_type == NATOAmmoBox) or (_type == CSATAmmoBox)) then
 				{
-				if ({if (((side _x== veryBad) or (side _x== bad)) and (_x knowsAbout _jugador > 1.4)) exitWith {1}} count allUnits > 0) then
+				if ({if (((side _x== veryBad) or (side _x== bad)) and (_x knowsAbout _player > 1.4)) exitWith {1}} count allUnits > 0) then
 					{
-					[_jugador,false] remoteExec ["setCaptive",0,_jugador];
-					_jugador setCaptive false;
+					[_player,false] remoteExec ["setCaptive",0,_player];
+					_player setCaptive false;
 					}
 				else
 					{
-					_ciudad = [ciudades,_jugador] call BIS_fnc_nearestPosition;
-					_size = [_ciudad] call A3A_fnc_sizeMarker;
-					_datos = server getVariable _ciudad;
-					if (random 100 < _datos select 2) then
+					_city = [ciudades,_player] call BIS_fnc_nearestPosition;
+					_size = [_city] call A3A_fnc_sizeMarker;
+					_data = server getVariable _city;
+					if (random 100 < _data select 2) then
 						{
-						if (_jugador distance getMarkerPos _ciudad < _size * 1.5) then
+						if (_player distance getMarkerPos _city < _size * 1.5) then
 							{
-							[_jugador,false] remoteExec ["setCaptive",0,_jugador];
-							_jugador setCaptive false;
+							[_player,false] remoteExec ["setCaptive",0,_player];
+							_player setCaptive false;
 							};
 						};
 					};
@@ -164,13 +164,13 @@ if (side group player == good) then
 		{
 		player addEventHandler ["Fired",
 				{
-				_tipo = _this select 1;
-				if ((_tipo == "Put") or (_tipo == "Throw")) then
+				_type = _this select 1;
+				if ((_type == "Put") or (_type == "Throw")) then
 					{
 					if (player distance petros < 50) then
 						{
 						deleteVehicle (_this select 6);
-						if (_tipo == "Put") then
+						if (_type == "Put") then
 							{
 							if (player distance petros < 10) then {[player,60] spawn A3A_fnc_castigo};
 							};
@@ -190,12 +190,12 @@ if (side group player == good) then
 				}
 			else
 				{
-				_ciudad = [ciudades,_player] call BIS_fnc_nearestPosition;
-				_size = [_ciudad] call A3A_fnc_sizeMarker;
-				_datos = server getVariable _ciudad;
-				if (random 100 < _datos select 2) then
+				_city = [ciudades,_player] call BIS_fnc_nearestPosition;
+				_size = [_city] call A3A_fnc_sizeMarker;
+				_data = server getVariable _city;
+				if (random 100 < _data select 2) then
 					{
-					if (_player distance getMarkerPos _ciudad < _size * 1.5) then
+					if (_player distance getMarkerPos _city < _size * 1.5) then
 						{
 						[_player,false] remoteExec ["setCaptive",0,_player];
 						_player setCaptive false;
@@ -239,8 +239,8 @@ if (side group player == good) then
 	}
 else
 	{
-	_viejo setVariable ["spawner",nil,true];
-	_nuevo setVariable ["spawner",true,true];
+	_old setVariable ["spawner",nil,true];
+	_new setVariable ["spawner",true,true];
 	if (foundRHS) then {[player] call A3A_fnc_RHSdress};
 	if (foundACE) then {[] call A3A_fnc_ACEpvpReDress};
 	};

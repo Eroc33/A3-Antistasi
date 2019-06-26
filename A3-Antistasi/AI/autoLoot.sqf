@@ -1,5 +1,5 @@
 _unit = _this select 0;
-_camion = _this select 1;
+_truck = _this select 1;
 
 if ((isPlayer _unit) or (player != leader group player)) exitWith {};
 if !([_unit] call A3A_fnc_canFight) exitWith {};
@@ -7,41 +7,41 @@ if !([_unit] call A3A_fnc_canFight) exitWith {};
 if (_unit getVariable ["ayudando",false]) exitWith {_unit groupChat "I cannot rearm right now. I'm healing a comrade"};
 _rearming = _unit getVariable "rearming";
 if (_rearming) exitWith {_unit groupChat "I am currently rearming. Cancelling."; _unit setVariable ["rearming",false]};
-if (_unit == gunner _camion) exitWith {_unit groupChat "I cannot rearm right now. I'm manning this gun"};
-if (!canMove _camion) exitWith {_unit groupChat "It is useless to load my vehicle, as it needs repairs"};
+if (_unit == gunner _truck) exitWith {_unit groupChat "I cannot rearm right now. I'm manning this gun"};
+if (!canMove _truck) exitWith {_unit groupChat "It is useless to load my vehicle, as it needs repairs"};
 
-_objetos = [];
-_hayCaja = false;
-_arma = "";
-_armas = [];
+_objects = [];
+_hasBox = false;
+_weapon = "";
+_weapons = [];
 _bigTimeOut = time + 120;
-_objetos = nearestObjects [_unit, ["WeaponHolderSimulated", "GroundWeaponHolder", "WeaponHolder"], 50];
-if (count _objetos == 0) exitWith {_unit groupChat "I see no corpses here to loot"};
+_objects = nearestObjects [_unit, ["WeaponHolderSimulated", "GroundWeaponHolder", "WeaponHolder"], 50];
+if (count _objects == 0) exitWith {_unit groupChat "I see no corpses here to loot"};
 
 _target = objNull;
-_distancia = 51;
+_distance = 51;
 {
-_objeto = _x;
-if (_unit distance _objeto < _distancia) then
+_object = _x;
+if (_unit distance _object < _distance) then
 	{
-	if ((count weaponCargo _objeto > 0) and !(_objeto getVariable ["busy",false])) then
+	if ((count weaponCargo _object > 0) and !(_object getVariable ["busy",false])) then
 		{
-		_armas = weaponCargo _objeto;
-		for "_i" from 0 to (count _armas - 1) do
+		_weapons = weaponCargo _object;
+		for "_i" from 0 to (count _weapons - 1) do
 			{
-			_posible = _armas select _i;
+			_posible = _weapons select _i;
 			_basePosible = [_posible] call BIS_fnc_baseWeapon;
 			//if ((not(_basePosible in unlockedWeapons)) and ((_basePosible in arifles) or (_basePosible in srifles) or (_basePosible in mguns) or (_posible in mlaunchers) or (_posible in rlaunchers))) then
 			if ((_basePosible in arifles) or (_basePosible in srifles) or (_basePosible in mguns) or (_posible in mlaunchers) or (_posible in rlaunchers)) then
 				{
-				_target = _objeto;
-				_distancia = _unit distance _objeto;
-				_arma = _posible;
+				_target = _object;
+				_distance = _unit distance _object;
+				_weapon = _posible;
 				};
 			};
 		};
 	};
-} forEach _objetos;
+} forEach _objects;
 
 if (isNull _target) exitWith {_unit groupChat "There is nothing to loot"};
 _target setVariable ["busy",true];
@@ -59,16 +59,16 @@ removeHeadgear _unit;
 //_Pweapon = primaryWeapon _unit;
 //_Sweapon = secondaryWeapon _unit;
 
-_unit action ["GetOut",_camion];
+_unit action ["GetOut",_truck];
 [_unit] orderGetin false;
 //sleep 3;
 
-//if (_Pweapon != "") then {_unit action ["DropWeapon",_camion,_Pweapon]; sleep 3};
-//if (_Sweapon != "") then {_unit action ["DropWeapon",_camion,_Sweapon]};
+//if (_Pweapon != "") then {_unit action ["DropWeapon",_truck,_Pweapon]; sleep 3};
+//if (_Sweapon != "") then {_unit action ["DropWeapon",_truck,_Sweapon]};
 
 _continuar = true;
 
-while {_continuar and ([_unit] call A3A_fnc_canFight) and (_unit getVariable "rearming") and (alive _camion) and (_bigTimeout > time)} do
+while {_continuar and ([_unit] call A3A_fnc_canFight) and (_unit getVariable "rearming") and (alive _truck) and (_bigTimeout > time)} do
 	{
 	if (isNull _target) exitWith {_continuar = false};
 	_target setVariable ["busy",true];
@@ -77,7 +77,7 @@ while {_continuar and ([_unit] call A3A_fnc_canFight) and (_unit getVariable "re
 	waitUntil {sleep 1; (!alive _unit) or (isNull _target) or (_unit distance _target < 3) or (_timeOut < time) or (unitReady _unit)};
 	if (_unit distance _target < 3) then
 		{
-		_unit action ["TakeWeapon",_target,_arma];
+		_unit action ["TakeWeapon",_target,_weapon];
 		sleep 3;
 		};
 	_target setVariable ["busy",false];
@@ -85,19 +85,19 @@ while {_continuar and ([_unit] call A3A_fnc_canFight) and (_unit getVariable "re
 	if (_tempPrimary != "") then
 		{
 		_magazines = getArray (configFile / "CfgWeapons" / _tempPrimary / "magazines");
-		_muertos = allDead select {(_x distance _unit < 51) and (!(_x getVariable ["busy",false]))};
-		_hayCaja = false;
-		_distancia = 51;
+		_nearbyDead = allDead select {(_x distance _unit < 51) and (!(_x getVariable ["busy",false]))};
+		_hasBox = false;
+		_distance = 51;
 		{
-		_muerto = _x;
-		if (({_x in _magazines} count (magazines _muerto) > 0) and (_unit distance _muerto < _distancia)) then
+		_dead = _x;
+		if (({_x in _magazines} count (magazines _dead) > 0) and (_unit distance _dead < _distance)) then
 			{
-			_target = _muerto;
-			_hayCaja = true;
-			_distancia = _muerto distance _unit;
+			_target = _dead;
+			_hasBox = true;
+			_distance = _dead distance _unit;
 			};
-		} forEach _muertos;
-		if ((_hayCaja) and (_unit getVariable "rearming")) then
+		} forEach _nearbyDead;
+		if ((_hasBox) and (_unit getVariable "rearming")) then
 			{
 			_unit stop false;
 			_target setVariable ["busy",true];
@@ -134,22 +134,22 @@ while {_continuar and ([_unit] call A3A_fnc_canFight) and (_unit getVariable "re
 			};
 		};
 
-	_unit doMove (getPosATL _camion);
+	_unit doMove (getPosATL _truck);
 	_timeOut = time + 60;
-	waitUntil {sleep 1; !([_unit] call A3A_fnc_canFight) or (!alive _camion) or (_unit distance _camion < 8) or (_timeOut < time)};
-	if ((alive _camion) and ([_unit] call A3A_fnc_canFight)) then
+	waitUntil {sleep 1; !([_unit] call A3A_fnc_canFight) or (!alive _truck) or (_unit distance _truck < 8) or (_timeOut < time)};
+	if ((alive _truck) and ([_unit] call A3A_fnc_canFight)) then
 		{
 		if (_tempPrimary != "") then
 			{
-			_unit action ["DropWeapon",_camion,_tempPrimary];
+			_unit action ["DropWeapon",_truck,_tempPrimary];
 			sleep 3;
 			};
 		if (secondaryWeapon _unit != "") then
 			{
-			_unit action ["DropWeapon",_camion,secondaryWeapon _unit];
+			_unit action ["DropWeapon",_truck,secondaryWeapon _unit];
 			sleep 3;
 			};
-		{_camion addItemCargoGlobal [_x,1]} forEach ((assignedItems _unit) + (vestItems _unit) + (backPackItems _unit) + [headgear _unit,backpack _unit,vest _unit]);
+		{_truck addItemCargoGlobal [_x,1]} forEach ((assignedItems _unit) + (vestItems _unit) + (backPackItems _unit) + [headgear _unit,backpack _unit,vest _unit]);
 		removeBackpackGlobal _unit;
 		removeVest _unit;
 		{_unit unlinkItem _x} forEach assignedItems _unit;
@@ -158,35 +158,35 @@ while {_continuar and ([_unit] call A3A_fnc_canFight) and (_unit getVariable "re
 		removeHeadgear _unit;
 		};
 	_target = objNull;
-	_distancia = 51;
+	_distance = 51;
 	{
-	_objeto = _x;
-	if (_unit distance _objeto < _distancia) then
+	_object = _x;
+	if (_unit distance _object < _distance) then
 		{
-		if ((count weaponCargo _objeto > 0) and !(_objeto getVariable ["busy",false])) then
+		if ((count weaponCargo _object > 0) and !(_object getVariable ["busy",false])) then
 			{
-			_armas = weaponCargo _objeto;
-			for "_i" from 0 to (count _armas - 1) do
+			_weapons = weaponCargo _object;
+			for "_i" from 0 to (count _weapons - 1) do
 				{
-				_posible = _armas select _i;
+				_posible = _weapons select _i;
 				_basePosible = [_posible] call BIS_fnc_baseWeapon;
 				if ((not(_basePosible in unlockedWeapons)) and ((_basePosible in arifles) or (_basePosible in srifles) or (_basePosible in mguns) or (_posible in mlaunchers) or (_posible in rlaunchers))) then
 					{
-					_target = _objeto;
-					_distancia = _unit distance _objeto;
-					_arma = _posible;
+					_target = _object;
+					_distance = _unit distance _object;
+					_weapon = _posible;
 					};
 				};
 			};
 		};
-	} forEach _objetos;
+	} forEach _objects;
 	};
 if (!_continuar) then
 	{
 	_unit groupChat "No more weapons to loot"
 	};
-//if (primaryWeapon _unit == "") then {_unit action ["TakeWeapon",_camion,_Pweapon]; sleep 3};
-//if ((secondaryWeapon _unit == "") and (_Sweapon != "")) then {_unit action ["TakeWeapon",_camion,_Sweapon]};
+//if (primaryWeapon _unit == "") then {_unit action ["TakeWeapon",_truck,_Pweapon]; sleep 3};
+//if ((secondaryWeapon _unit == "") and (_Sweapon != "")) then {_unit action ["TakeWeapon",_truck,_Sweapon]};
 _unit doFollow player;
 _unit setVariable ["rearming",false];
 _unit setUnitLoadout _originalLoadout;
