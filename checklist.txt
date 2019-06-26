@@ -276,51 +276,51 @@ playerHasBeenPvPCheck.sqf                |       |        |          |
 recallGroup.sqf                          |       |        |          |
 isFrontline.sqf                          |       |        |          |
 borrarTask.sqf                           |       |        |          |
-destroyCity.sqf                          |       |        |          |
-enemyList.sqf                            |       |        |          |
-citiesToCivPatrol.sqf                    |       |        |          |
-findNearestGoodRoad.sqf                  |       |        |          |
+destroyCity.sqf                          |=======|~~~~~~~~|          |
+enemyList.sqf                            |=======|~~~~~~~~|          |
+citiesToCivPatrol.sqf                    |=======|========|          |  
+findNearestGoodRoad.sqf                  |=======|========|          |
 vehAvailable.sqf                         |       |        |          |
-nodefinder.sqf                           |       |        |          |
+nodefinder.sqf                           |=======|========|          |
 Init.sqf                                 |       |        |          |
-deleteControles.sqf                      |       |        |          |
-timingCA.sqf                             |       |        |          |
+deleteControles.sqf                      |=======|        |          |
+timingCA.sqf                             |=======|        |          |
 Init.sqf                                 |       |        |          |
-recompile.sqf                            |       |        |          |
-fuegoSupresor.sqf                        |       |        |          |
-Init.sqf                                 |       |        |          |
-canConquer.sqf                           |       |        |          |
+recompile.sqf                            |=======|========|          |
+fuegoSupresor.sqf                        |~~~~~~~|        |          | !eny 
+Init.sqf                                 |       |        |          | 
+canConquer.sqf                           |=======|========|          |
 init.sqf                                 |       |        |          |
 Init.sqf                                 |       |        |          |
-onOffLamp.sqf                            |       |        |          |
-autoHealFnc.sqf                          |       |        |          |
-hasRadio.sqf                             |       |        |          |
-vehiclePrice.sqf                         |       |        |          |
-canFight.sqf                             |       |        |          |
-postmortem.sqf                           |       |        |          |
-reinitY.sqf                              |       |        |          |
-enemigoCercano.sqf                       |       |        |          |
-removeVehFromPool.sqf                    |       |        |          |
-enemyNearCheck.sqf                       |       |        |          |
+onOffLamp.sqf                            |=======|        |          | !manual translate  
+autoHealFnc.sqf                          |=======|========|          |
+hasRadio.sqf                             |=======|========|          |
+vehiclePrice.sqf                         |=======|        |          |
+canFight.sqf                             |=======|========|          |
+postmortem.sqf                           |=======|========|          |
+reinitY.sqf                              |=======|========|          | 
+enemigoCercano.sqf                       |=======|        |          | !eny  
+removeVehFromPool.sqf                    |=======|        |          |
+enemyNearCheck.sqf                       |=======|        |          |
 Init.sqf                                 |       |        |          |
-missionrequestAUTO.sqf                   |       |        |          |
+missionrequestAUTO.sqf                   |=======|        |          |
 Init.sqf                                 |       |        |          |
 Init.sqf                                 |       |        |          |
 init.sqf                                 |       |        |          |
 Init.sqf                                 |       |        |          |
-initRevive.sqf                           |       |        |          |
+initRevive.sqf                           |=======|        |          |
 Init.sqf                                 |       |        |          |
 Init.sqf                                 |       |        |          |
 isMember.sqf                             |       |        |          |
-resourcesPlayer.sqf                      |       |        |          |
-ranksMP.sqf                              |=======|========|==========|
-sizeMarker.sqf                           |=======|========|==========|
-isMedic.sqf                              |=======|========|==========|
-reDress.sqf                              |=======|========|==========|
-addHC.sqf                                |=======|========|==========|
-cleanserVeh.sqf                          |=======|========|==========|
-rearmCall.sqf                            |=======|========|==========|
-fatalWound.sqf                           |=======|========|==========|
-resourcecheckSkipTime.sqf                |=======|========|==========|
+resourcesPlayer.sqf                      |=======|        |          |
+ranksMP.sqf                              |=======|========|          |
+sizeMarker.sqf                           |=======|========|          |
+isMedic.sqf                              |=======|========|          |
+reDress.sqf                              |=======|========|          |
+addHC.sqf                                |=======|========|          |
+cleanserVeh.sqf                          |=======|========|          |
+rearmCall.sqf                            |=======|========|          |
+fatalWound.sqf                           |=======|========|          |
+resourcecheckSkipTime.sqf                |=======|========|          |
 Init.sqf                                 |       |        |          |
-isWindowPosition.sqf                     |=======|========|==========| 
+isWindowPosition.sqf                     |=======|========|          | 
