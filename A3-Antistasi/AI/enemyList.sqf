@@ -1,10 +1,10 @@
-private _grupo = _this;
+private _group = _this;
 
-private _lider = leader _grupo;
+private _leader = leader _group;
 
-private _lado = side _grupo;
-private _enemySides = _lado call BIS_fnc_enemySides;
-private _objetivos = (_lider nearTargets  500) select {((_x select 2) in _enemySides) and ([_x select 4] call A3A_fnc_canFight)};
-_objetivos = [_objetivos,[_lider],{_input0 distance (_x select 0)},"ASCEND"] call BIS_fnc_sortBy;
-_grupo setVariable ["objetivos",_objetivos];
-_objetivos
+private _side = side _group;
+private _enemySides = _side call BIS_fnc_enemySides;
+private _objectives = (_leader nearTargets  500) select {((_x select 2) in _enemySides) and ([_x select 4] call A3A_fnc_canFight)};
+_objectives = [_objectives,[_leader],{_input0 distance (_x select 0)},"ASCEND"] call BIS_fnc_sortBy;
+_group setVariable ["objetivos",_objectives];
+_objectives

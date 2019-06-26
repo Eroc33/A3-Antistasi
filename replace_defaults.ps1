@@ -177,6 +177,8 @@ $Replacements=@{
     "_multiplicandorec"="_resourceMultiplyer"
     "_chequeo"="_check";
     "_cambio"="_change";
+    "_dinero"="_money";
+    "_arrayCiudades"="_arrayCities";
 }
 
 foreach ($Find in $Replacements.Keys) {
